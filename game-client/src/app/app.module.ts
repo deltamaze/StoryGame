@@ -1,43 +1,32 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 
-import { AppComponent } from './app.component';
+import { NgModule }       from '@angular/core';
+import { BrowserModule }  from '@angular/platform-browser';
 
-
-@NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
-
-
-
-import { NgModule }           from '@angular/core';
-import { BrowserModule }      from '@angular/platform-browser';
 /* App Root */
-import { AppComponent }       from './app.component.3';
+import { AppComponent }   from './app.component';
 
+/* Feature Modules */
+// import { ContactModule }    from './contact/contact.module';
+ import { CoreModule }       from './core/core.module';
 
 /* Routing Module */
-import { AppRoutingModule }   from './app-routing.module.3';
+import { AppRoutingModule } from './app-routing.module';
+
 @NgModule({
-  imports:      [
+  imports: [
     BrowserModule,
-    ContactModule,
+    //ContactModule,
+    CoreModule,
     AppRoutingModule
   ],
-  providers:    [ UserService ],
-  declarations: [ AppComponent, HighlightDirective, TitleComponent ],
+  declarations: [ AppComponent ],
   bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
+
+
+/*
+Copyright 2017 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+*/
