@@ -3,16 +3,25 @@ import { NgModule }       from '@angular/core';
 import { BrowserModule }  from '@angular/platform-browser';
 
 
+/* App Root */
+import { AppComponent }   from './app.component';
+
+/* Feature Modules */
+import { AccountModule }    from './account/account.module';
+import { CoreModule }       from './core/core.module';
+
+/* Routing Module */
+import { AppRoutingModule } from './app-routing.module';
+
+
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
   imports: [
     BrowserModule,
-    FormsModule,
-    HttpModule
+    AccountModule,
+    CoreModule,
+    AppRoutingModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  declarations: [ AppComponent ],
+  bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

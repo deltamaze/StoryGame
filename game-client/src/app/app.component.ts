@@ -4,6 +4,9 @@ import { Component } from '@angular/core';
   selector: 'app-root',
   template: `
     <app-title></app-title>
+     <nav>
+       <a routerLink="logon" routerLinkActive="active">Logon</a>
+     </nav>
     <router-outlet></router-outlet>
   `
     //   <nav>

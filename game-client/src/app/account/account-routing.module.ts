@@ -1,23 +1,12 @@
-import { NgModule }     from '@angular/core';
-import { Routes,
-         RouterModule } from '@angular/router';
+import { NgModule }            from '@angular/core';
+import { RouterModule }        from '@angular/router';
 
-// import { HeroComponent }       from './hero.component';
-// import { HeroListComponent }   from './hero-list.component';
-// import { HeroDetailComponent } from './hero-detail.component';
-
-const routes: Routes = [
-  { path: '',
-    // component: HeroComponent,
-    // children: [
-    //   { path: '',    component: HeroListComponent },
-    //   { path: ':id', component: HeroDetailComponent }
-    // ]
-  }
-];
+import { LogonComponent } from './pages/logon/logon.component';
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild([
+    { path: 'logon', component: LogonComponent }
+  ])],
   exports: [RouterModule]
 })
 export class AccountRoutingModule {}

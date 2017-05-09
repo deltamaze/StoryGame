@@ -2,8 +2,8 @@ import { NgModule }             from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'contact', pathMatch: 'full'},
-  // { path: 'crisis', loadChildren: 'app/crisis/crisis.module#CrisisModule' },
+  { path: '', redirectTo: 'logon', pathMatch: 'full'},
+  //{ path: 'logon', loadChildren: 'app/account/account.module#logon' },
   // { path: 'heroes', loadChildren: 'app/hero/hero.module#HeroModule' }
 ];
 
@@ -13,9 +13,3 @@ export const routes: Routes = [
 })
 export class AppRoutingModule {}
 
-
-/*
-Copyright 2017 Google Inc. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://angular.io/license
-*/
