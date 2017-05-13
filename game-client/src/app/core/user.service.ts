@@ -6,6 +6,7 @@
 // after each lazy load and the userName would double up.
 
 import { Injectable, Optional } from '@angular/core';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
 
 
@@ -14,7 +15,7 @@ export class UserService {
   id = 1;
   private _userName = 'Sherlock Holmes';
 
-  constructor() {
+  constructor(db: AngularFireDatabase) {
     
   }
 
