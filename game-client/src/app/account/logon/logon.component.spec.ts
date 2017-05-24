@@ -22,4 +22,17 @@ describe('LogonComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should let user log in with google', () => {
+    expect(component).toBeFalsy();
+  });
+
+  it('should let user log in with email', () => {
+    expect(component).toBeFalsy();
+  });
+
+  it('should let user log in as guest', () => {
+    expect(component).toBeFalsy();
+  });
+
 });

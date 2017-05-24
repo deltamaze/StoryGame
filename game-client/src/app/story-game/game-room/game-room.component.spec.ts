@@ -22,4 +22,13 @@ describe('GameRoomComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('should show the sub component that shows games players', () => {
+    expect(component).toBeTruthy();
+  });
+  it('should show sub component that is the game chatroom', () => {
+    expect(component).toBeTruthy();
+  });
+  it('should load sub component that shows story thus far ', () => {
+    expect(component).toBeTruthy();
+  });
 });

@@ -22,4 +22,8 @@ describe('CreateGameComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should let user create a gameroom', () => {
+    expect(component).toBeFalsy();
+  });
 });

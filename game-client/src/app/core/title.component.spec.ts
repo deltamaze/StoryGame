@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FindGameComponent } from './find-game.component';
+import { TitleComponent } from './title.component';
 
-describe('FindGameComponent', () => {
-  let component: FindGameComponent;
-  let fixture: ComponentFixture<FindGameComponent>;
+describe('TitleComponent', () => {
+  let component: TitleComponent;
+  let fixture: ComponentFixture<TitleComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FindGameComponent ]
+      declarations: [ TitleComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FindGameComponent);
+    fixture = TestBed.createComponent(TitleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -22,10 +22,11 @@ describe('FindGameComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  it('should show list of games available', () => {
+
+  it('should let user log out', () => {
     expect(component).toBeFalsy();
   });
-  it('should let users filter game rooms', () => {
+  it('should display a website Title', () => {
     expect(component).toBeFalsy();
   });
 });

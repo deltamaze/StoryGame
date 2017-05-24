@@ -12,4 +12,7 @@ describe('StoryGameService', () => {
   it('should ...', inject([StoryGameService], (service: StoryGameService) => {
     expect(service).toBeTruthy();
   }));
+  it('should kick off web api to start game on web server', inject([StoryGameService], (service: StoryGameService) => {
+    expect(service).toBeFalsy();
+  }));
 });

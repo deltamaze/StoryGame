@@ -22,4 +22,8 @@ describe('CreateAccountComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should let user create email account', () => {
+    expect(component).toBeFalsy();
+  });
 });
