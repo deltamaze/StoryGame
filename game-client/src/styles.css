@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+.foreground {
+    padding: 15px;
+    padding-top: 25px;
+    padding-bottom: 0px;
+    background-color: white;
+    /*max-width: 330px;*/
+    margin: 0 auto;
+}
+.google-button-img{
+    padding-right: 10px;
+}
+.pad-bottom{
+    padding-bottom: 50px;
+}
+.nopadding{
+    padding: 0px;
+}
+.googleButton{
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+.chatWindow{
+    height:300px;
+    overflow:scroll;
+}
+.red-text{
+    color:red;
+}

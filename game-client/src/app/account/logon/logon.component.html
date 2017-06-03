@@ -1,3 +1,26 @@
-<p>
-  logon works!
-</p>
+<div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                        <form class="form-signin">
+                                <h2 class="form-signin-heading">Please sign in</h2>
+                                <label for="inputEmail" class="sr-only">Email address</label>
+                                <input type="email" [(ngModel)]="email" name="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+                                <label for="inputPassword" class="sr-only">Password</label>
+                                <input type="password" [(ngModel)]="password" name="inputPassword" class="form-control" placeholder="Password" required="">
+                                <button class="btn btn-md btn-primary" type="submit" (click)="login()" >Sign in</button>
+                                
+                        </form>
+                        <br />
+                        <form class="form-signin pad-bottom">
+                                <button class="btn btn-lg btn-primary googleButton" (click)="googleLogin()">
+                                        <img class="google-button-img nopadding" src="../../../assets/btn_google_light_normal_ios.png" />
+                                        Sign In with Google  
+                                </button>
+                                <br />
+                                <br />
+                                <button class="btn btn-lg btn-primary" (click)="guestLogin()">Sign In as a Guest</button>
+                                <span class=".red-text">{{status}}</span> 
+                         </form> 
+                </div>
+                <div class="col-md-1"></div>
+        </div>

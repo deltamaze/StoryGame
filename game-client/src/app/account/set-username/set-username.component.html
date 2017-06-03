@@ -1,0 +1,19 @@
+<div class="container">
+        <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                        <form ngNativeValidate class="form-signin" id="setUsernameForm" action="setUsername()">
+                                <h2 class="form-signin-heading">Create Username for your Account </h2>
+                                <label for="inputUsername" class="sr-only">Username</label>
+                                <input type="text" name="inputUsername" minlength=3 maxlength="20"  [(ngModel)]="desiredUsername" class="form-control" placeholder="Username" required="" autofocus="">
+                                <!--<input type="text" pattern="[A-Za-z]{3}" title="Three letter country code"  [(ngModel)]="desiredUsername" name="inputUsername" class="form-control" placeholder="Username" required="" autofocus="">-->
+                                <!--<button class="btn btn-lg btn-primary btn-block" type="submit" form="setUsernameForm" (click)="setUsername()" >Create Game</button>-->
+                                <br />
+                                <span class="red-text">{{status}}</span> 
+                        </form>
+
+                        <button class="btn btn-lg btn-primary" form="setUsernameForm" type="submit" (click)="setUsername()" >Set Username!</button>
+                </div>
+                <div class="col-md-1"></div>
+        </div>
+</div>

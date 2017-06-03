@@ -10,7 +10,8 @@ export class TitleComponent {
   title = 'Story Game';
   user = '';
 
-  constructor(userService: UserService) {
-    this.user = userService.userName;
+  constructor(private userService: UserService) {
+    userService.verifyAuthStatus();
+    userService.getUsername().subscribe(item => this.user = item);
   }
 }

@@ -8,11 +8,12 @@ import { CreateAccountComponent } from './create-account/create-account.componen
 // import { HeroDetailComponent } from './hero-detail.component';
 // import { HeroListComponent }   from './hero-list.component';
  import { AccountRoutingModule }   from './account-routing.module';
+import { SetUsernameComponent } from './set-username/set-username.component';
 
 @NgModule({
   imports: [ SharedModule
   , AccountRoutingModule ],
   declarations: [
-  LogonComponent,CreateAccountComponent]
+  LogonComponent,CreateAccountComponent, SetUsernameComponent]
 })
 export class AccountModule { }
