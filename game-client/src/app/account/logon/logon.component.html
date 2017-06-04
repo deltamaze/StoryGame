@@ -11,7 +11,7 @@
                                 
                         </form>
                         <br />
-                        <form class="form-signin pad-bottom">
+                        <div class=" pad-bottom">
                                 <button class="btn btn-lg btn-primary googleButton" (click)="googleLogin()">
                                         <img class="google-button-img nopadding" src="../../../assets/btn_google_light_normal_ios.png" />
                                         Sign In with Google  
@@ -19,8 +19,11 @@
                                 <br />
                                 <br />
                                 <button class="btn btn-lg btn-primary" (click)="guestLogin()">Sign In as a Guest</button>
-                                <span class=".red-text">{{status}}</span> 
-                         </form> 
+                                <br />
+                                <button class="btn btn-lg btn-primary" (click)="signUp()">Sign Up</button>
+                                <br />
+                                <span class="red-text">{{status}}</span> 
+                         </div> 
                 </div>
                 <div class="col-md-1"></div>
         </div>

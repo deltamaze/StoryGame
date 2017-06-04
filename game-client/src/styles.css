@@ -27,3 +27,6 @@
 .red-text{
     color:red;
 }
+.pointer {
+    cursor: pointer;
+}

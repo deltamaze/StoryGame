@@ -1,3 +1,23 @@
-<p>
-  create-account works!
-</p>
+<div class="container">
+        <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                        <form ngNativeValidate class="form-signin" id="setUsernameForm" action="setUsername()">
+                                <h2 class="form-signin-heading">Create Account </h2>
+                                <label for="inputEmail" class="sr-only">Email:</label>
+                                <input type="email" name="inputEmail"  [(ngModel)]="desiredEmail" class="form-control" placeholder="Email" required="" autofocus="">
+                                <label for="inputPassword" class="sr-only">Password:</label>
+                                <input type="password" name="inputPassword"  [(ngModel)]="desiredPassword" class="form-control" placeholder="Password" required="" autofocus="">
+                                <label for="confirmPassword" class="sr-only">Confirm Password:</label>
+                                <input type="password" name="confirmPassword"  [(ngModel)]="confirmPassword" class="form-control" placeholder="ConfirmPassword" required="" autofocus="">
+                                
+
+                                <br />
+                                <span class="red-text">{{status}}</span> 
+                        </form>
+
+                        <button class="btn btn-lg btn-primary" form="setUsernameForm" type="submit" (click)="createAccount()" >Create Account!</button>
+                </div>
+                <div class="col-md-1"></div>
+        </div>
+</div>

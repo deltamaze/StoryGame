@@ -7,7 +7,7 @@
 
 import { Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject,Subscription } from 'rxjs/RX'
+import { BehaviorSubject, Subscription } from 'rxjs/RX'
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 @Injectable()
 export class UserService {
   public user: Observable<firebase.User>;
-  private userSubscription:firebase.User; //for internal use in the set username function
+  private userSubscription: firebase.User; //for internal use in the set username function
   private username: BehaviorSubject<string> = new BehaviorSubject<string>("");
   private errorStatus: BehaviorSubject<string> = new BehaviorSubject<string>("");
   private authStatusSubscription: Subscription;
@@ -37,7 +37,7 @@ export class UserService {
   private setUsername(username: string): void {
     this.username.next(username);
   }
-  public getErrorStatus():Observable<any>{
+  public getErrorStatus(): Observable<any> {
     return this.errorStatus.asObservable();
   }
   private setErrorStatus(errorMsg: string): void {
@@ -45,48 +45,31 @@ export class UserService {
   }
 
   public login(email: string, password: string): void {
-    // this.status.text = "";
-    // this.af.auth.login({
-    // email: email,
-    // password: password
-    // }).then(() => {
-    // this.router.navigate(['Home']);
-    // }).catch(err => this.handleError(err));
+    this.clearError();
     this.afAuth.auth.signInWithEmailAndPassword(email, password)
-      .then(() => this.router.navigate(['home'])).catch(err=>this.handleError(err));
-    //.then;
+      .then(() => this.router.navigate(['home'])).catch(err => this.handleError(err));
 
   }
   public googleLogin(): void {
-    // this.status.text = "";
-    // this.af.auth.login({
-    // provider: AuthProviders.Google,
-    // method: AuthMethods.Popup
-    // }).then(() => {
-    // this.router.navigate(['Home']);
-    // }).catch(err => this.handleError(err));
+    this.clearError();
     this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-      .then(() => this.router.navigate(['home'])).catch(err=>this.handleError(err));;
+      .then(() => this.router.navigate(['home'])).catch(err => this.handleError(err));;
   }
   public guestLogin(): void {
-    // this.status.text = "";
-    // this.af.auth.login({
-    // provider: AuthProviders.Anonymous,
-    // method: AuthMethods.Anonymous
-    // }).then(() => {
-    // this.router.navigate(['Home']);
-    // }).catch(err => this.handleError(err));
+    this.clearError();
     this.afAuth.auth.signInAnonymously()
-      .then(() => this.router.navigate(['home'])).catch(err=>this.handleError(err));;
+      .then(() => this.router.navigate(['home'])).catch(err => this.handleError(err));;
   }
 
   public logout(): void {
+    this.clearError();
     this.afAuth.auth.signOut();
     //this.authStatusSubscription.unsubscribe();
     this.router.navigate(['logon']);
 
   }
   public verifyAuthStatus() {
+    this.clearError();
     this.authStatusSubscription = this.user.subscribe(auth => {
       if (!auth) {
         this.router.navigate(['logon']);
@@ -97,8 +80,8 @@ export class UserService {
     });
   }
   private verifyUsernameStatus(uid: string): void {
-    console.log(uid);
-    this.db.object('/usernames/' + uid )
+    
+    this.db.object('/usernames/' + uid)
       .subscribe(item => {
         console.log(item);
         if (!item.username) {
@@ -112,11 +95,28 @@ export class UserService {
         }
       });
   }
-  public setUsernameInFirebase(username: string):void{
-    this.db.object('/usernames/' + this.userSubscription.uid ).set({username}).catch(err => this.handleError(err));
+  public setUsernameInFirebase(username: string): void {
+    this.clearError();
+    this.db.object('/usernames/' + this.userSubscription.uid).set({ username }).catch(err => this.handleError(err));
+  }
+  public navSignup():void{
+    this.router.navigate(['createAccount']);
+  }
+  public navHome():void{
+    this.router.navigate(['home']);
+  }
+  public navLogon():void{
+    this.router.navigate(['logon']);
+  }
+  public createAccount(email: string, password: string): void {
+    this.clearError();
+    this.afAuth.auth.createUserWithEmailAndPassword(email, password).catch(err=>this.handleError(err));
   }
   public handleError(err): void {
-    this.setErrorStatus(err);  
+    this.setErrorStatus(err);
+  }
+  public clearError():void{
+    this.setErrorStatus("");
   }
 }
 

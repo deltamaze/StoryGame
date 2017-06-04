@@ -14,4 +14,16 @@ export class TitleComponent {
     userService.verifyAuthStatus();
     userService.getUsername().subscribe(item => this.user = item);
   }
+  private navHome():void
+  {
+    this.userService.navHome();
+  }
+
+  private navLogon():void
+  {
+    this.userService.navLogon();
+  }
+  private logout():void{
+    this.userService.logout();
+  }
 }

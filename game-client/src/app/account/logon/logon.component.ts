@@ -28,6 +28,9 @@ export class LogonComponent implements OnInit {
   private guestLogin() :void{
     this.userService.guestLogin();
   }
+  private signUp(): void{
+    this.userService.navSignup();
+  }
 
   private logout(): void{
     this.userService.logout();
