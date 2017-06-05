@@ -1,3 +1,37 @@
-<p>
-  create-game works!
-</p>
+<form ngNativeValidate>
+  <!--<div class="form-check">
+          <label for="inputPasswordOption"  class="form-check-label" >
+                  <input type="checkbox" [(ngModel)]="newGame.isPrivate" name="inputPasswordOption" class="form-check-input"  autofocus="">
+                  Private Game?
+          </label>
+  </div>-->
+
+  <label for="inputGameName">GameName</label>
+  <input type="text" [(ngModel)]="newGame.gameName" name="inputGameName" class="form-control" placeholder="Game Name" required="" autofocus="">
+
+  
+
+  <div *ngIf="newGame.isPrivate">
+  <label for="inputPassword" >Password?</label>
+  <input type="password" [(ngModel)]="newGame.password" name="inputPassword" class="form-control" placeholder="Password" required="" autofocus="">
+  </div>
+
+  <label for="inputMaxPlayer" >Max Players Allowed?</label>
+  <input type="number" max="8" min="3" step="1" [(ngModel)]="newGame.maxPlayers" name="inputMaxPlayer" class="form-control" placeholder="Max Players" required="" autofocus="">
+
+  <label for="inputTurnLength" >How many Seconds per round?</label>
+  <input type="number" max="60" min="5" step="1" [(ngModel)]="newGame.timeBetweenTurns" name="inputTurnLength" class="form-control" placeholder="Turn Length in Seconds" required="" autofocus="">
+
+  <label for="inputMaxTurns" >Number of Game Rounds?</label>
+  <input type="number" max="30" min="5" step="1" [(ngModel)]="newGame.totalRounds" name="inputMaxTurns" class="form-control" placeholder="Max Turns" required="" autofocus="">
+
+  <label for="inputStartingMessage" >How would you like the story to start?</label>
+  <textarea class="form-control"  name="inputStartingMessage" maxlength="200" minlength="5" [(ngModel)]="newGame.startingMessage" rows="3"  required></textarea>
+  <button class="btn btn-lg btn-primary" type="submit" (click)="createGame()" >Create Game</button>
+</form>
+
+<ul class="list-unstyled">
+  <li>
+    <button class="btn btn-danger btn-md" (click)="navHome()">Return Home</button>
+  </li>
+</ul>

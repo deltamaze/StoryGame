@@ -5,7 +5,7 @@ import {
 
 import { CommonModule }      from '@angular/common';
 import { TitleComponent }    from './title.component';
-import { UserService }       from './user.service';
+import { UserService }       from './core.service';
  //import { UserServiceConfig } from './user.service';
 
 @NgModule({

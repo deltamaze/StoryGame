@@ -1,10 +1,3 @@
-// Crazy copy of the app/user.service
-// Proves that UserService is an app-wide singleton and only instantiated once
-// IFF shared.module follows the `forRoot` pattern
-//
-// If it didn't, a new instance of UserService would be created
-// after each lazy load and the userName would double up.
-
 import { Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject, Subscription } from 'rxjs/RX'
@@ -13,36 +6,52 @@ import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
-
-@Injectable()
-export class UserService {
-  public user: Observable<firebase.User>;
-  private userSubscription: firebase.User; //for internal use in the set username function
-  private username: BehaviorSubject<string> = new BehaviorSubject<string>("");
+export class BaseService {
   private errorStatus: BehaviorSubject<string> = new BehaviorSubject<string>("");
-  private authStatusSubscription: Subscription;
 
-  constructor(public afAuth: AngularFireAuth,
-    private router: Router,
-    public db: AngularFireDatabase) {
-    this.user = afAuth.authState;
-    this.user.subscribe(auth => this.userSubscription = auth);
+  constructor(public router: Router){}
 
-  }
-
-
-  public getUsername(): Observable<any> {
-    return this.username.asObservable();
-  }
-  private setUsername(username: string): void {
-    this.username.next(username);
-  }
   public getErrorStatus(): Observable<any> {
     return this.errorStatus.asObservable();
   }
   private setErrorStatus(errorMsg: string): void {
     this.errorStatus.next(errorMsg);
   }
+
+  public handleError(err): void {
+    this.setErrorStatus(err);
+  }
+  public clearError():void{
+    this.setErrorStatus("");
+  }
+  public navHome():void{
+    this.router.navigate(['home']);
+  }
+}
+
+@Injectable()
+export class UserService extends BaseService {
+  public user: Observable<firebase.User>;
+  private userSubscription: firebase.User; //for internal use in the set username function
+  private userInfo: BehaviorSubject<UserInfo> = new BehaviorSubject<UserInfo>(new UserInfo);
+  
+  private authStatusSubscription: Subscription;
+
+  constructor(public afAuth: AngularFireAuth,
+    public router: Router,
+    public db: AngularFireDatabase) {
+    super(router);
+    this.user = afAuth.authState;
+    this.user.subscribe(auth => this.userSubscription = auth);
+
+  }
+  public getUserInfo(): Observable<any> {
+    return this.userInfo.asObservable();
+  }
+  private setUserInfo(userInfo: UserInfo): void {
+    this.userInfo.next(userInfo);
+  }
+  
 
   public login(email: string, password: string): void {
     this.clearError();
@@ -64,7 +73,6 @@ export class UserService {
   public logout(): void {
     this.clearError();
     this.afAuth.auth.signOut();
-    //this.authStatusSubscription.unsubscribe();
     this.router.navigate(['logon']);
 
   }
@@ -91,7 +99,10 @@ export class UserService {
           this.router.navigate(['home']);
         }
         else {
-          this.setUsername(item);
+          let userInfo: UserInfo = new UserInfo;
+          userInfo.username = item.username
+          userInfo.uid = uid
+          this.setUserInfo(userInfo);
         }
       });
   }
@@ -102,9 +113,7 @@ export class UserService {
   public navSignup():void{
     this.router.navigate(['createAccount']);
   }
-  public navHome():void{
-    this.router.navigate(['home']);
-  }
+  
   public navLogon():void{
     this.router.navigate(['logon']);
   }
@@ -112,12 +121,10 @@ export class UserService {
     this.clearError();
     this.afAuth.auth.createUserWithEmailAndPassword(email, password).catch(err=>this.handleError(err));
   }
-  public handleError(err): void {
-    this.setErrorStatus(err);
-  }
-  public clearError():void{
-    this.setErrorStatus("");
-  }
+  
 }
 
-
+export class UserInfo{
+  username="";
+  uid="";
+}

@@ -11,8 +11,8 @@ import { CreateGameComponent } from './create-game/create-game.component';
   imports: [RouterModule.forChild([
     { path: 'home', component: HomeComponent },
     { path: 'gameroom', component: GameRoomComponent },
-    { path: 'findgame', component: FindGameComponent },
-    { path: 'creategame', component: CreateGameComponent }
+    { path: 'joinGame', component: FindGameComponent },
+    { path: 'createGame', component: CreateGameComponent }
   ])],
   exports: [RouterModule]
 })
