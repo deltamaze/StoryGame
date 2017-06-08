@@ -60,7 +60,7 @@ export class StoryGameService extends BaseService {
     //nav with param
 
   }
-  public getGames() {
+  public getGames() {//test
 
   }
 
