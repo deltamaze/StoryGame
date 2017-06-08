@@ -17,8 +17,9 @@ export class CreateGameComponent implements OnInit {
   private navHome(): void {
     this.gameService.navHome();
   }
-  private CreateGameComponent(): void {
-    this.gameService.createGame(this.newGame);
+  private createGame(): void {
+    if(this.validateInput())
+      this.gameService.createGame(this.newGame);
   }
   private validateInput(): boolean {
     if (this.newGame.gameName.length < 3 || this.newGame.gameName.length > 10) //game name longer than 3 characters, and less than 10

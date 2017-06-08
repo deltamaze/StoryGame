@@ -4,20 +4,21 @@ import { BehaviorSubject, Subscription } from 'rxjs/RX'
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { BaseService,UserService, UserInfo } from '../core/core.service';
+import { BaseService, UserService, UserInfo } from '../core/core.service';
 
 @Injectable()
 export class StoryGameService extends BaseService {
 
   public currentGameId: string = "";
   private user: UserInfo; //for internal use in the set username function
+  private pingSubscription: Subscription;
 
   constructor(
     public router: Router,
     public db: AngularFireDatabase,
     public userService: UserService) {
     super(router);
-    userService.getUserInfo().subscribe(item => this.user=item);
+    userService.getUserInfo().subscribe(item => this.user = item);
   }
 
 
@@ -30,37 +31,62 @@ export class StoryGameService extends BaseService {
     this.router.navigate(['joinGame']);
   }
 
-  public createGame(newgame: GameRoom) {
+  public createGame(newgame: GameRoom):void {
     //store password seperately or implement write (noread) only rule on it.
-    this.db.list('/storyGames/')
-    .push({ newgame }).then(item=>{
-      this.currentGameId=item;
-      this.joinGame();
-    })
-    .catch(err => this.handleError(err));
+    console.log(newgame);
+    let pushedGame = this.db.list('/storyGames/')
+      .push(newgame).then(item => {
+        console.log(item);
+        this.currentGameId = item.key;
+        this.joinGame();
+      })
+      .catch(err => this.handleError(err));
     //firebase rules, once game created, don't let it be modified
   }
-  public joinGame(gameId:string = "") {
+
+  public joinGame(gameId: string = ""):void {
     //startRoomPing
-    if(gameId != "")
-      this.currentGameId=gameId
+    console.log("abc");
+    if (gameId != "")
+      this.currentGameId = gameId
+    if (this.pingSubscription != null && !this.pingSubscription.closed) {
+      this.pingSubscription.unsubscribe();
+    }
 
-    let timer = Observable.timer(5000);
-    timer.subscribe(t=> {
-        this.roomPing();
+    let timer = Observable.timer(1000, 5000);
+    this.pingSubscription = timer.subscribe(t => {
+      this.roomPing();
     });
+    //nav with param
 
   }
-  private roomPing():void{//let other plays know which games are active, and the playerCount
-    //calculate # of players, but count of pings done in last 5 seconds
-    let ping = {timestamp : firebase.database.ServerValue.TIMESTAMP,
-                username:this.user.username }
-    this.db.object('/rooms/'+this.currentGameId+'/'+this.user.uid)
-    .set(ping);
+  public getGames() {
+
   }
-  public leaveGame() {
-    //stop room ping
+
+  public navHome() {
+    this.leaveGame();
     super.navHome();
+  }
+
+  private roomPing(): void {
+    //let other plays know which games are active, and the playerCount
+    //calculate # of players, but count of pings done in last 5 seconds
+
+    let fbPath = '/gamePlayers/' + this.currentGameId + '/' + this.user.uid + '/'
+    console.log(fbPath);
+    let ping = {
+      timestamp: firebase.database.ServerValue.TIMESTAMP,
+      username: this.user.username
+    }
+    this.db.object(fbPath)
+      .set(ping);
+  }
+
+  private leaveGame() {
+    if (this.pingSubscription != null && !this.pingSubscription.closed) {
+      this.pingSubscription.unsubscribe();
+    }
   }
 
 
@@ -75,6 +101,6 @@ export class GameRoom {
   public startingMessage: string = "Once upon a time ...";
   public timeStamp: any = firebase.database.ServerValue.TIMESTAMP;
 }
-export class CurrentGameInfo{
+export class CurrentGameInfo {
   public gameName: string
 }

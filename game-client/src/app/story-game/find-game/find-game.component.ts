@@ -8,12 +8,21 @@ import {StoryGameService} from '../story-game.service';
 })
 export class FindGameComponent implements OnInit {
   
+  private gameList:any;
+
   constructor(private gameService: StoryGameService) { }
 
   ngOnInit() {
+    this.getGames();
   }
   private navHome():void{
     this.gameService.navHome();
+  }
+  private getGames():void{
+
+  }
+  private joinGame():void{
+
   }
 
 
