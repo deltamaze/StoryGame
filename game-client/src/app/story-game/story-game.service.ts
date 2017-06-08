@@ -60,7 +60,38 @@ export class StoryGameService extends BaseService {
     //nav with param
 
   }
-  public getGames() {//test
+  public getGames() {
+    let test 
+    this.db.list(`/storyGames/`).subscribe(res =>{
+      test =res;
+      console.log(test);
+    });
+    // this.db.list(`/storyGames/`)
+    //   .switchMap(games=>{
+    //   let memberObservables = [];
+    //   games.forEach(player => {
+    //     memberObservables.push(this.db
+    //     .object(`gamePlayers/${games.$key}`)
+    //     .first()
+    //     .do(value => { thread.author = value.username; })
+    //   );
+    //   });
+    // });
+  
+  
+
+  //   this.projects = this.af.database.list(`projects`)
+  // .map(projects => {
+  //   return projects.map(project => {
+  //     project.customers.map(customer => {
+  //       this.af.database.list(`customers`)
+  //         .subscribe(c => {
+  //           customer = c;
+  //         });
+  //     });
+  //     return project;
+  //   });
+  // });
 
   }
 

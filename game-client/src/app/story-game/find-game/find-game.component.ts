@@ -19,7 +19,7 @@ export class FindGameComponent implements OnInit {
     this.gameService.navHome();
   }
   private getGames():void{
-
+    this.gameService.getGames();
   }
   private joinGame():void{
 
