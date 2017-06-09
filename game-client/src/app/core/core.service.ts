@@ -91,7 +91,6 @@ export class UserService extends BaseService {
     
     this.db.object('/usernames/' + uid)
       .subscribe(item => {
-        console.log(item);
         if (!item.username) {
           this.router.navigate(['setUsername']);
         }

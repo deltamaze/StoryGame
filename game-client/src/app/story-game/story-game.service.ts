@@ -62,21 +62,24 @@ export class StoryGameService extends BaseService {
   }
   public getGames() {
     let test 
-    this.db.list(`/storyGames/`).subscribe(res =>{
-      test =res;
-      console.log(test);
-    });
-    // this.db.list(`/storyGames/`)
-    //   .switchMap(games=>{
-    //   let memberObservables = [];
-    //   games.forEach(player => {
-    //     memberObservables.push(this.db
-    //     .object(`gamePlayers/${games.$key}`)
-    //     .first()
-    //     .do(value => { thread.author = value.username; })
-    //   );
-    //   });
+    // this.db.list(`/storyGames/`).subscribe(res =>{
+    //   test =res;
+    //   console.log(test);
     // });
+    this.db.list(`/storyGames/`)
+      .map(games=>{
+        for (let game of games) {
+          // Find each corresponding associated object and store it as a FibreaseObjectObservable
+          this.db.object(`/gamePlayers/${game.$key}`).subscribe(players =>{
+            game.players = players;
+          });
+        }
+        
+        return games;
+      }).subscribe(res =>{
+      test =res;
+      console.log(res);
+    });
   
   
 
