@@ -62,40 +62,31 @@ export class StoryGameService extends BaseService {
   }
   public getGames() {
     let test 
-    // this.db.list(`/storyGames/`).subscribe(res =>{
-    //   test =res;
-    //   console.log(test);
-    // });
+ 
     this.db.list(`/storyGames/`)
       .map(games=>{
         for (let game of games) {
           // Find each corresponding associated object and store it as a FibreaseObjectObservable
-          this.db.object(`/gamePlayers/${game.$key}`).subscribe(players =>{
-            game.players = players;
+
+          this.db.list(`/gamePlayers/${game.$key}`,{
+            query:{
+              //orderByChild:"timestamp",
+             //startAt:playerStartAtDate
+            }
+          }).subscribe(players =>{
+            game.players = players.filter(player=>{
+              let playerStartAtDate = Math.floor(Date.now()) - 15000 //use as threshold to only pull players who have pinged in the past 15 seconds
+              return player.timestamp > playerStartAtDate;
+            });
           });
         }
-        
         return games;
+
       }).subscribe(res =>{
       test =res;
       console.log(res);
     });
   
-  
-
-  //   this.projects = this.af.database.list(`projects`)
-  // .map(projects => {
-  //   return projects.map(project => {
-  //     project.customers.map(customer => {
-  //       this.af.database.list(`customers`)
-  //         .subscribe(c => {
-  //           customer = c;
-  //         });
-  //     });
-  //     return project;
-  //   });
-  // });
-
   }
 
   public navHome() {
@@ -108,7 +99,6 @@ export class StoryGameService extends BaseService {
     //calculate # of players, but count of pings done in last 5 seconds
 
     let fbPath = '/gamePlayers/' + this.currentGameId + '/' + this.user.uid + '/'
-    console.log(fbPath);
     let ping = {
       timestamp: firebase.database.ServerValue.TIMESTAMP,
       username: this.user.username
