@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StoryGameService, GameRoom } from '../story-game.service';
+import {FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl  } from '@angular/forms';
 
 @Component({
   selector: 'app-create-game',
@@ -9,12 +10,36 @@ import { StoryGameService, GameRoom } from '../story-game.service';
 export class CreateGameComponent implements OnInit {
 
   private newGame: GameRoom = new GameRoom;
+  private createNewGame: FormGroup;
   private status: string;
-  constructor(private gameService: StoryGameService) { }
+
+  constructor(private gameService: StoryGameService,
+              private fb: FormBuilder) { }
 
   ngOnInit() {
     this.gameService.getErrorStatus().subscribe(status => this.status = status);
+
+    this.createNewGame = this.fb.group({
+      gameName: ['', [Validators.required, Validators.minLength(3),Validators.maxLength(10)]],
+      isPrivate: ['', [Validators.required]],
+      maxPlayers: ['', [Validators.required, minValue(3)],maxValue(8)],
+      timeBetweenTurns: ['', [Validators.required, minValue(5)],maxValue(60)],
+      totalRounds: ['', [Validators.required,minValue(5)],maxValue(30)],
+      startingMessage: ['', [Validators.required, Validators.minLength(5), ,Validators.maxLength(200)]],
+      timeStamp: [null]
+    });
   }
+
+  onSubmit({ value, valid }: { value: GameRoom, valid: boolean }) {
+    if(valid)
+    {
+      this.gameService.clearError();
+    }
+    console.log(value, valid);
+  }
+
+
+
   private navHome(): void {
     this.gameService.navHome();
   }
@@ -59,4 +84,26 @@ export class CreateGameComponent implements OnInit {
     }
   }
 
+}
+
+export function maxValue(max: Number): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} => {
+    const input = control.value,
+          isValid = input > max;
+    if(isValid) 
+        return { 'maxValue': {max} }
+    else 
+        return null;
+  };
+}
+
+export function minValue(min: Number): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} => {
+    const input = control.value,
+          isValid = input < min;
+    if(isValid) 
+        return { 'minValue': {min} }
+    else 
+        return null;
+  };
 }

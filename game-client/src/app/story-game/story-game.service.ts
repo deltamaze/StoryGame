@@ -32,6 +32,10 @@ export class StoryGameService extends BaseService {
   }
 
   public createGame(newgame: GameRoom):void {
+    if(newgame.timeStamp == null)
+    {
+      newgame.timeStamp = firebase.database.ServerValue.TIMESTAMP;
+    }
     //store password seperately or implement write (noread) only rule on it.
     console.log(newgame);
     let pushedGame = this.db.list('/storyGames/')

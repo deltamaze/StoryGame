@@ -1,35 +1,38 @@
-<form ngNativeValidate>
-  <!--<div class="form-check">
-          <label for="inputPasswordOption"  class="form-check-label" >
-                  <input type="checkbox" [(ngModel)]="newGame.isPrivate" name="inputPasswordOption" class="form-check-input"  autofocus="">
-                  Private Game?
-          </label>
-  </div>-->
+<form [formGroup]="createNewGame"  *ngIf="active"  (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="gameName">Game Name</label>
 
-  <label for="inputGameName">GameName</label>
-  <input type="text" [(ngModel)]="newGame.gameName" name="inputGameName" class="form-control" placeholder="Game Name" required="" autofocus="">
+        <input type="text" id="gameName" class="form-control"
+               formControlName="gameName" required >
 
-  
+        <div *ngIf="formErrors.gameName" class="alert alert-danger">
+          {{ formErrors.gameName}}
+        </div>
+      </div>
 
-  <div *ngIf="newGame.isPrivate">
-  <label for="inputPassword" >Password?</label>
-  <input type="password" [(ngModel)]="newGame.password" name="inputPassword" class="form-control" placeholder="Password" required="" autofocus="">
-  </div>
+      <div class="form-group">
+        <label for="alterEgo">Alter Ego</label>
+        <input type="text" id="alterEgo" class="form-control"
+            formControlName="alterEgo"  >
+      </div>
 
-  <label for="inputMaxPlayer" >Max Players Allowed?</label>
-  <input type="number" max="8" min="3" step="1" [(ngModel)]="newGame.maxPlayers" name="inputMaxPlayer" class="form-control" placeholder="Max Players" required="" autofocus="">
+      <div class="form-group">
+        <label for="power">Hero Power</label>
+        <select id="power" class="form-control"
+            formControlName="power" required >
+          <option *ngFor="let p of powers" [value]="p">{{p}}</option>
+        </select>
 
-  <label for="inputTurnLength" >How many Seconds per round?</label>
-  <input type="number" max="60" min="5" step="1" [(ngModel)]="newGame.timeBetweenTurns" name="inputTurnLength" class="form-control" placeholder="Turn Length in Seconds" required="" autofocus="">
+        <div *ngIf="formErrors.power" class="alert alert-danger">
+          {{ formErrors.power }}
+        </div>
+      </div>
 
-  <label for="inputMaxTurns" >Number of Game Rounds?</label>
-  <input type="number" max="30" min="5" step="1" [(ngModel)]="newGame.totalRounds" name="inputMaxTurns" class="form-control" placeholder="Max Turns" required="" autofocus="">
-
-  <label for="inputStartingMessage" >How would you like the story to start?</label>
-  <textarea class="form-control"  name="inputStartingMessage" maxlength="200" minlength="5" [(ngModel)]="newGame.startingMessage" rows="3"  required></textarea>
-  <button class="btn btn-lg btn-primary" type="submit" (click)="createGame()" >Create Game</button>
-  <span class="red-text">{{status}}</span> 
-</form>
+      <button type="submit" class="btn btn-default"
+             [disabled]="!heroForm.valid">Submit</button>
+      <button type="button" class="btn btn-default"
+             (click)="addHero()">New Hero</button>
+    </form>
 
 <ul class="list-unstyled">
   <li>
