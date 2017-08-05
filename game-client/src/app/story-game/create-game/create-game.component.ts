@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StoryGameService, GameRoom } from '../story-game.service';
 import {FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl  } from '@angular/forms';
-
+import {Utils} from '../../shared/utils'
 @Component({
   selector: 'app-create-game',
   templateUrl: './create-game.component.html',
@@ -10,7 +10,7 @@ import {FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl  } from
 export class CreateGameComponent implements OnInit {
 
   private newGame: GameRoom = new GameRoom;
-  private createNewGame: FormGroup;
+  public createNewGame: FormGroup;
   private status: string;
 
   constructor(private gameService: StoryGameService,
@@ -22,9 +22,9 @@ export class CreateGameComponent implements OnInit {
     this.createNewGame = this.fb.group({
       gameName: ['', [Validators.required, Validators.minLength(3),Validators.maxLength(10)]],
       isPrivate: ['', [Validators.required]],
-      maxPlayers: ['', [Validators.required, minValue(3)],maxValue(8)],
-      timeBetweenTurns: ['', [Validators.required, minValue(5)],maxValue(60)],
-      totalRounds: ['', [Validators.required,minValue(5)],maxValue(30)],
+      maxPlayers: ['', [Validators.required, Utils.minValue(3)],Utils.maxValue(8)],
+      timeBetweenTurns: ['', [Validators.required, Utils.minValue(5)],Utils.maxValue(60)],
+      totalRounds: ['', [Validators.required,Utils.minValue(5)],Utils.maxValue(30)],
       startingMessage: ['', [Validators.required, Validators.minLength(5), ,Validators.maxLength(200)]],
       timeStamp: [null]
     });
@@ -84,26 +84,4 @@ export class CreateGameComponent implements OnInit {
     }
   }
 
-}
-
-export function maxValue(max: Number): ValidatorFn {
-  return (control: AbstractControl): {[key: string]: any} => {
-    const input = control.value,
-          isValid = input > max;
-    if(isValid) 
-        return { 'maxValue': {max} }
-    else 
-        return null;
-  };
-}
-
-export function minValue(min: Number): ValidatorFn {
-  return (control: AbstractControl): {[key: string]: any} => {
-    const input = control.value,
-          isValid = input < min;
-    if(isValid) 
-        return { 'minValue': {min} }
-    else 
-        return null;
-  };
 }
