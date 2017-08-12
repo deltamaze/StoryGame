@@ -22,7 +22,7 @@ export class CreateGameComponent implements OnInit {
     this.createNewGame = this.fb.group({
       gameName: ['', [Validators.required, Validators.minLength(3),Validators.maxLength(10)]],
       isPrivate: ['', [Validators.required]],
-      maxPlayers: ['', [Validators.required, Utils.minValue(3)],Utils.maxValue(8)],
+      maxPlayers: ['', [Validators.required, Utils.minValue(3),Utils.maxValue(8)]],
       timeBetweenTurns: ['', [Validators.required, Utils.minValue(5)],Utils.maxValue(60)],
       totalRounds: ['', [Validators.required,Utils.minValue(5)],Utils.maxValue(30)],
       startingMessage: ['', [Validators.required, Validators.minLength(5), ,Validators.maxLength(200)]],

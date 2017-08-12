@@ -1,29 +1,52 @@
-import { ValidatorFn, AbstractControl  } from '@angular/forms';
+import { ValidatorFn, AbstractControl, FormControl  } from '@angular/forms';
 
 
 export class Utils {
 
 
-public static maxValue(max: Number): ValidatorFn {
-  return (control: AbstractControl): {[key: string]: any} => {
-    const input = control.value,
-          isValid = input > max;
-    if(isValid) 
-        return { 'maxValue': {max} }
-    else 
-        return null;
-  };
+public static maxValue(max: Number):ValidatorFn {
+return (control: FormControl): { [key: string]: boolean } | null => {
+
+  let val: number = control.value;
+
+  if (control.pristine || control.pristine) {
+    return null;
+  }
+  if (val <= max) {
+    return null;
+  }
+  return { 'max': true };
+  }
 }
 
 public static minValue(min: Number): ValidatorFn {
-  return (control: AbstractControl): {[key: string]: any} => {
-    const input = control.value,
-          isValid = input < min;
-    if(isValid) 
-        return { 'minValue': {min} }
-    else 
-        return null;
-  };
+return (control: FormControl): { [key: string]: boolean } | null => {
+
+  let val: number = control.value;
+
+  if (control.pristine || control.pristine) {
+    return null;
+  }
+  if (val >= min) {
+    return null;
+  }
+  return { 'min': true };
+  }
+}
+
+  static max(max: number): ValidatorFn {
+return (control: FormControl): { [key: string]: boolean } | null => {
+
+  let val: number = control.value;
+
+  if (control.pristine || control.pristine) {
+    return null;
+  }
+  if (val <= max) {
+    return null;
+  }
+  return { 'max': true };
+  }
 }
 
 }

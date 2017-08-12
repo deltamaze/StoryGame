@@ -1,0 +1,8 @@
+.narrowcontainer {
+    max-width: 46rem;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 15px;
+    padding-left: 15px;
+    width: 100%;
+}

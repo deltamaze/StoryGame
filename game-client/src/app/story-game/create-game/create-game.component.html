@@ -1,24 +1,52 @@
-<form [formGroup]="heroForm" >
+<form [formGroup]="createNewGame" >
       <div class="form-group">
-
-        <!--<label for="gameName">Game Name</label>
+        <label for="gameName">Game Name</label>
 
         <input type="text" id="gameName" class="form-control"
-               formControlName="gameName" required >-->
+              formControlName="gameName" required >
 
-        <!--<div *ngIf="heroForm.controls.gameName.errors.required">
+        <div *ngIf="createNewGame.controls.gameName.errors?.required" class="red-text">
             Game Name is required.
-        </div>-->
-        <!--<div *ngIf="heroForm.gameName.errors.minLength">
-            Game name must be more than 3 characters.
-        </div>-->
-      </div>
+        </div>
+        <div *ngIf="createNewGame.controls.gameName.errors?.minlength" class="red-text">
+            Game name must be more than 2 characters.
+        </div>
+        <div *ngIf="createNewGame.controls.gameName.errors?.maxlength" class="red-text">
+            Game name must be less than 11 characters.
+        </div>
 
+        <label for="isPrivate">Private Game?</label>
+        <input type="checkbox" id="isPrivate" class="form-control"
+              formControlName="isPrivate" required >
+        <div *ngIf="createNewGame.controls.isPrivate.errors?.required" class="red-text">
+            Field is required.
+        </div>
+
+        <label for="maxPlayers">Game Size</label>
+        <input type="range" min="1" max="8" id="maxPlayers" class="form-control"
+              formControlName="maxPlayers" required >
+        <div *ngIf="createNewGame.controls.maxPlayers.errors?.required" class="red-text">
+            Field is required.
+        </div>
+        <div *ngIf="createNewGame.controls.maxPlayers.errors?.min" class="red-text">
+            Must be greater than 2
+        </div>
+        <div *ngIf="createNewGame.controls.maxPlayers.errors?.max" class="red-text"> 
+            Must be Less than 9
+        </div>
+
+
+      </div>
+<!--
+
+      timeBetweenTurns: ['', [Validators.required, Utils.minValue(5)],Utils.maxValue(60)],
+      totalRounds: ['', [Validators.required,Utils.minValue(5)],Utils.maxValue(30)],
+      startingMessage: ['', [Validators.required, Validators.minLength(5), ,Validators.maxLength(200)]],-->
 
       <button type="submit" class="btn btn-default"
-             [disabled]="heroForm">Submit</button>
-      <button type="button" class="btn btn-default"
-             (click)="formDir.resetForm({})">Reset</button>
+             [disabled]="createNewGame">Submit</button>
+      <!--<button type="button" class="btn btn-default"
+             (click)="formDir.resetForm({})">Reset</button>-->
     </form>
 
 <ul class="list-unstyled">
