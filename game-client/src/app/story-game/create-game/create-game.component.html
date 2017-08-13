@@ -1,10 +1,14 @@
-<form [formGroup]="createNewGame" >
+<form [formGroup]="createNewGame" (ngSubmit)="onSubmit(createNewGame)" >
       <div class="form-group">
-        <label for="gameName">Game Name</label>
 
-        <input type="text" id="gameName" class="form-control"
-              formControlName="gameName" required >
-
+        <!--GameName-->
+        <div class="row">
+            <label for="gameName" class="col-sm-3 col-form-label">Game Name</label>
+            <div class="col-sm-9">
+                <input type="text" id="gameName" class="form-control"
+                    formControlName="gameName" required >
+            </div>
+        </div>
         <div *ngIf="createNewGame.controls.gameName.errors?.required" class="red-text">
             Game Name is required.
         </div>
@@ -14,17 +18,24 @@
         <div *ngIf="createNewGame.controls.gameName.errors?.maxlength" class="red-text">
             Game name must be less than 11 characters.
         </div>
-
-        <label for="isPrivate">Private Game?</label>
-        <input type="checkbox" id="isPrivate" class="form-control"
-              formControlName="isPrivate" required >
-        <div *ngIf="createNewGame.controls.isPrivate.errors?.required" class="red-text">
-            Field is required.
+        
+        <!--IsPrivate-->
+        <div class="row">
+            <label for="isPrivate" class="col-sm-3 col-form-label">Private Game?</label>
+            <div class="col-sm-9">
+                <input type="checkbox" id="isPrivate" class="form-control" style="width: auto;margin-top: 12px;"
+                    formControlName="isPrivate"  >
+            </div>
         </div>
 
-        <label for="maxPlayers">Game Size</label>
-        <input type="range" min="1" max="8" id="maxPlayers" class="form-control"
-              formControlName="maxPlayers" required >
+        <!--GameSize-->
+        <div class="row">
+            <label for="maxPlayers" class="col-sm-3 col-form-label">Game Size {{createNewGame.controls.maxPlayers.value}}</label>
+            <div class="col-sm-9">
+                <input type="range" min="3" max="8" id="maxPlayers" class="form-control"
+                    formControlName="maxPlayers" required >
+            </div>
+        </div>
         <div *ngIf="createNewGame.controls.maxPlayers.errors?.required" class="red-text">
             Field is required.
         </div>
@@ -35,8 +46,64 @@
             Must be Less than 9
         </div>
 
+        <!--TimeBetweenTurns-->
+        <div class="row">
+            <label for="timeBetweenTurns" class="col-sm-3 col-form-label">Round Time {{createNewGame.controls.timeBetweenTurns.value}}</label>
+            <div class="col-sm-9">
+                <input type="range" min="5" max="60" id="timeBetweenTurns" class="form-control"
+                    formControlName="timeBetweenTurns" required >
+            </div>
+        </div>
+        <div *ngIf="createNewGame.controls.timeBetweenTurns.errors?.required" class="red-text">
+            Field is required.
+        </div>
+        <div *ngIf="createNewGame.controls.timeBetweenTurns.errors?.min" class="red-text">
+            Must be greater than 4
+        </div>
+        <div *ngIf="createNewGame.controls.timeBetweenTurns.errors?.max" class="red-text"> 
+            Must be Less than 61
+        </div>
 
+         <!--Total Rounds-->
+        <div class="row">
+            <label for="totalRounds" class="col-sm-3 col-form-label">Total Rounds {{createNewGame.controls.totalRounds.value}}</label>
+            <div class="col-sm-9">
+                <input type="range" min="5" max="30" id="totalRounds" class="form-control"
+                    formControlName="totalRounds" required >
+            </div>
+        </div>
+        <div *ngIf="createNewGame.controls.totalRounds.errors?.required" class="red-text">
+            Field is required.
+        </div>
+        <div *ngIf="createNewGame.controls.totalRounds.errors?.min" class="red-text">
+            Must be greater than 4
+        </div>
+        <div *ngIf="createNewGame.controls.totalRounds.errors?.max" class="red-text"> 
+            Must be Less than 31
+        </div>
+
+        <!--Starting Message-->
+        <div class="row">
+            <label for="startingMessage" class="col-sm-3 col-form-label">Starting Sentence:</label>
+            <div class="col-sm-9">
+                <input type="text" id="startingMessage" class="form-control"
+                    formControlName="startingMessage" required >
+            </div>
+        </div>
+        <div *ngIf="createNewGame.controls.startingMessage.errors?.required" class="red-text">
+            Field is required.
+        </div>
+        <div *ngIf="createNewGame.controls.startingMessage.errors?.minlength" class="red-text">
+            Field must be more than 4 characters.
+        </div>
+        <div *ngIf="createNewGame.controls.startingMessage.errors?.maxlength" class="red-text">
+            Field must be less than 201 characters.
+        </div>
+
+        <!--End of Form-Group-Controls-->
       </div>
+
+
 <!--
 
       timeBetweenTurns: ['', [Validators.required, Utils.minValue(5)],Utils.maxValue(60)],
@@ -44,7 +111,7 @@
       startingMessage: ['', [Validators.required, Validators.minLength(5), ,Validators.maxLength(200)]],-->
 
       <button type="submit" class="btn btn-default"
-             [disabled]="createNewGame">Submit</button>
+             [disabled]="!createNewGame.valid">Submit</button>
       <!--<button type="button" class="btn btn-default"
              (click)="formDir.resetForm({})">Reset</button>-->
     </form>
