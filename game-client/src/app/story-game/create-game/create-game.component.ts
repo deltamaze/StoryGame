@@ -20,7 +20,7 @@ export class CreateGameComponent implements OnInit {
     this.gameService.getErrorStatus().subscribe(status => this.status = status);
 
     this.createNewGame = this.fb.group({
-      gameName: [' ', [Validators.required, Validators.minLength(3),Validators.maxLength(10)]],
+      gameName: [' ', [Validators.required, Validators.minLength(3),Validators.maxLength(20)]],
       isPrivate: [false, []],
       maxPlayers: [8, [Validators.required, Utils.minValue(3),Utils.maxValue(8)]],
       timeBetweenTurns: [30, [Validators.required, Utils.minValue(5),Utils.maxValue(60)]],
@@ -39,10 +39,6 @@ export class CreateGameComponent implements OnInit {
 
   private navHome(): void {
     this.gameService.navHome();
-  }
-  private createGame(): void {
-    this.gameService.clearError() //Clear Previous Error
-      this.gameService.createGame(this.newGame);
   }
 
 

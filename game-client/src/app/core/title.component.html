@@ -1,12 +1,9 @@
 <!-- Exact copy from earlier app.component.html -->
 <!-- As a heading -->
 <nav class="navbar navbar-light bg-faded  navbar-toggleable-md">
-  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <h1 class="navbar-brand mb-0">{{title}}</h1>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
+  <h1 class="navbar-brand navbar-header pull-left">{{title}}</h1>
+  <div class="navbar-header pull-right" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
       <li *ngIf="user" class="nav-item">
         <a class="nav-link pointer"  (click)="navHome()">Home</a>
       </li>
@@ -19,9 +16,9 @@
 
     </ul>
   </div>
-       <!--<a routerLink="logon" routerLinkActive="active">Logon</a>
-       <a routerLink="home" routerLinkActive="active">Home</a>-->
 </nav>
+
+
 <p *ngIf="user">
   <i>Welcome, {{user.username}}</i>
 <p>
