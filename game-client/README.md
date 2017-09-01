@@ -26,3 +26,8 @@ Before running the tests make sure you are serving the app via `ng serve`.
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## ToDo
+Display active games in joingame component
+set up task/cron job on DO to delete inactive games
+set up component for game room and have joinroom/create game nav to it
