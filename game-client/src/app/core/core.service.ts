@@ -56,23 +56,28 @@ export class UserService extends BaseService {
   public login(email: string, password: string): void {
     this.clearError();
     this.afAuth.auth.signInWithEmailAndPassword(email, password)
-      .then(() => this.router.navigate(['home'])).catch(err => this.handleError(err));
+      .then(() => this.router.navigate(['home'])).then(() => this.verifyAuthStatus()).catch(err => this.handleError(err));
 
   }
   public googleLogin(): void {
     this.clearError();
     this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-      .then(() => this.router.navigate(['home'])).catch(err => this.handleError(err));;
+      .then(() => this.router.navigate(['home'])).then(() => this.verifyAuthStatus()).catch(err => this.handleError(err));;
   }
   public guestLogin(): void {
     this.clearError();
     this.afAuth.auth.signInAnonymously()
-      .then(() => this.router.navigate(['home'])).catch(err => this.handleError(err));;
+      .then(() => this.router.navigate(['home'])).then(() => this.verifyAuthStatus()).catch(err => this.handleError(err));;
   }
 
   public logout(): void {
     this.clearError();
-    this.afAuth.auth.signOut();
+    this.afAuth.auth.signOut().then(()=>{
+      let userInfo: UserInfo = new UserInfo;
+          userInfo.username ="";
+          userInfo.uid = "";
+          this.setUserInfo(userInfo);
+  });
     this.router.navigate(['logon']);
 
   }
