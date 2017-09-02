@@ -140,13 +140,3 @@ export class UserInfo {
   public username: string = "";
   public uid: string = "";
 }
-
-export class GameInfoList {
-  public gameInfoList: GameInfo[] = [new GameInfo]
-}
-export class GameInfo {
-  public gameName
-  public isPrivate
-  public maxPlayers
-  public
-}

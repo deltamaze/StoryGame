@@ -19,7 +19,12 @@ export class FindGameComponent implements OnInit {
     this.gameService.navHome();
   }
   private getGames():void{
-    this.gameService.getGames();
+    this.gameService.getGames().subscribe(res=>{
+      this.gameList = res
+    });
+  }
+  private consoleTest():void{
+    console.log(this.gameList);
   }
   private joinGame():void{
   }

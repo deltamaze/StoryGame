@@ -12,7 +12,7 @@ export class StoryGameService extends BaseService {
   public currentGameId: string = "";
   private user: UserInfo; //for internal use in the set username function
   private pingSubscription: Subscription;
-  private userInfo: BehaviorSubject<UserInfo> = new BehaviorSubject<UserInfo>(new UserInfo);
+
 
   constructor(
     public router: Router,
@@ -65,36 +65,39 @@ export class StoryGameService extends BaseService {
     //nav with param
 
   }
-  public getGames() {
-    let test 
- 
-    this.db.list(`/storyGames/`)
+  public getGames():Observable<any> {
+    
+    let playerStartAtDate = Math.floor(Date.now()) - 15000 //use as threshold to only pull players who have pinged in the past 15 seconds
+    let gameStartAtDate = Math.floor(Date.now()) - 900000 //use as threshold to only pull players who have pinged in the past 15 minutes
+
+    console.log(gameStartAtDate);
+    return this.db.list(`/storyGames/`,{
+            query:{
+              orderByChild: 'timeStamp',
+              startAt:{ value: gameStartAtDate, key: 'timeStamp' }
+            }
+          })
       .map(games=>{
         for (let game of games) {
           // Find each corresponding associated object and store it as a FibreaseObjectObservable
 
-          this.db.list(`/gamePlayers/${game.$key}`,{
-            query:{
-              //orderByChild:"timestamp",
-             //startAt:playerStartAtDate
-            }
-          }).subscribe(players =>{
+          this.db.list(`/gamePlayers/${game.$key}`).subscribe(players =>{
             game.players = players.filter(player=>{
-              let playerStartAtDate = Math.floor(Date.now()) - 15000 //use as threshold to only pull players who have pinged in the past 15 seconds
+              
               return player.timestamp > playerStartAtDate;
             });
           });
         }
         return games;
-
-      }).subscribe(res =>{
-      test =res;
-      console.log(res);
-    });
+      })
+    //   .subscribe(res =>{
+    //   test =res;
+    //   console.log(res);
+    // });
   
   }
 
-  public navHome() {
+  public navHome():void {
     this.leaveGame();
     super.navHome();
   }
@@ -112,7 +115,7 @@ export class StoryGameService extends BaseService {
       .set(ping);
   }
 
-  private leaveGame() {
+  private leaveGame():void {
     if (this.pingSubscription != null && !this.pingSubscription.closed) {
       this.pingSubscription.unsubscribe();
     }
