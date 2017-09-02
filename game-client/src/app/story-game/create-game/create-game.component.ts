@@ -9,7 +9,7 @@ import {Utils} from '../../shared/utils'
 })
 export class CreateGameComponent implements OnInit {
 
-  private newGame: GameRoom = new GameRoom;
+  private newGame: GameRoom = new GameRoom();
   public createNewGame: FormGroup;
   private status: string;
 

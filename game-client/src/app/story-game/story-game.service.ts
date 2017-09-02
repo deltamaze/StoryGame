@@ -12,6 +12,7 @@ export class StoryGameService extends BaseService {
   public currentGameId: string = "";
   private user: UserInfo; //for internal use in the set username function
   private pingSubscription: Subscription;
+  private userInfo: BehaviorSubject<UserInfo> = new BehaviorSubject<UserInfo>(new UserInfo);
 
   constructor(
     public router: Router,

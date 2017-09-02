@@ -3,23 +3,22 @@
 <nav class="navbar navbar-light bg-faded  navbar-toggleable-md">
   <h1 class="navbar-brand navbar-header pull-left">{{title}}</h1>
   <div class="navbar-header pull-right" id="navbarNav">
-    <ul class="navbar-nav mr-auto">
-      <li *ngIf="user" class="nav-item">
+    <ul class="nav navbar-nav">
+      <li class="nav-item">
         <a class="nav-link pointer"  (click)="navHome()">Home</a>
       </li>
-      <li *ngIf="!user" class="nav-item" >
+      <li *ngIf="!user || user.username ==''" class="nav-item" >
         <a class="nav-link pointer"  (click)="navLogon()">Logon</a>
       </li>
-      <li *ngIf="user" class="nav-item" >
+      <li *ngIf="user != null && user.username != ''" class="nav-item" >
         <a class="nav-link pointer"  (click)="logout()">Logout</a>
       </li>
-
     </ul>
   </div>
 </nav>
 
 
-<p *ngIf="user">
+<p *ngIf="user != null && user.username != ''">
   <i>Welcome, {{user.username}}</i>
 <p>
 

@@ -22,7 +22,6 @@ export class FindGameComponent implements OnInit {
     this.gameService.getGames();
   }
   private joinGame():void{
-
   }
 
 
