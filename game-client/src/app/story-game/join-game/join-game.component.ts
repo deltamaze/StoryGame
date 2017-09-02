@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {StoryGameService} from '../story-game.service';
 
 @Component({
-  selector: 'app-find-game',
-  templateUrl: './find-game.component.html',
-  styleUrls: ['./find-game.component.css']
+  selector: 'app-join-game',
+  templateUrl: './join-game.component.html',
+  styleUrls: ['./join-game.component.css']
 })
-export class FindGameComponent implements OnInit {
+export class JoinGameComponent implements OnInit {
   
   private gameList:any;
 

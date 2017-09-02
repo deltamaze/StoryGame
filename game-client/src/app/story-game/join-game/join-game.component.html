@@ -1,0 +1,48 @@
+
+<p *ngIf="gameList && gameList.length == 0">
+  No Games Found
+</p>
+<p *ngIf="gameList == null">
+  Loading Games
+</p>
+<div *ngIf="gameList && gameList.length > 0" >
+  <p>Games Found: {{gameList.length}} </p> 
+  <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Username</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <td>Larry</td>
+      <td>the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+<ul class="list-unstyled">
+  <li>
+    <button class="btn btn-primary btn-md" (click)="consoleTest()">ConsoleTest</button>
+  </li>
+  <br />
+  <br />
+  <li>
+    <button class="btn btn-danger btn-md" (click)="navHome()">Return Home</button>
+  </li>
+</ul>
