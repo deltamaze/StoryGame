@@ -24,9 +24,11 @@ export class JoinGameComponent implements OnInit {
     });
   }
   private consoleTest():void{
-    console.log(this.gameList);
+    
   }
-  private joinGame():void{
+  private joinGame(gameKey:any):void{
+    console.log(gameKey);
+    // console.log(this.gameList);
   }
 
 

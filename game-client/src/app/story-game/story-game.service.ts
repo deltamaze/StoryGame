@@ -4,7 +4,8 @@ import { BehaviorSubject, Subscription } from 'rxjs/RX'
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { BaseService, UserService, UserInfo } from '../core/core.service';
+import { BaseService} from '../core/base.service';
+import { UserService, UserInfo } from '../core/user.service';
 
 @Injectable()
 export class StoryGameService extends BaseService {

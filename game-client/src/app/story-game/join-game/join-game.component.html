@@ -10,26 +10,23 @@
   <table class="table table-striped">
   <thead>
     <tr>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Username</th>
+      <th>Game Name</th>
+      <th>Private</th>
+      <th>Players</th>
+      <th>Starting Message</th>
+      <th> </th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
+    <!--<li *ngFor="let hero of heroes">
+      {{ hero }}
+    </li>-->
+    <tr *ngFor="let game of gameList">
+      <td>{{game.gameName}}</td>
+      <td>{{game.isPrivate}}</td>
+      <td>{{(game.players)?.length}} / {{game.maxPlayers}}</td>
+      <td>{{game.startingMessage}}</td>
+      <td><button class="btn btn-success btn-md" (click)="joinGame(game.$key)">Join</button></td>
     </tr>
   </tbody>
 </table>
@@ -37,11 +34,11 @@
 
 
 <ul class="list-unstyled">
-  <li>
+  <!--<li>
     <button class="btn btn-primary btn-md" (click)="consoleTest()">ConsoleTest</button>
   </li>
   <br />
-  <br />
+  <br />-->
   <li>
     <button class="btn btn-danger btn-md" (click)="navHome()">Return Home</button>
   </li>

@@ -1,6 +1,6 @@
 // Exact copy of app/title.component.ts except import UserService from shared
 import { Component, Input } from '@angular/core';
-import { UserService,UserInfo }      from '../core/core.service';
+import { UserService,UserInfo }      from '../core/user.service';
 
 @Component({
   selector: 'app-title',
