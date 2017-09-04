@@ -9,10 +9,12 @@ import {StoryGameService} from '../story-game.service';
 export class JoinGameComponent implements OnInit {
   
   private gameList:any;
+  private status: string = "";
 
   constructor(private gameService: StoryGameService) { }
 
   ngOnInit() {
+    this.gameService.getErrorStatus().subscribe(status => this.status = status);
     this.getGames();
   }
   private navHome():void{

@@ -122,6 +122,19 @@ export class StoryGameService extends BaseService {
     }
   }
 
+  public submitChatMessage(message: string):void
+  {
+
+  }
+  public submitIdea(idea: string):void
+  {
+
+  }
+  public submiteVote(voteOptionKey: string):void
+  {
+
+  }
+
 
 }
 export class GameRoom {

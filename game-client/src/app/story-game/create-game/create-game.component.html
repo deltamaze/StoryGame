@@ -104,12 +104,6 @@
       </div>
 
 
-<!--
-
-      timeBetweenTurns: ['', [Validators.required, Utils.minValue(5)],Utils.maxValue(60)],
-      totalRounds: ['', [Validators.required,Utils.minValue(5)],Utils.maxValue(30)],
-      startingMessage: ['', [Validators.required, Validators.minLength(5), ,Validators.maxLength(200)]],-->
-
       <button type="submit" class="btn btn-primary"
              [disabled]="!createNewGame.valid">Submit</button>
     </form>
@@ -119,3 +113,4 @@
     <button class="btn btn-danger btn-md" (click)="navHome()">Return Home</button>
   </li>
 </ul>
+<span class="red-text">{{status}}</span> 
