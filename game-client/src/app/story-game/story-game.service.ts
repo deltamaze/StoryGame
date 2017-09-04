@@ -53,9 +53,9 @@ export class StoryGameService extends BaseService {
   public joinGame(gameId: string = ""):void {
     //startRoomPing
     console.log("abc");
-    if (gameId != "")
+    if (gameId != "")//this will be blank when coming from the createGame component, and have gameId when coming form joinGame component
       this.currentGameId = gameId
-    if (this.pingSubscription != null && !this.pingSubscription.closed) {
+    if (this.pingSubscription != null && !this.pingSubscription.closed) {//kill any existing ping subscription, so we can create a new one.
       this.pingSubscription.unsubscribe();
     }
 
@@ -63,7 +63,7 @@ export class StoryGameService extends BaseService {
     this.pingSubscription = timer.subscribe(t => {
       this.roomPing();
     });
-    //nav with param
+    this.router.navigate(['gameroom']);
 
   }
   public getGames():Observable<any> {
