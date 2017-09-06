@@ -26,11 +26,12 @@ export class GameRoomComponent implements OnInit {
   private submitChatMessage():void
   {
     this.gameService.submitChatMessage(this.chatInput);
-    this.chatInput = "";
+    this.chatInput = "";//clear input
 
   }
   private submitIdea():void
   {
+    this.gameService.submitChatMessage(this.chatInput);
 
   }
   private submiteVote():void
