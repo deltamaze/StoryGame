@@ -19,14 +19,20 @@ export class GameRoomComponent implements OnInit {
   constructor(private gameService: StoryGameService) { }
 
   ngOnInit() {
+    //make sure player is in game, and didn't nav straight here without joinin a game
+    this.gameService.verifyInGameStatus();
+
     this.gameService.getErrorStatus().subscribe(status => this.status = status);
-    //subscripe to rest chatmessages, playerlist,gamestory,gameinfo
+    this.gameService.getChatMessages().subscribe(res => {
+      this.chatMessages = res;
+    })
   }
 
   private submitChatMessage():void
   {
     this.gameService.submitChatMessage(this.chatInput);
     this.chatInput = "";//clear input
+    this.gameService.clearError();
 
   }
   private submitIdea():void

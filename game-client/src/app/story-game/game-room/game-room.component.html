@@ -12,7 +12,19 @@
       <!--gamebody and chat in single stacked column-->
       <div class="row">
         <div class="col-12">Game</div>
-        <div class="col-12">Chat</div>
+        <div class="col-12">Chat
+          <form (ngSubmit)="submitChatMessage()" >
+            <div class="form-group">
+              <input type="text" class="form-control" id="text" [(ngModel)]="chatInput" name="text" maxlength="50" required>
+            </div>
+          <button type="submit" class="btn btn-success">Submit</button>
+          </form>
+          <ul>
+            <li class="text" *ngFor="let message of chatMessages">
+              {{message.username}} - {{message.message}}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="col-sm-3">Playerlist</div>

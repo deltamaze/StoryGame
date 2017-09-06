@@ -112,6 +112,7 @@ export class StoryGameService extends BaseService {
     if (this.pingSubscription != null && !this.pingSubscription.closed) {
       this.pingSubscription.unsubscribe();
     }
+    this.currentGameId="";
   }
 
   public submitChatMessage(input: string):void
@@ -125,7 +126,7 @@ export class StoryGameService extends BaseService {
     this.db.list('/gamePlayerChat/' + this.currentGameId + '/')
       .push(packedMessage).catch(err => this.handleError(err));
   }
-  public getChatMessage():FirebaseListObservable<any>
+  public getChatMessages():FirebaseListObservable<any>
   {
     return this.db.list('/gamePlayerChat/' + this.currentGameId + '/')
   }
@@ -136,6 +137,13 @@ export class StoryGameService extends BaseService {
   public submiteVote(voteOptionKey: string):void
   {
 
+  }
+  public verifyInGameStatus() {
+    if(this.currentGameId == null || this.currentGameId=="")
+    {
+      //not in game, return home
+      super.navHome();
+    }
   }
 
 
