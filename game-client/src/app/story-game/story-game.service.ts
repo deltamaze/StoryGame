@@ -34,12 +34,12 @@ export class StoryGameService extends BaseService {
   }
 
   public createGame(newgame: GameRoom):void {
-    if(newgame.timeStamp == null)
+    if(newgame.timestamp == null)
     {
-      newgame.timeStamp = firebase.database.ServerValue.TIMESTAMP;
+      newgame.timestamp = firebase.database.ServerValue.TIMESTAMP;
     }
     //store password seperately or implement write (noread) only rule on it.
-    console.log(newgame);
+    
     let pushedGame = this.db.list('/storyGames/')
       .push(newgame).then(item => {
         console.log(item);
@@ -52,7 +52,6 @@ export class StoryGameService extends BaseService {
 
   public joinGame(gameId: string = ""):void {
     //startRoomPing
-    console.log("abc");
     if (gameId != "")//this will be blank when coming from the createGame component, and have gameId when coming form joinGame component
       this.currentGameId = gameId
     if (this.pingSubscription != null && !this.pingSubscription.closed) {//kill any existing ping subscription, so we can create a new one.
@@ -68,14 +67,11 @@ export class StoryGameService extends BaseService {
   }
   public getGames():Observable<any> {
     
-    let playerStartAtDate = Math.floor(Date.now()) - 15000 //use as threshold to only pull players who have pinged in the past 15 seconds
-    let gameStartAtDate = Math.floor(Date.now()) - 900000 //use as threshold to only pull players who have pinged in the past 15 minutes
 
-    console.log(gameStartAtDate);
     return this.db.list(`/storyGames/`,{
             query:{
-              orderByChild: 'timeStamp',
-              startAt:{ value: gameStartAtDate, key: 'timeStamp' }
+              orderByChild: 'timestamp',
+              startAt:{ value: Math.floor(Date.now()) - 900000 , key: 'timestamp' }//use as threshold to only pull players who have pinged in the past 15 minutes
             }
           })
       .map(games=>{
@@ -85,16 +81,12 @@ export class StoryGameService extends BaseService {
           this.db.list(`/gamePlayers/${game.$key}`).subscribe(players =>{
             game.players = players.filter(player=>{
               
-              return player.timestamp > playerStartAtDate;
+              return player.timestamp > Math.floor(Date.now()) - 15000; //use as threshold to only pull players who have pinged in the past 15 seconds
             });
           });
         }
         return games;
       })
-    //   .subscribe(res =>{
-    //   test =res;
-    //   console.log(res);
-    // });
   
   }
 
@@ -122,9 +114,20 @@ export class StoryGameService extends BaseService {
     }
   }
 
-  public submitChatMessage(message: string):void
+  public submitChatMessage(input: string):void
   {
+    let packedMessage = {
+      username:this.user.username,
+      message:input,
+      timestamp:firebase.database.ServerValue.TIMESTAMP
 
+    }
+    this.db.list('/gamePlayerChat/' + this.currentGameId + '/')
+      .push(packedMessage).catch(err => this.handleError(err));
+  }
+  public getChatMessage():FirebaseListObservable<any>
+  {
+    return this.db.list('/gamePlayerChat/' + this.currentGameId + '/')
   }
   public submitIdea(idea: string):void
   {
@@ -145,7 +148,7 @@ export class GameRoom {
   public timeBetweenTurns: number = 30;
   public totalRounds: number = 15;
   public startingMessage: string = "Once upon a time ...";
-  public timeStamp: any = firebase.database.ServerValue.TIMESTAMP;
+  public timestamp: any = firebase.database.ServerValue.TIMESTAMP;
 }
 export class CurrentGameInfo {
   public gameName: string

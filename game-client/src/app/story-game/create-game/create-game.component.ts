@@ -26,7 +26,7 @@ export class CreateGameComponent implements OnInit {
       timeBetweenTurns: [30, [Validators.required, Utils.minValue(5),Utils.maxValue(60)]],
       totalRounds: [15, [Validators.required,Utils.minValue(5),Utils.maxValue(30)]],
       startingMessage: ['Once upon a time ...', [Validators.required, Validators.minLength(5), ,Validators.maxLength(200)]],
-      timeStamp: [null]
+      timestamp: [null]
     });
   }
 
