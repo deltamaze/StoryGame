@@ -34,9 +34,10 @@ export class StoryGameService extends BaseService {
   }
 
   public createGame(newgame: GameRoom):void {
-    if(newgame.timestamp == null)
+    if(newgame.timestamp == null || newgame.currentRound == null)
     {
       newgame.timestamp = firebase.database.ServerValue.TIMESTAMP;
+      newgame.currentRound = 0;
     }
     //store password seperately or implement write (noread) only rule on it.
     
@@ -157,6 +158,7 @@ export class GameRoom {
   public totalRounds: number = 15;
   public startingMessage: string = "Once upon a time ...";
   public timestamp: any = firebase.database.ServerValue.TIMESTAMP;
+  public currentRound: number = 0;//when creating, start at round zero, when game starts , the api will turn this into round 1..2..3..etc
 }
 export class CurrentGameInfo {
   public gameName: string
