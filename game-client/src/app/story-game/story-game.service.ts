@@ -38,6 +38,7 @@ export class StoryGameService extends BaseService {
     newgame.timestamp = firebase.database.ServerValue.TIMESTAMP;
     newgame.currentRound = 0;
     newgame.creatorUid = this.user.uid;
+    newgame.isGameOver = false;
     //store password seperately or implement write (noread) only rule on it.
     
     let pushedGame = this.db.list('/storyGames/')
@@ -155,10 +156,11 @@ export class GameRoom {
   public maxPlayers: number = 8;
   public timeBetweenTurns: number = 30;
   public totalRounds: number = 15;
-  public startingMessage: string = "Once upon a time ...";
+  public storyThusFar: string = "Once upon a time ...";
   public timestamp: any = firebase.database.ServerValue.TIMESTAMP;
   public currentRound: number = 0;//when creating, start at round zero, when game starts , the api will turn this into round 1..2..3..etc
   public creatorUid:string= "0";
+  public isGameOver: boolean = false;
 }
 export class CurrentGameInfo {
   public gameName: string

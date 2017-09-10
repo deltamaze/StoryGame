@@ -11,7 +11,19 @@
     <div class="col-sm-9">
       <!--gamebody and chat in single stacked column-->
       <div class="row">
-        <div class="col-12">Game</div>
+        <div class="col-12">
+          <!--If Owner and Round 0, display StartGame-->
+          <!--If round zero, and not owner, display: 'Waiting for game to start'-->
+          <!--If Round > 0 display StoryThusFar-->
+
+          <div>StoryThusFar</div>
+          <!--IfRound > 0 and Odd, and gameOver = False-->
+          <div>SubmitIdea</div>
+          <!--IfRound > 0 and Even, and gameOver = False-->
+          <div>SubmitVote</div>
+          <!--If Game Over-->
+          <div>GameOver</div>
+        </div>
         <div class="col-12">Chat
           <form (ngSubmit)="submitChatMessage()" >
             <div class="form-group">

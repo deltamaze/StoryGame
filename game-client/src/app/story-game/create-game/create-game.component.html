@@ -84,19 +84,19 @@
 
         <!--Starting Message-->
         <div class="row">
-            <label for="startingMessage" class="col-sm-3 col-form-label">Starting Sentence:</label>
+            <label for="storyThusFar" class="col-sm-3 col-form-label">Starting Sentence:</label>
             <div class="col-sm-9">
-                <input type="text" id="startingMessage" class="form-control"
-                    formControlName="startingMessage" required >
+                <input type="text" id="storyThusFar" class="form-control"
+                    formControlName="storyThusFar" required >
             </div>
         </div>
-        <div *ngIf="createNewGame.controls.startingMessage.errors?.required" class="red-text">
+        <div *ngIf="createNewGame.controls.storyThusFar.errors?.required" class="red-text">
             Field is required.
         </div>
-        <div *ngIf="createNewGame.controls.startingMessage.errors?.minlength" class="red-text">
+        <div *ngIf="createNewGame.controls.storyThusFar.errors?.minlength" class="red-text">
             Field must be more than 4 characters.
         </div>
-        <div *ngIf="createNewGame.controls.startingMessage.errors?.maxlength" class="red-text">
+        <div *ngIf="createNewGame.controls.storyThusFar.errors?.maxlength" class="red-text">
             Field must be less than 201 characters.
         </div>
 
