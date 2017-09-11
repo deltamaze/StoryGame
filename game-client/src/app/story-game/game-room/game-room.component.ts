@@ -23,6 +23,7 @@ export class GameRoomComponent implements OnInit {
     this.gameService.verifyInGameStatus();
 
     this.gameService.getErrorStatus().subscribe(status => this.status = status);
+    this.gameService.getGameInfo().subscribe(res => this.gameInfo = res);
     this.gameService.getChatMessages().subscribe(res => {
       this.chatMessages = res;
     })
@@ -48,7 +49,6 @@ export class GameRoomComponent implements OnInit {
   private leaveGame():void
   {
     this.gameService.navHome(); //this will unsubscripe player from gameroom as well as returning player home
-
   }
 
 

@@ -1,45 +1,70 @@
-<p>
-  game-room works!
-</p>
-<!--grid 9/3 game and playerlist-->
-<!--underneath, chatroom-->
-<!--on small window, stack game/chat/playerlist-->
-
-  <!--on main body, is user is owner, and game not started, display button: START GAME, otherwise, display starting message + game story-->
-<div class="container">
+<div *ngIf="gameInfo != null" class="container">
   <div class="row">
     <div class="col-sm-9">
       <!--gamebody and chat in single stacked column-->
       <div class="row">
         <div class="col-12">
+
           <!--If Owner and Round 0, display StartGame-->
           <!--If round zero, and not owner, display: 'Waiting for game to start'-->
           <!--If Round > 0 display StoryThusFar-->
-
-          <div>StoryThusFar</div>
-          <!--IfRound > 0 and Odd, and gameOver = False-->
-          <div>SubmitIdea</div>
-          <!--IfRound > 0 and Even, and gameOver = False-->
-          <div>SubmitVote</div>
-          <!--If Game Over-->
-          <div>GameOver</div>
-        </div>
-        <div class="col-12">Chat
-          <form (ngSubmit)="submitChatMessage()" >
-            <div class="form-group">
-              <input type="text" class="form-control" id="text" [(ngModel)]="chatInput" name="text" maxlength="50" required>
+          <div class="card card-outline-primary mb-3">
+            <h4 class="card-title">Story</h4>
+            <div class="card-text">
+                  <p>{{gameInfo.storyThusFar}}</p>
             </div>
-          <button type="submit" class="btn btn-success">Submit</button>
-          </form>
-          <ul>
-            <li class="text" *ngFor="let message of chatMessages">
-              {{message.username}} - {{message.message}}
-            </li>
-          </ul>
+          </div>
+          <div class="card card-outline-success mb-3">
+            <h4 class="card-title">Player Action</h4>
+            <div class="card-text">
+              <div *ngIf="gameInfo.currentRound == 0">
+                  <div *ngIf="gameInfo.creatorUid == gameService.user.uid ">StartGame Button</div>
+                  <div *ngIf="gameInfo.creatorUid != gameService.user.uid ">Please Wait for Host to Start Game!</div>
+              </div>
+              <!--IfRound > 0 and Odd, and gameOver = False-->
+              <div *ngIf="gameInfo.currentRound % 2 ==1 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
+                SubmitIdea
+              </div>
+              <!--IfRound > 0 and Even, and gameOver = False-->
+              <div *ngIf="gameInfo.currentRound % 2 ==0 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
+                SubmitVote
+              </div>
+              <!--If Game Over-->
+              <div *ngIf="gameInfo.isGameOver == true">
+                GameOver
+              </div>
+            </div>
+          </div>
+         
+        </div>
+        <div class="col-12">
+          <div class="card card-outline-info mb-3">
+            <h4 class="card-title">Chat</h4>
+            <div class="card-text">
+              <form (ngSubmit)="submitChatMessage()" >
+                <div class="form-group">
+                  <input type="text" class="form-control" id="text" [(ngModel)]="chatInput" name="text" maxlength="50" required>
+                </div>
+              <button type="submit" class="btn btn-success">Submit</button>
+              </form>
+              <ul>
+                <li class="text" *ngFor="let message of chatMessages">
+                  {{message.username}} - {{message.message}}
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-sm-3">Playerlist</div>
+    <div class="col-sm-3">
+      <div class="card card-outline-warning mb-3">
+        <h4 class="card-title">PlayerList</h4>
+        <div class="card-text">
+            <p>Test</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <span class="red-text">{{status}}</span> 
