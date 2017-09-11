@@ -59,6 +59,17 @@ export class StoryGameService extends BaseService {
       this.pingSubscription.unsubscribe();
     }
 
+    let fbPath = '/gamePlayers/' + this.currentGameId + '/' + this.user.uid + '/'
+    let playerInfo = {
+      joinTime: firebase.database.ServerValue.TIMESTAMP,
+      pingTime: firebase.database.ServerValue.TIMESTAMP,
+      score: 0,
+      isActive : true,
+      username: this.user.username
+    }
+    this.db.object(fbPath)
+      .set(playerInfo);
+
     let timer = Observable.timer(1000, 5000);
     this.pingSubscription = timer.subscribe(t => {
       this.roomPing();
@@ -100,11 +111,8 @@ export class StoryGameService extends BaseService {
     //let other plays know which games are active, and the playerCount
     //calculate # of players, but count of pings done in last 5 seconds
 
-    let fbPath = '/gamePlayers/' + this.currentGameId + '/' + this.user.uid + '/'
-    let ping = {
-      timestamp: firebase.database.ServerValue.TIMESTAMP,
-      username: this.user.username
-    }
+    let fbPath = '/gamePlayers/' + this.currentGameId + '/' + this.user.uid + '/pingTime'
+    let ping = firebase.database.ServerValue.TIMESTAMP;
     this.db.object(fbPath)
       .set(ping);
   }
