@@ -1,0 +1,16 @@
+{
+  "name": "game-server",
+  "version": "1.0.0",
+  "description": "server side for story game",
+  "engines": {
+    "node": ">=4.3.2"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.15.2",
+    "firebase": "^3.8.0",
+    "firebase-admin": "^4.2.1"
+  }
+}
