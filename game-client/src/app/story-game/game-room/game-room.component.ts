@@ -15,6 +15,7 @@ export class GameRoomComponent implements OnInit {
   private playerList: any;
   private gameStory: any;
   private gameInfo: any;
+  private ideaInput: string;
 
   constructor(private gameService: StoryGameService) { }
 
@@ -36,15 +37,17 @@ export class GameRoomComponent implements OnInit {
     this.gameService.clearError();
 
   }
+  private startGame(): void
+  {
+
+  }
   private submitIdea():void
   {
-    this.gameService.submitChatMessage(this.chatInput);
-
+    this.gameService.submitIdea(this.ideaInput);
   }
   private submiteVote():void
   {
     this.gameService.submiteVote("");
-
   }
   private leaveGame():void
   {

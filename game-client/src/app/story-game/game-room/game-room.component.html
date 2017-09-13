@@ -18,12 +18,19 @@
             <h4 class="card-title">Player Action</h4>
             <div class="card-text">
               <div *ngIf="gameInfo.currentRound == 0">
-                  <div *ngIf="gameInfo.creatorUid == gameService.user.uid ">StartGame Button</div>
+                  <div *ngIf="gameInfo.creatorUid == gameService.user.uid ">
+                    <button class="btn btn-success btn-md" (click)="startGame()">StartGame</button>
+                  </div>
                   <div *ngIf="gameInfo.creatorUid != gameService.user.uid ">Please Wait for Host to Start Game!</div>
               </div>
               <!--IfRound > 0 and Odd, and gameOver = False-->
               <div *ngIf="gameInfo.currentRound % 2 ==1 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
-                SubmitIdea
+                <form (ngSubmit)="submitIdea()" >
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="text" [(ngModel)]="chatInput" name="text" maxlength="50" required>
+                  </div>
+                  <button type="submit" class="btn btn-success">Submit Idea</button>
+                </form>
               </div>
               <!--IfRound > 0 and Even, and gameOver = False-->
               <div *ngIf="gameInfo.currentRound % 2 ==0 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
@@ -45,7 +52,7 @@
                 <div class="form-group">
                   <input type="text" class="form-control" id="text" [(ngModel)]="chatInput" name="text" maxlength="50" required>
                 </div>
-              <button type="submit" class="btn btn-success">Submit</button>
+              <button type="submit" class="btn btn-success">Send</button>
               </form>
               <ul>
                 <li class="text" *ngFor="let message of chatMessages">
@@ -67,4 +74,14 @@
     </div>
   </div>
 </div>
+<ul class="list-unstyled">
+  <!--<li>
+    <button class="btn btn-primary btn-md" (click)="consoleTest()">ConsoleTest</button>
+  </li>
+  <br />
+  <br />-->
+  <li>
+    <button class="btn btn-danger btn-md" (click)="navHome()">Leave Game</button>
+  </li>
+</ul>
 <span class="red-text">{{status}}</span> 
