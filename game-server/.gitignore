@@ -33,6 +33,10 @@ storygame-40e42-firebase-adminsdk-xgxyg-8d0fe422e4.json
 npm-debug.log
 testem.log
 /typings
+.tscache
+.baseDir.ts
+dist
+node_modules
 
 # e2e
 /e2e/*.js
