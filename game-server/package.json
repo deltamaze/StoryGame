@@ -1,9 +1,8 @@
 {
-  "name": "heros",
-  "description": "The tour of heros",
+  "name": "game-server",
+  "description": "server side for story game",
   "version": "1.0.0",
-  "private": true,
-  "author": "Brian Love",
+  "author": "William Pooley",
   "scripts": {
     "dev": "NODE_ENV=development nodemon ./bin/www",
     "grunt": "grunt",
