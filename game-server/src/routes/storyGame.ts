@@ -4,8 +4,8 @@ import * as firebase from 'firebase-admin';
 var serviceAccount = require("../../storygame-40e42-firebase-adminsdk-xgxyg-8d0fe422e4.json");
 
 firebase.initializeApp({
-    credential: firebase.credential.cert(serviceAccount)//,
-    //databaseURL: //"https://snakearcade-45688.firebaseio.com"
+    credential: firebase.credential.cert(serviceAccount),
+    databaseURL: "https://storygame-40e42.firebaseio.com"
 });
 
 
@@ -66,7 +66,13 @@ export class StoryGameRoute extends BaseRoute {
       "message": 'Parameter:' + req.params.roomName//"Welcome to the StoryGameAPI"
     };
 
+
     //render template
     this.render(req, res, "index", options);
+    //Start Game
+    var test = firebase.database().ref('testRef/'+ req.params.roomName);
+    test.push(':o');
+
+
   }
 }
