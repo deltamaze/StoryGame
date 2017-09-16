@@ -7,6 +7,7 @@ import errorHandler = require("errorhandler");
 import methodOverride = require("method-override");
 
 import { IndexRoute } from "./routes/index";
+import { StoryGameRoute } from "./routes/storyGame";
 
 /**
  * The server.
@@ -113,8 +114,10 @@ export class Server {
 
     //IndexRoute
     IndexRoute.create(router);
+    StoryGameRoute.create(router);
 
     //use router middleware
+    
     this.app.use(router);
   }
 

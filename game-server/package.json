@@ -16,7 +16,7 @@
     "method-override": "^2.3.6",
     "morgan": "^1.7.0",
     "pug": "^2.0.0-beta6",
-	"firebase": "^3.8.0",
+	  "firebase": "^3.8.0",
     "firebase-admin": "^4.2.1"
   },
   "devDependencies": {
