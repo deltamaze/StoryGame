@@ -70,8 +70,8 @@ export class StoryGameRoute extends BaseRoute {
     //render template
     this.render(req, res, "index", options);
     //Start Game
-    var test = firebase.database().ref('testRef/'+ req.params.roomName);
-    test.push(':o');
+    var test = firebase.database().ref('storyGames/'+ req.params.roomName+'/isGameOver');
+    test.set(true);
 
 
   }
