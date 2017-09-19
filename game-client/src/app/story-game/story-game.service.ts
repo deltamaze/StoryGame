@@ -1,4 +1,5 @@
 import { Injectable, Optional } from '@angular/core';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject, Subscription } from 'rxjs/RX'
 import * as firebase from 'firebase/app';
@@ -13,12 +14,14 @@ export class StoryGameService extends BaseService {
   public currentGameId: string = "";
   public user: UserInfo; //for internal use in the set username function
   private pingSubscription: Subscription;
+  private gameApiUrl:string = 'http://localhost:8080/';
 
 
   constructor(
     public router: Router,
     public db: AngularFireDatabase,
-    public userService: UserService) {
+    public userService: UserService,
+    private http: Http) {
     super(router);
     userService.getUserInfo().subscribe(item => this.user = item);
   }
@@ -160,6 +163,10 @@ export class StoryGameService extends BaseService {
     }
   }
 
+  public startGame() {
+    this.http.post(this.gameApiUrl+'StartStoryGame/'+ this.currentGameId ,null)
+    .subscribe({ error: err => this.handleError(err)});
+  }
 
 }
 export class GameRoom {
