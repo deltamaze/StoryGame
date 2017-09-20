@@ -63,15 +63,31 @@ export class StoryGameRoute extends BaseRoute {
 
     //set message
     let options: Object = {
-      "message": 'Parameter:' + req.params.roomName//"Welcome to the StoryGameAPI"
+      "message": 'Parameter:' + req.params.roomName//
     };
 
 
     //render template
     this.render(req, res, "index", options);
+
     //Start Game
-    var test = firebase.database().ref('storyGames/'+ req.params.roomName+'/isGameOver');
-    test.set(true);
+    let gameRef = firebase.database().ref('storyGames/'+ req.params.roomName);
+    let gameObj
+
+    //determine if game has been created, and if round is still zero
+    //possible that the client has some slowdown pushing to firebase, lets wait 1 second and check 
+      setTimeout(() => 
+      {
+          
+            gameRef.once('value').then(function (snapshot) {
+            if (!snapshot.val()) {
+                gameObj = snapshot.val()
+            }
+            
+        }.bind(this));
+      },
+      5000);
+    //game.set(true);
 
 
   }
