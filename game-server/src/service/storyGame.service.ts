@@ -10,6 +10,11 @@ export class StoryGameService {
   gameId :string;
   gameRef : any;
   gameObj: any;
+  timer: any;
+  roundTime: number = 0;//move to game object
+  gameTime: number = 0;//move to game object
+  gameEngineInterval: number = 2000; //2 seconds
+  maxGameLength: number = 10;//max possible 2 second iterations. 
 
     constructor(id:string) {
         this.gameId = id
@@ -34,33 +39,13 @@ export class StoryGameService {
             //grab game info, created by user in client side Create Game Page
             this.gameObj = snapshot.val()
             console.log("Starting Game for id:"+this.gameId);
+            this.timer = setInterval(this.gameEngine.bind(this), this.gameUpdateTime);
 
-            //okay, lets start by looping through each round
-            for(let x: number=1;x<=this.gameObj.totalRounds;x++)
-            {
-              this.gameObj.currentRound = x;//update current round
-              console.log(this.gameObj.totalRounds)
-              console.log("Set Game Round:"+this.gameObj.currentRound);
-              this.gameRef.set(this.gameObj); //let players know current round
-
-              //So, we are going to start a timer for each round
-              //when timer reaches zero we will go to next round
-              //also, every second, we'll check to see if all players
-              //are done performing their action, if so, end round and proceed to next
-              //when round count is = to max rounds, end game.
-              if(x >30)
-              {
-                  break; //just incase we get stuck in an infinit loop
-              }
-
-
-
-            }
+            
             //also, every other second we'll perform maintenance functions to clean up inactive players
             
             //test output
-            this.gameObj.isGameOver = true;
-            this.gameRef.set(this.gameObj);
+            
             //gameRef.sdfsg
 
             
@@ -72,10 +57,44 @@ export class StoryGameService {
 
   private checkForInActivePlayers():void
   {
-    //if all players are inactive, end game
+    //if player last activity is more than 30 seconds, set them to inactive/join date to current time
+    //set (max players:number) to active sort by create date to determine the rounds active players 
+    //if there was not a single player action performed in 30 seconds, end game.
+
+        //in future implement a role column , where joining a game sets player as spectator, then they can sit down into game,
+    //   and going inactive m akes them a spectator again
+    
+    
   }
   private determineRoundWinner():void
   {
 
   }
+  private gameEngine():void
+  {
+        this.roundTime ++;
+        this.gameTime ++;
+        //if this is the start of the game , lets change round zero, to round 1
+        if(this.gameObj.currentRound == 0)
+        {
+          this.gameObj.currentRound = 1;
+          
+        }
+        //perform maintenance for inactive players
+
+        //check to see if all player actions are over, if so, determine winner and progress round
+        //check to see if round time is up, if so, determine winner and progress round
+        
+        
+        //check to see if game over
+         if (this.gameTime > this.maxGameLength || this.gameObj.currentRound > this.gameObj.totalRounds)//game is over, or has gone past max length possible
+        {
+          clearInterval(this.timer); //game over, top timer
+          this.gameObj.isGameOver = true;
+        }
+        this.gameRef.set(this.gameObj); //post all changes to players can see
+
+  }//end iteration
+
+
 }
