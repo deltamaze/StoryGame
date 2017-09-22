@@ -1,12 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { BaseRoute } from "./route";
-import * as firebase from 'firebase-admin';
-var serviceAccount = require("../../storygame-40e42-firebase-adminsdk-xgxyg-8d0fe422e4.json");
-
-firebase.initializeApp({
-    credential: firebase.credential.cert(serviceAccount),
-    databaseURL: "https://storygame-40e42.firebaseio.com"
-});
+import { StoryGameService } from "../service/storyGame.service";
 
 
 /**
@@ -66,42 +60,13 @@ export class StoryGameRoute extends BaseRoute {
       "message": 'Parameter:' + req.params.roomName//
     };
 
-
     //render template
     this.render(req, res, "index", options);
 
-    //Start Game
-    let gameRef = firebase.database().ref('storyGames/'+ req.params.roomName);
-    let gameObj
-
-    //determine if game has been created, and if round is still zero
-    //possible that the client has some slowdown pushing to firebase, lets wait 3 second and check 
-      setTimeout(() => 
-      {
-          
-            gameRef.once('value').then(function (snapshot) {
-            if (!snapshot.val()) {
-                return; //game doesn't exist, lets get outa here!
-            }
-            //aight, lets start
-            //So, we are going to start a timer for each round
-            //when timer reaches zero we will go to next round
-            //also, every second, we'll check to see if all players
-            //are done performing their action, if so, end round and proceed to next
-            //when round count is = to max rounds, end game.
-            //also, every other second we'll perform maintenance functions to clean up inactive players
-            gameObj = snapshot.val()
-            //test output
-            gameObj.isGameOver = true;
-            gameRef.set(gameObj);
-            //gameRef.sdfsg
-
-            
-            
-        }.bind(this));
-      },
-      3000);
-
-
+    //start game service
+    new StoryGameService(req.params.roomName).startGame();
   }
+
+
+
 }
