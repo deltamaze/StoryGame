@@ -1,1 +1,0 @@
-src\routes\index.ts src\routes\route.ts src\routes\storyGame.ts src\server.ts src\service\storyGame.service.ts --removeComments --rootDir src --target ES6 --module commonjs --outDir ./dist
