@@ -108,10 +108,10 @@ export class StoryGameService {
     });
 
   }
-  private allPlayerActionSubmitted(roundNum: number):boolean{
+  private allPlayerActionSubmitted(roundNum: number): boolean {
     let allPlayersReady: boolean = true; //if someone isn't ready, set this to false
     this.allPlayersObj.forEach(player => {
-      if (player.isActive == true ) //only check for active players, that didn't just join the game 
+      if (player.isActive == true) //only check for active players, that didn't just join the game 
       {
         //look for in playerInputsObj
         if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player.uid] == null) {
@@ -128,14 +128,22 @@ export class StoryGameService {
 
     let didRoundChange: boolean = false;
     this.gameObj.gameTimeElapsed = this.gameObj.gameTimeElapsed + (this.gameEngineInterval / this.oneSecond);//add second to game
-    
-    
+
+
 
     //perform maintenance for inactive players
     this.establishActivePlayers();//players join as inactive, so activate them as they come in
     this.checkForDisconnectedPlayers();
+    
+    if(this.allPlayerActionSubmitted(this.gameObj.currentRound) || this.gameObj.timeLeftInRound <=0)
+    {
+      didRoundChange = true;
+    }
+    
 
     //check to see if all player actions are over, if so, determine winner and progress round
+    if()
+
     //check to see if round time is up, if so, tally votes determine winner and progress round
 
     if (this.gameObj.currentRound == 0) {//if this is the start of the game , lets change round zero, to round 1
@@ -148,7 +156,7 @@ export class StoryGameService {
     {
       this.checkForInActivePlayers(this.gameObj.currentRound);
       this.gameObj.currentRound = this.gameObj.currentRound + 1;
-      this.gameObj.timeLeftInRound = this.gameObj.timeBetweenTurns;
+      this.gameObj.timeLeftInRound = this.gameObj.timeBetweenTurns;//reset timer back to full
     }
     else//round did not change, decrease time
     {
