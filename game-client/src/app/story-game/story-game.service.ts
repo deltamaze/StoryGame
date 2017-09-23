@@ -42,6 +42,8 @@ export class StoryGameService extends BaseService {
     newgame.currentRound = 0;
     newgame.creatorUid = this.user.uid;
     newgame.isGameOver = false;
+    newgame.timeLeftInRound=  0;
+    newgame.gameTimeElapsed= 0;
     //store password seperately or implement write (noread) only rule on it.
     
     let pushedGame = this.db.list('/storyGames/')
@@ -67,7 +69,8 @@ export class StoryGameService extends BaseService {
       joinTime: firebase.database.ServerValue.TIMESTAMP,
       pingTime: firebase.database.ServerValue.TIMESTAMP,
       score: 0,
-      isActive : true,
+      isActive : false,
+      isActiveStartTime : 0,
       username: this.user.username
     }
     this.db.object(fbPath)
@@ -136,6 +139,7 @@ export class StoryGameService extends BaseService {
   {
     let packedMessage = {
       username:this.user.username,
+      uid: this.user.uid,
       message:input,
       timestamp:firebase.database.ServerValue.TIMESTAMP
 
@@ -181,6 +185,9 @@ export class GameRoom {
   public currentRound: number = 0;//when creating, start at round zero, when game starts , the api will turn this into round 1..2..3..etc
   public creatorUid:string= "0";
   public isGameOver: boolean = false;
+  public timeLeftInRound: number =  0;
+  public gameTimeElapsed: number = 0;
+
 }
 export class CurrentGameInfo {
   public gameName: string
