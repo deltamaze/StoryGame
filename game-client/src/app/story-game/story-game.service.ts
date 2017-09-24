@@ -122,6 +122,10 @@ export class StoryGameService extends BaseService {
     this.db.object(fbPath)
       .set(ping);
   }
+  private getPlayers():void{
+    
+    //return this.db.object('/gamePlayers/' + this.currentGameId+'/')
+  }
 
   private leaveGame():void {
     if (this.pingSubscription != null && !this.pingSubscription.closed) {

@@ -2,7 +2,7 @@ import { NgModule }            from '@angular/core';
 
 import { SharedModule }        from '../shared/shared.module';
 //import { LogonComponent } from './pages/logon/logon.component';
-
+import { HttpModule } from '@angular/http';
 
 import { StoryGameRoutingModule }   from './story-game-routing.module';
 import { HomeComponent } from './home/home.component';
@@ -13,7 +13,8 @@ import {StoryGameService} from './story-game.service'
 
 @NgModule({
   imports: [ SharedModule , 
-    StoryGameRoutingModule],
+    StoryGameRoutingModule,
+    HttpModule],
     
   declarations: [
   HomeComponent,

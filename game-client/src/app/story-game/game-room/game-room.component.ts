@@ -39,7 +39,7 @@ export class GameRoomComponent implements OnInit {
   }
   private startGame(): void
   {
-
+    this.gameService.startGame();
   }
   private submitIdea():void
   {

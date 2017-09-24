@@ -123,6 +123,7 @@ export class StoryGameService {
     return allPlayersReady;
   }
   private determineRoundWinner(): void {
+    //this.playerInputsObj[roundNum]
   }
   private gameEngine(): void {
 
@@ -141,8 +142,11 @@ export class StoryGameService {
     }
     
 
-    //check to see if all player actions are over, if so, determine winner and progress round
-    if()
+    
+    if(this.gameObj.currentRound %2==0 && didRoundChange)//if this is a vote round, and we are ready to find the winner
+    {
+
+    }
 
     //check to see if round time is up, if so, tally votes determine winner and progress round
 
