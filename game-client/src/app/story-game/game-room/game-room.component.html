@@ -68,7 +68,12 @@
       <div class="card card-outline-warning mb-3">
         <h4 class="card-title">PlayerList</h4>
         <div class="card-text">
-            <p>Test</p>
+            <ul>
+                <li class="text" *ngFor="let player of playerList">
+                  <!--Add isActionFinished into this as a checkmark-->
+                  {{player.username}} - {{player.score}}
+                </li>
+              </ul>
         </div>
       </div>
     </div>

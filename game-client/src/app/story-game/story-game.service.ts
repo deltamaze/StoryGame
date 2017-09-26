@@ -69,6 +69,7 @@ export class StoryGameService extends BaseService {
       joinTime: firebase.database.ServerValue.TIMESTAMP,
       pingTime: firebase.database.ServerValue.TIMESTAMP,
       score: 0,
+      isActionFinished: false,
       isActive : false,
       isActiveStartTime : 0,
       username: this.user.username
@@ -122,9 +123,9 @@ export class StoryGameService extends BaseService {
     this.db.object(fbPath)
       .set(ping);
   }
-  private getPlayers():void{
+  public getPlayerList():FirebaseListObservable<any>{
     
-    //return this.db.object('/gamePlayers/' + this.currentGameId+'/')
+    return this.db.list('/gamePlayers/' + this.currentGameId+'/')
   }
 
   private leaveGame():void {

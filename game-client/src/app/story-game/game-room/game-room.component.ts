@@ -27,7 +27,10 @@ export class GameRoomComponent implements OnInit {
     this.gameService.getGameInfo().subscribe(res => this.gameInfo = res);
     this.gameService.getChatMessages().subscribe(res => {
       this.chatMessages = res;
-    })
+    });
+    this.gameService.getPlayerList().subscribe(res => {
+      this.playerList = res;
+    });
   }
 
   private submitChatMessage():void
