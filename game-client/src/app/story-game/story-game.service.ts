@@ -15,6 +15,7 @@ export class StoryGameService extends BaseService {
   public user: UserInfo; //for internal use in the set username function
   private pingSubscription: Subscription;
   private gameApiUrl:string = 'http://localhost:8080/';
+  
 
 
   constructor(
@@ -156,12 +157,19 @@ export class StoryGameService extends BaseService {
   {
     return this.db.list('/gamePlayerChat/' + this.currentGameId + '/')
   }
-  public submitIdea(idea: string):void
+  public submitInput(idea: string,roundNumber: number):void
   {
-
+    let input = {
+      username:this.user.username,
+      input:idea,
+      timestamp:firebase.database.ServerValue.TIMESTAMP
+    }
+    this.db.object('/gamePlayerInput/' + this.currentGameId + '/'+roundNumber.toString()+'/'+this.user.uid+'/').set(input);
   }
-  public submiteVote(voteOptionKey: string):void
+  public getPlayerInputs():FirebaseListObservable<any>
   {
+    //gamePlayerInput
+    return this.db.list('/gamePlayerInput/' + this.currentGameId + '/')
 
   }
   public verifyInGameStatus() {
