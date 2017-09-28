@@ -46,11 +46,11 @@ export class GameRoomComponent implements OnInit {
   }
   private submitIdea():void
   {
-    this.gameService.submitIdea(this.ideaInput);
+    this.gameService.submitInput(this.ideaInput,this.gameInfo.currentRound);
   }
   private submiteVote():void
   {
-    this.gameService.submiteVote("");
+    this.gameService.submitInput("",this.gameInfo.currentRound);
   }
   private leaveGame():void
   {
