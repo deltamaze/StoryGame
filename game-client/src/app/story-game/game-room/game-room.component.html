@@ -24,17 +24,22 @@
                   <div *ngIf="gameInfo.creatorUid != gameService.user.uid ">Please Wait for Host to Start Game!</div>
               </div>
               <!--IfRound > 0 and Odd, and gameOver = False-->
-              <div *ngIf="gameInfo.currentRound % 2 ==1 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
+              <!--<div *ngIf="gameInfo.currentRound % 2 ==1 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">-->
+                <!--DEBUG-->
+              <div *ngIf="1==1">
                 <form (ngSubmit)="submitIdea()" >
                   <div class="form-group">
-                    <input type="text" class="form-control" id="text" [(ngModel)]="chatInput" name="text" maxlength="50" required>
+                    <input type="text" class="form-control" id="text" [(ngModel)]="ideaInput" name="text" maxlength="50" required>
                   </div>
                   <button type="submit" class="btn btn-success">Submit Idea</button>
                 </form>
               </div>
               <!--IfRound > 0 and Even, and gameOver = False-->
-              <div *ngIf="gameInfo.currentRound % 2 ==0 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
+              <!--<div *ngIf="gameInfo.currentRound % 2 ==0 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">-->
+                <!--DEBUG-->
+              <div *ngIf="1==1">
                 SubmitVote
+                <button class="btn btn-danger btn-md" (click)="consoleTest()">Console Test</button>
               </div>
               <!--If Game Over-->
               <div *ngIf="gameInfo.isGameOver == true">

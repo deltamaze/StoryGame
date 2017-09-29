@@ -16,6 +16,7 @@ export class GameRoomComponent implements OnInit {
   private gameStory: any;
   private gameInfo: any;
   private ideaInput: string;
+  private playerInputs: any;
 
   constructor(private gameService: StoryGameService) { }
 
@@ -30,6 +31,9 @@ export class GameRoomComponent implements OnInit {
     });
     this.gameService.getPlayerList().subscribe(res => {
       this.playerList = res;
+    });
+    this.gameService.getPlayerInputs().subscribe(res => {
+      this.playerInputs = res;
     });
   }
 
@@ -55,6 +59,10 @@ export class GameRoomComponent implements OnInit {
   private leaveGame():void
   {
     this.gameService.navHome(); //this will unsubscripe player from gameroom as well as returning player home
+  }
+  private consoleTest():void
+  {
+    console.log(this.playerInputs.find(o => o.$key === (1).toString()));
   }
 
 
