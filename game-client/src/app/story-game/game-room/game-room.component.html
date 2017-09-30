@@ -15,7 +15,6 @@
             </div>
           </div>
           <div class="card card-outline-success mb-3">
-            <h4 class="card-title">Player Action</h4>
             <div class="card-text">
               <div *ngIf="gameInfo.currentRound == 0">
                   <div *ngIf="gameInfo.creatorUid == gameService.user.uid ">
@@ -27,19 +26,34 @@
               <!--<div *ngIf="gameInfo.currentRound % 2 ==1 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">-->
                 <!--DEBUG-->
               <div *ngIf="1==1">
+                <h4>Enter a sentence!</h4>
                 <form (ngSubmit)="submitIdea()" >
                   <div class="form-group">
                     <input type="text" class="form-control" id="text" [(ngModel)]="ideaInput" name="text" maxlength="50" required>
                   </div>
-                  <button type="submit" class="btn btn-success">Submit Idea</button>
+                  <button type="submit" class="btn btn-primary">Submit Idea</button>
                 </form>
               </div>
               <!--IfRound > 0 and Even, and gameOver = False-->
               <!--<div *ngIf="gameInfo.currentRound % 2 ==0 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">-->
                 <!--DEBUG-->
               <div *ngIf="1==1">
-                SubmitVote
-                <button class="btn btn-danger btn-md" (click)="consoleTest()">Console Test</button>
+                <h4>Vote on your favorite sentence!</h4>
+                
+                <div class="text" *ngFor="let round of playerInputs">
+                  <!--Only Display Current Round - 1-->
+                  <div *ngIf="displayThisRound(round.$key)" >
+                    <ul>
+                      <div *ngFor="let input of round  | propToArray"  >
+                        <li *ngIf="displayThisInput(input.key)" >
+                          {{input.value.input}} - <button class="btn btn-primary btn-sm" (click)="submiteVote(input.key)">Vote</button>
+                        </li>
+                      </div>
+                    </ul>
+                  </div>
+                  <!--playerInputs.find(o => o.$key === (parseInt(gameInfo.currentRound)-1).toString())-->
+                
+                </div>
               </div>
               <!--If Game Over-->
               <div *ngIf="gameInfo.isGameOver == true">
@@ -95,3 +109,5 @@
   </li>
 </ul>
 <span class="red-text">{{status}}</span> 
+
+<button class="btn btn-danger btn-md" (click)="consoleTest()">Console Test</button>

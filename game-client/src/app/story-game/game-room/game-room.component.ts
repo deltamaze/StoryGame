@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {StoryGameService} from '../story-game.service';
 
-
 @Component({
   selector: 'app-game-room',
   templateUrl: './game-room.component.html',
@@ -52,9 +51,9 @@ export class GameRoomComponent implements OnInit {
   {
     this.gameService.submitInput(this.ideaInput,this.gameInfo.currentRound);
   }
-  private submiteVote():void
+  private submiteVote(ideaKey):void
   {
-    this.gameService.submitInput("",this.gameInfo.currentRound);
+    this.gameService.submitInput(ideaKey,this.gameInfo.currentRound);
   }
   private leaveGame():void
   {
@@ -62,8 +61,29 @@ export class GameRoomComponent implements OnInit {
   }
   private consoleTest():void
   {
-    console.log(this.playerInputs.find(o => o.$key === (1).toString()));
+    console.log(this.playerInputs.find(o => o.$key === (parseInt(this.gameInfo.currentRound)-1).toString()));
   }
-
-
+  private displayThisRound(roundNum: string):boolean
+  {
+    //only display input for the round that is = to this round - 1
+    return((parseInt(this.gameInfo.currentRound)-1 )== parseInt(roundNum) ); 
+  }
+  private displayThisInput(inputUID: string):boolean
+  {
+    //return true;
+    //only display input that isn't your own.
+    //return(this.gameService.user.uid != inputUID)
+    //to debug, lets just return true for now
+    return true;
+  }
+  private isActionComplete():boolean
+  {
+    this.playerList.forEach(player => {
+      //find self
+      if(player.$key == this.gameService.user.uid && player.isActionFinished ==true )
+        return true;
+    });
+    return false;
+  }
 }
+

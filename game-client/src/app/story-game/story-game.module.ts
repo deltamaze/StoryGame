@@ -10,6 +10,7 @@ import { GameRoomComponent } from './game-room/game-room.component';
 import { JoinGameComponent } from './join-game/join-game.component';
 import { CreateGameComponent } from './create-game/create-game.component';
 import {StoryGameService} from './story-game.service'
+//import { PropToArrayPipe } from './prop-to-array.pipe'
 
 @NgModule({
   imports: [ SharedModule , 
@@ -21,6 +22,7 @@ import {StoryGameService} from './story-game.service'
   GameRoomComponent,
   JoinGameComponent,
   CreateGameComponent],
+  //PropToArrayPipe],
   providers:[ StoryGameService ]
 })
 export class StoryGameModule { }
