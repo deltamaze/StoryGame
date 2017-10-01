@@ -42,22 +42,23 @@ export class StoryGameService {
       }
       //grab game info, created by user in client side Create Game Page
       this.gameObj = snapshot.val()
-    }.bind(this));
-    //If we are here, then we have a valid game, lets grab player info into observables
-    this.playersRef.on("value", function (snapshot) {
-      this.allPlayersObj = snapshot.val();
-    }.bind(this));
-    this.playersRef.orderByChild("joinTime").limitToLast(this.gameObj.maxPlayers).on("child_added", function (snapshot) {
-      this.currentPlayersObj = snapshot.val();
-    }.bind(this));;
-    this.playerInputsRef.on("value", function (snapshot) {
-      this.playerInputsObj = snapshot.val();
-    }.bind(this));
+    }.bind(this)).then(() => {
+      //If we are here, then we have a valid game, lets grab player info into observables
+      this.playersRef.on("value", function (snapshot) {
+        this.allPlayersObj = snapshot.val();
+      }.bind(this));
+      this.playersRef.orderByChild("joinTime").limitToLast(this.gameObj.maxPlayers).on("value", function (snapshot) {
+        this.currentPlayersObj = snapshot.val();
+      }.bind(this));;
+      this.playerInputsRef.on("value", function (snapshot) {
+        this.playerInputsObj = snapshot.val();
+      }.bind(this));
+
+      console.log("Starting GameEngine for id:" + this.gameId);
+      this.timer = setInterval(this.gameEngine.bind(this), this.gameEngineInterval);
 
 
-
-    console.log("Starting GameEngine for id:" + this.gameId);
-    this.timer = setInterval(this.gameEngine.bind(this), this.gameEngineInterval);
+    });
 
   }
   private inactivityTreshold(): number {
@@ -67,59 +68,69 @@ export class StoryGameService {
     //startAt:{ value: Math.floor(Date.now()) - 900000 , key: 'timestamp' }//use as threshold to only pull players who have pinged in the past 15 minutes
     //if player last activity is more than 30 seconds, set them to inactive/join date to current time
     let activePlayerTally: number = 0;
-    this.allPlayersObj.forEach(player => {
-      if (player.isActive == true && player.pingTime < this.inactivityTreshold()) //if no ping for 10 sec, set them to inactive
-      {
-        player.isActive = false;
-        player.joinTime = Date.now();
-        firebase.database().ref('gamePlayers/' + this.gameId + '/' + player.uid).set(player);
+    for (var player in this.allPlayersObj) {
+      if (this.allPlayersObj.hasOwnProperty(player)) {
+        if (this.allPlayersObj[player].isActive == true && this.allPlayersObj[player].pingTime < this.inactivityTreshold()) //if no ping for 10 sec, set them to inactive
+        {
+          this.allPlayersObj[player].isActive = false;
+          this.allPlayersObj[player].joinTime = Date.now();
+          firebase.database().ref('gamePlayers/' + this.gameId + '/' + this.allPlayersObj[player].uid).set(this.allPlayersObj[player]);
+        }
+        else if (this.allPlayersObj[player].isActive) {
+          activePlayerTally++;
+        }
       }
-      else if (player.isActive) {
-        activePlayerTally++;
-      }
-    });
+    }
+
     if (activePlayerTally == 0 && this.gameTime > 10) {
       this.gameObj.isGameOver = true;//if after 10 seconds of gam creation, there are no active players, then end game
     }
 
   }
   private checkForInActivePlayers(roundNum: number): void {
-    this.allPlayersObj.forEach(player => {
-      if (player.isActive == true && player.isActiveStartTime < this.inactivityTreshold()) //only check for active players, that didn't just join the game 
-      {
-        //look for in playerInputsObj
-        if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player.uid] == null) {
-          player.isActive = false;
-          player.joinTime = Date.now();
-          firebase.database().ref('gamePlayers/' + this.gameId + '/' + player.uid).set(player);
-        }
+    for (var player in this.allPlayersObj) {
+      if (this.allPlayersObj.hasOwnProperty(player)) {
+        if (this.allPlayersObj[player].isActive == true && this.allPlayersObj[player].isActiveStartTime < this.inactivityTreshold()) //only check for active players, that didn't just join the game 
+        {
+          //look for in playerInputsObj
+          if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][this.allPlayersObj[player].uid] == null) {
+            this.allPlayersObj[player].isActive = false;
+            this.allPlayersObj[player].joinTime = Date.now();
+            firebase.database().ref('gamePlayers/' + this.gameId + '/' + this.allPlayersObj[player].uid).set(this.allPlayersObj[player]);
+          }
 
+        }
       }
-    });
+    }
   }
   private establishActivePlayers(): void {
-    this.currentPlayersObj.forEach(player => {
-      if (player.isActive != true && player.pingTime >= this.inactivityTreshold()) //if within threshold, and they are currently inactive, convert to active
-      {
-        player.isActive = true;
-        player.isActiveStartTime = Date.now();
-        firebase.database().ref('gamePlayers/' + this.gameId + '/' + player.uid).set(player);
+    for (var player in this.currentPlayersObj) {
+      if (this.currentPlayersObj.hasOwnProperty(player)) {
+        if (this.currentPlayersObj[player].isActive != true && this.currentPlayersObj[player].pingTime >= this.inactivityTreshold()) //if within threshold, and they are currently inactive, convert to active
+        {
+          this.currentPlayersObj[player].isActive = true;
+          this.currentPlayersObj[player].isActiveStartTime = Date.now();
+          firebase.database().ref('gamePlayers/' + this.gameId + '/' + this.currentPlayersObj[player].uid).set(this.currentPlayersObj[player]);
+        }
       }
-    });
-
+    }
   }
+
   private allPlayerActionSubmitted(roundNum: number): boolean {
     let allPlayersReady: boolean = true; //if someone isn't ready, set this to false
-    this.allPlayersObj.forEach(player => {
-      if (player.isActive == true) //only check for active players, that didn't just join the game 
-      {
-        //look for in playerInputsObj
-        if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player.uid] == null) {
-          allPlayersReady = false;
-        }
+    for (var player in this.allPlayersObj) {
+      if (this.allPlayersObj.hasOwnProperty(player)) {
+        if (this.allPlayersObj[player].isActive == true) //only check for active players, that didn't just join the game 
+        {
+          //look for in playerInputsObj
+          if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][this.allPlayersObj[player].uid] == null) {
+            allPlayersReady = false;
+          }
 
+        }
       }
-    });
+    }
+
     return allPlayersReady;
   }
   private determineRoundWinner(): void {
@@ -135,15 +146,14 @@ export class StoryGameService {
     //perform maintenance for inactive players
     this.establishActivePlayers();//players join as inactive, so activate them as they come in
     this.checkForDisconnectedPlayers();
-    
-    if(this.allPlayerActionSubmitted(this.gameObj.currentRound) || this.gameObj.timeLeftInRound <=0)
-    {
+
+    if (this.allPlayerActionSubmitted(this.gameObj.currentRound) || this.gameObj.timeLeftInRound <= 0) {
       didRoundChange = true;
     }
-    
 
-    
-    if(this.gameObj.currentRound %2==0 && didRoundChange)//if this is a vote round, and we are ready to find the winner
+
+
+    if (this.gameObj.currentRound % 2 == 0 && didRoundChange)//if this is a vote round, and we are ready to find the winner
     {
 
     }
