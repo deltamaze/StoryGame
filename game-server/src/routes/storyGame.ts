@@ -27,6 +27,9 @@ export class StoryGameRoute extends BaseRoute {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
     });
+    router.get("/StartStoryGame/:roomName", (req: Request, res: Response, next: NextFunction) => {
+      new StoryGameRoute().startGame(req, res, next);
+    });
     router.post("/StartStoryGame/:roomName", (req: Request, res: Response, next: NextFunction) => {
       new StoryGameRoute().startGame(req, res, next);
     });

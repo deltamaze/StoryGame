@@ -36,13 +36,18 @@ export class StoryGameService {
     this.playerInputsRef = firebase.database().ref('gamePlayerInput/' + this.gameId);
     //determine if game has been created, and if round is still zero
     this.gameRef.once('value').then(function (snapshot) {
-      if (!snapshot.val() || snapshot.val().currentRound != 0) {
-        console.log("Game Doesn't Exist, or round isn't zero");
+      if (!snapshot.val() ) {
+        console.log("Game Doesn't Exist");
         return; //game doesn't exist, lets get outa here!
       }
       //grab game info, created by user in client side Create Game Page
       this.gameObj = snapshot.val()
     }.bind(this)).then(() => {
+      if(this.gameObj.currentRound != 0)
+      {
+        console.log("Game Round isn't zero");
+        return;
+      }
       //If we are here, then we have a valid game, lets grab player info into observables
       this.playersRef.on("value", function (snapshot) {
         this.allPlayersObj = snapshot.val();
@@ -174,6 +179,7 @@ export class StoryGameService {
       if (this.allPlayersObj.hasOwnProperty(player)) {
         if (this.allPlayersObj[player].isActive == true) //only check for active players, that didn't just join the game 
         {
+          console.log(this.playerInputsObj[roundNum][player])
           //look for in playerInputsObj
           if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player] == null) {
             allPlayersReady = false;
@@ -182,6 +188,8 @@ export class StoryGameService {
         }
       }
     }
+    
+    console.log(allPlayersReady);
 
     return allPlayersReady;
   }
