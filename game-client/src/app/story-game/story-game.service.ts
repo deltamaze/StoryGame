@@ -101,7 +101,7 @@ export class StoryGameService extends BaseService {
           this.db.list(`/gamePlayers/${game.$key}`).subscribe(players =>{
             game.players = players.filter(player=>{
               
-              return player.timestamp > Math.floor(Date.now()) - 15000; //use as threshold to only pull players who have pinged in the past 15 seconds
+              return player.pingTime > Math.floor(Date.now()) - 15000; //use as threshold to only pull players who have pinged in the past 15 seconds
             });
           });
         }

@@ -96,12 +96,15 @@ export class StoryGameService {
       didRoundChange = true;
     }
 
+    
+
     //progress round, or decrease time
     if (didRoundChange)//round changes, reset round time left
     {
       this.checkForInActivePlayers(this.gameObj.currentRound);
       this.gameObj.currentRound = this.gameObj.currentRound + 1;
       this.gameObj.timeLeftInRound = this.gameObj.timeBetweenTurns;//reset timer back to full
+      this.resetIsActionFinished();//
     }
     else//round did not change, decrease time
     {
@@ -116,8 +119,7 @@ export class StoryGameService {
       console.log("Game Over");
     }
     this.gameRef.set(this.gameObj); //post all changes to players can see
-    console.log("tick done");
-
+    console.log("Tick done");
   }//end iteration
 
 
@@ -188,12 +190,17 @@ export class StoryGameService {
           //look for in playerInputsObj
           if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player] != null) {
             countDone++;
+            //also, lets make sure to let other players know, that this guy has completed his action
+            if(this.allPlayersObj[player].isActionFinished == false)
+            {
+              this.allPlayersObj[player].isActionFinished = true;
+              firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).set(this.allPlayersObj[player]);
+            }
           }
           else
           {
             countNotDone++;
           }
-
         }
       }
     }
@@ -206,8 +213,18 @@ export class StoryGameService {
 
     return allPlayersReady;
   }
+  private resetIsActionFinished():void{
+    for (var player in this.allPlayersObj) {
+      if (this.allPlayersObj.hasOwnProperty(player)) {
+        if (this.allPlayersObj[player].isActionFinished == true) //only check for active players, that didn't just join the game 
+        {
+          this.allPlayersObj[player].isActionFinished = false;
+          firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).set(this.allPlayersObj[player]);
+        }
+      }
+    }
+  }
   private determineRoundWinner(): void {
     //this.playerInputsObj[roundNum]
   }
-
 }
