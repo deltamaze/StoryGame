@@ -26,9 +26,9 @@
                   <div *ngIf="gameInfo.creatorUid != gameService.user.uid ">Please Wait for Host to Start Game!</div>
                 </div>
                 <!--IfRound > 0 and Odd, and gameOver = False-->
-                <!--<div *ngIf="gameInfo.currentRound % 2 ==1 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">-->
+                <div *ngIf="gameInfo.currentRound % 2 ==1 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
                 <!--DEBUG-->
-                <div *ngIf="1==1">
+                <!--<div *ngIf="1==1">-->
                   <h4>Enter a sentence!</h4>
                   <form (ngSubmit)="submitIdea()">
                     <div class="form-group">
@@ -38,9 +38,9 @@
                   </form>
                 </div>
                 <!--IfRound > 0 and Even, and gameOver = False-->
-                <!--<div *ngIf="gameInfo.currentRound % 2 ==0 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">-->
+                <div *ngIf="gameInfo.currentRound % 2 ==0 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
                 <!--DEBUG-->
-                <div *ngIf="1==1">
+                <!--<div *ngIf="1==1">-->
                   <h4>Vote on your favorite sentence!</h4>
 
                   <div class="text" *ngFor="let round of playerInputs">

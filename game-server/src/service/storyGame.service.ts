@@ -70,6 +70,8 @@ export class StoryGameService {
 
     let didRoundChange: boolean = false;
     this.gameObj.gameTimeElapsed = this.gameObj.gameTimeElapsed + (this.gameEngineInterval / this.oneSecond);//add second to game
+    console.log(this.gameObj.gameTimeElapsed );
+    console.log(this.gameEngineInterval);
 
 
 
@@ -91,7 +93,6 @@ export class StoryGameService {
     //check to see if round time is up, if so, tally votes determine winner and progress round
 
     if (this.gameObj.currentRound == 0) {//if this is the start of the game , lets change round zero, to round 1
-      this.gameObj.currentRound = 1;
       didRoundChange = true;
     }
 
@@ -112,8 +113,10 @@ export class StoryGameService {
     {
       clearInterval(this.timer); //game over, top timer
       this.gameObj.isGameOver = true;
+      console.log("Game Over");
     }
     this.gameRef.set(this.gameObj); //post all changes to players can see
+    console.log("tick done");
 
   }//end iteration
 
@@ -174,22 +177,32 @@ export class StoryGameService {
   }
 
   private allPlayerActionSubmitted(roundNum: number): boolean {
-    let allPlayersReady: boolean = true; //if someone isn't ready, set this to false
+    let allPlayersReady: boolean = false; //if someone isn't ready, set this to false
+    let countDone: number = 0;
+    let countNotDone:number = 0;
+
     for (var player in this.allPlayersObj) {
       if (this.allPlayersObj.hasOwnProperty(player)) {
         if (this.allPlayersObj[player].isActive == true) //only check for active players, that didn't just join the game 
         {
-          console.log(this.playerInputsObj[roundNum][player])
           //look for in playerInputsObj
-          if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player] == null) {
-            allPlayersReady = false;
+          if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player] != null) {
+            countDone++;
+          }
+          else
+          {
+            countNotDone++;
           }
 
         }
       }
     }
-    
-    console.log(allPlayersReady);
+    console.log(countDone);
+    console.log(countNotDone);
+    if(countDone > 0 && countNotDone ==0 )
+    {
+      allPlayersReady = true;
+    }
 
     return allPlayersReady;
   }
