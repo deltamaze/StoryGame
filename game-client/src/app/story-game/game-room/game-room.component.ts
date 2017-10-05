@@ -72,9 +72,9 @@ export class GameRoomComponent implements OnInit {
   {
     //return true;
     //only display input that isn't your own.
-    //return(this.gameService.user.uid != inputUID)
+    return(this.gameService.user.uid != inputUID)
     //to debug, lets just return true for now
-    return true;
+    //return true;
   }
   private isActionComplete():boolean
   {

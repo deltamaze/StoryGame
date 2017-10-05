@@ -48,6 +48,7 @@ export class StoryGameService {
         console.log("Game Round isn't zero");
         return;
       }
+      console.log("Valid game, going to set up more ref's");
       //If we are here, then we have a valid game, lets grab player info into observables
       this.playersRef.on("value", function (snapshot) {
         this.allPlayersObj = snapshot.val();
@@ -85,10 +86,6 @@ export class StoryGameService {
 
 
 
-    if (this.gameObj.currentRound % 2 == 0 && didRoundChange)//if this is a vote round, and we are ready to find the winner
-    {
-
-    }
 
     //check to see if round time is up, if so, tally votes determine winner and progress round
 
@@ -101,10 +98,14 @@ export class StoryGameService {
     //progress round, or decrease time
     if (didRoundChange)//round changes, reset round time left
     {
+      if(this.gameObj.currentRound % 2 && this.gameObj.currentRound > 0)
+      {
+        this.determineRoundWinner(this.gameObj.currentRound);
+      }
       this.checkForInActivePlayers(this.gameObj.currentRound);
       this.gameObj.currentRound = this.gameObj.currentRound + 1;
       this.gameObj.timeLeftInRound = this.gameObj.timeBetweenTurns;//reset timer back to full
-      this.resetIsActionFinished();//
+      this.resetIsActionFinished();//set everyone isActionFinished back to false
     }
     else//round did not change, decrease time
     {
@@ -204,8 +205,8 @@ export class StoryGameService {
         }
       }
     }
-    console.log(countDone);
-    console.log(countNotDone);
+    console.log("Players who are ready: "+countDone);
+    console.log("Players who are not ready"+countNotDone);
     if(countDone > 0 && countNotDone ==0 )
     {
       allPlayersReady = true;
@@ -224,7 +225,42 @@ export class StoryGameService {
       }
     }
   }
-  private determineRoundWinner(): void {
-    //this.playerInputsObj[roundNum]
+  private determineRoundWinner(roundNum: number): void {
+    let votes = []
+
+
+    for (var player in this.allPlayersObj) {
+      if (this.allPlayersObj.hasOwnProperty(player)) {
+        //cycle through each active player and see who they voted for
+    
+        if (this.allPlayersObj[player].isActive == true) //only check for active players
+        {
+          //look for in playerInputsObj
+          if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player] != null) {
+            //parse vote
+            if (votes.hasOwnProperty(this.playerInputsObj[roundNum][player].input))
+            {
+              votes[this.playerInputsObj[roundNum][player].input]++
+            }
+            else//if no current votes for this person, then push new entry into votes
+            {
+              votes[this.playerInputsObj[roundNum][player].input] = 1;
+            }
+            console.log(votes);
+          }
+        }
+      }
+    }
+    //okay so now we have a dictionary with uid's and their tally
+
+
+    //find out what the max value is
+    // let arr = Object.values(obj);
+    // let min = Math.min(...arr);
+    // let max = Math.max(...arr);
+
+    //give win to person with most votes/random num if tie
+
+    //update story thus far
   }
 }
