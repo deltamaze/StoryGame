@@ -254,11 +254,9 @@ export class StoryGameService {
     //okay so now we have a dictionary with uid's and their tally
 
 
-    //find out what the max value is
-    // let arr = Object.values(obj);
-    // let min = Math.min(...arr);
-    // let max = Math.max(...arr);
-
+    //find out what the max value is. Ad a random Decimal Value, to generate a random winner
+    let maxKey = Object.keys(votes).reduce(function(a, b){ return (votes[a]+Math.random()) > (votes[b]+Math.random()) ? a : b });
+    console.log(maxKey);
     //give win to person with most votes/random num if tie
 
     //update story thus far
