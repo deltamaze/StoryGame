@@ -21,7 +21,7 @@
               <div class="card-text">
                 <div *ngIf="gameInfo.currentRound == 0">
                   <div *ngIf="gameInfo.creatorUid == gameService.user.uid ">
-                    <button class="btn btn-success btn-md" (click)="startGame()">StartGame</button>
+                    <button class="btn btn-success btn-md"  [disabled]="disableButton" (click)="startGame()">StartGame</button>
                   </div>
                   <div *ngIf="gameInfo.creatorUid != gameService.user.uid ">Please Wait for Host to Start Game!</div>
                 </div>
@@ -34,7 +34,7 @@
                     <div class="form-group">
                       <input type="text" class="form-control" id="text" [(ngModel)]="ideaInput" name="text" maxlength="50" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit Idea</button>
+                    <button type="submit" [disabled]="disableButton" class="btn btn-primary">Submit Idea</button>
                   </form>
                 </div>
                 <!--IfRound > 0 and Even, and gameOver = False-->
@@ -49,7 +49,7 @@
                       <ul>
                         <div *ngFor="let input of round  | propToArray">
                           <li *ngIf="displayThisInput(input.key)">
-                            {{input.value.input}} - <button class="btn btn-primary btn-sm" (click)="submiteVote(input.key)">Vote</button>
+                            {{input.value.input}} - <button class="btn btn-primary btn-sm" [disabled]="disableButton" (click)="submiteVote(input.key)">Vote</button>
                           </li>
                         </div>
                       </ul>

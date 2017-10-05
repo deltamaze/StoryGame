@@ -15,8 +15,6 @@ export class StoryGameService extends BaseService {
   public user: UserInfo; //for internal use in the set username function
   private pingSubscription: Subscription;
   private gameApiUrl:string = 'http://localhost:8080/';
-  
-
 
   constructor(
     public router: Router,

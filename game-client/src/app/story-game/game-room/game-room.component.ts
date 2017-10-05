@@ -16,6 +16,9 @@ export class GameRoomComponent implements OnInit {
   private gameInfo: any;
   private ideaInput: string;
   private playerInputs: any;
+  private disableButton: boolean = false;
+
+
 
   constructor(private gameService: StoryGameService) { }
 
@@ -36,6 +39,15 @@ export class GameRoomComponent implements OnInit {
     });
   }
 
+  private temporarilyDisableButton():void{
+    this.disableButton = true;
+    console.log(this.disableButton);
+        setTimeout(()=> {
+          this.disableButton = false;
+          console.log(this.disableButton);
+    }, 2000);
+  }
+
   private submitChatMessage():void
   {
     this.gameService.submitChatMessage(this.chatInput);
@@ -45,14 +57,17 @@ export class GameRoomComponent implements OnInit {
   }
   private startGame(): void
   {
+    this.temporarilyDisableButton(); //prevent a double click, causing 2 posts to the web api
     this.gameService.startGame();
   }
   private submitIdea():void
   {
+    this.temporarilyDisableButton();
     this.gameService.submitInput(this.ideaInput,this.gameInfo.currentRound);
   }
   private submiteVote(ideaKey):void
   {
+    this.temporarilyDisableButton();
     this.gameService.submitInput(ideaKey,this.gameInfo.currentRound);
   }
   private leaveGame():void
