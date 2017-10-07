@@ -11,8 +11,8 @@
   <thead>
     <tr>
       <th>Game Name</th>
-      <th>Private</th>
-      <th>Players</th>
+      <th>Round - Players</th>
+      <!--<th>Players</th>-->
       <th>Starting Message</th>
       <th> </th>
     </tr>
@@ -22,11 +22,13 @@
       {{ hero }}
     </li>-->
     <tr *ngFor="let game of gameList">
-      <td>{{game.gameName}}</td>
-      <td>{{game.isPrivate}}</td>
-      <td>{{(game.players)?.length}} / {{game.maxPlayers}}</td>
-      <td>{{game.startingMessage}}</td>
-      <td><button class="btn btn-success btn-md" (click)="joinGame(game.$key)">Join</button></td>
+      <ng-template [ngIf]="game.isGameOver == false && game.players != null && game.players.length > 0 ">
+        <td>{{game.gameName}}</td>
+        <td>({{game.currentRound}}/{{game.totalRounds}}) - ({{(game.players)?.length}}/{{game.maxPlayers}})</td>
+        <!--<td>{{(game.players)?.length}} / {{game.maxPlayers}}</td>-->
+        <td>{{game.storyThusFar.substring(0, 15)+'...'}}</td>
+        <td><button class="btn btn-success btn-md" (click)="joinGame(game.$key)">Join</button></td>
+      </ng-template>
     </tr>
   </tbody>
 </table>

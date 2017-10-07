@@ -92,7 +92,7 @@ export class StoryGameService extends BaseService {
     return this.db.list(`/storyGames/`,{
             query:{
               orderByChild: 'timestamp',
-              startAt:{ value: Math.floor(Date.now()) - 900000 , key: 'timestamp' }//use as threshold to only pull players who have pinged in the past 15 minutes
+              startAt:{ value: Math.floor(Date.now()) - 300000 , key: 'timestamp' }//use as threshold to only pull games that were started 55 min ago
             }
           })
       .map(games=>{
@@ -212,7 +212,7 @@ export class GameRoom {
   public maxPlayers: number = 8;
   public timeBetweenTurns: number = 30;
   public totalRounds: number = 15;
-  public storyThusFar: string = "Once upon a time ...";
+  public storyThusFar: string = "Once upon a time,";
   public timestamp: any = firebase.database.ServerValue.TIMESTAMP;
   public currentRound: number = 0;//when creating, start at round zero, when game starts , the api will turn this into round 1..2..3..etc
   public creatorUid:string= "0";

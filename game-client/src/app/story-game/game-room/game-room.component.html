@@ -10,7 +10,12 @@
           <!--If Round > 0 display StoryThusFar-->
           <div class="card card-outline-primary mb-3">
             <div style="margin: 10px;">
-              <h4 class="card-title">Story</h4>
+              <div>
+                    <h4 class="float-left">Story</h4>
+                    <p class="float-right">Current Round: {{gameInfo.currentRound}} / {{gameInfo.totalRounds}}</p>
+              </div>
+              <br />
+              <br />
               <div class="card-text">
                 <p>{{gameInfo.storyThusFar}}</p>
               </div>
@@ -29,7 +34,10 @@
                 <div *ngIf="gameInfo.currentRound % 2 ==1 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
                 <!--DEBUG-->
                 <!--<div *ngIf="1==1">-->
-                  <h4>Enter a sentence!</h4>
+                  <div>
+                    <h4 class="float-left">Enter a sentence!</h4>
+                    <p class="float-right">Time Left in round: {{gameInfo.timeLeftInRound}}</p>
+                  </div>
                   <form (ngSubmit)="submitIdea()">
                     <div class="form-group">
                       <input type="text" class="form-control" id="text" [(ngModel)]="ideaInput" name="text" maxlength="50" required>
@@ -41,7 +49,10 @@
                 <div *ngIf="gameInfo.currentRound % 2 ==0 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
                 <!--DEBUG-->
                 <!--<div *ngIf="1==1">-->
-                  <h4>Vote on your favorite sentence!</h4>
+                  <div>
+                    <h4 class="float-left">Vote on your favorite sentence!</h4>
+                    <p class="float-right">Time Left in round: {{gameInfo.timeLeftInRound}}</p>
+                  </div>
 
                   <div class="text" *ngFor="let round of playerInputs">
                     <!--Only Display Current Round - 1-->

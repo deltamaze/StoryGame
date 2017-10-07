@@ -67,6 +67,8 @@ export class GameRoomComponent implements OnInit {
   }
   private submiteVote(ideaKey):void
   {
+    //clear out idea variable, to get ready for next round
+    this.ideaInput = "";
     this.temporarilyDisableButton();
     this.gameService.submitInput(ideaKey,this.gameInfo.currentRound);
   }
