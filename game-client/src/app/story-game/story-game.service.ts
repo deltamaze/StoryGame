@@ -28,14 +28,16 @@ export class StoryGameService extends BaseService {
 
 
   public navCreateGame(): void {
+    super.clearError();
     this.router.navigate(['createGame']);
   }
   public navJoinGame(): void {
-
+    super.clearError();
     this.router.navigate(['joinGame']);
   }
 
   public createGame(newgame: GameRoom):void {
+    super.clearError();
     
     newgame.timestamp = firebase.database.ServerValue.TIMESTAMP;
     newgame.currentRound = 0;
@@ -56,7 +58,7 @@ export class StoryGameService extends BaseService {
   }
 
   public joinGame(gameId: string = ""):void {
-    //startRoomPing
+    super.clearError();
     if (gameId != "")//this will be blank when coming from the createGame component, and have gameId when coming form joinGame component
       this.currentGameId = gameId
     if (this.pingSubscription != null && !this.pingSubscription.closed) {//kill any existing ping subscription, so we can create a new one.
@@ -67,6 +69,7 @@ export class StoryGameService extends BaseService {
     let playerInfo = {
       joinTime: firebase.database.ServerValue.TIMESTAMP,
       pingTime: firebase.database.ServerValue.TIMESTAMP,
+      lastActionTime: firebase.database.ServerValue.TIMESTAMP,
       score: 0,
       isActionFinished: false,
       isActive : false,
@@ -74,7 +77,7 @@ export class StoryGameService extends BaseService {
       username: this.user.username
     }
     this.db.object(fbPath)
-      .set(playerInfo);
+      .set(playerInfo).catch(err=>this.handleError(err));
 
     let timer = Observable.timer(1000, 5000);
     this.pingSubscription = timer.subscribe(t => {
@@ -113,6 +116,13 @@ export class StoryGameService extends BaseService {
     this.leaveGame();
     super.navHome();
   }
+  private updateLastActionTime():void
+  {
+    let fbPath = '/gamePlayers/' + this.currentGameId + '/' + this.user.uid + '/lastActionTime'
+    let time = firebase.database.ServerValue.TIMESTAMP;
+    this.db.object(fbPath)
+      .set(time).catch(err=>this.handleError(err));
+  }
 
   private roomPing(): void {
     //let other plays know which games are active, and the playerCount
@@ -121,7 +131,16 @@ export class StoryGameService extends BaseService {
     let fbPath = '/gamePlayers/' + this.currentGameId + '/' + this.user.uid + '/pingTime'
     let ping = firebase.database.ServerValue.TIMESTAMP;
     this.db.object(fbPath)
-      .set(ping);
+      .set(ping).catch(err=>this.pingDisconnected());
+  }
+  private pingDisconnected():void
+  {
+    
+    
+    this.leaveGame();
+    this.navJoinGame();
+    super.handleError("Disconnected from game for In-Activity");
+
   }
   public getPlayerList():FirebaseListObservable<any>{
     
@@ -163,7 +182,8 @@ export class StoryGameService extends BaseService {
       input:idea,
       timestamp:firebase.database.ServerValue.TIMESTAMP
     }
-    this.db.object('/gamePlayerInput/' + this.currentGameId + '/'+roundNumber.toString()+'/'+this.user.uid+'/').set(input);
+    this.db.object('/gamePlayerInput/' + this.currentGameId + '/'+roundNumber.toString()+'/'+this.user.uid+'/').set(input).catch(err => this.handleError(err));
+    this.updateLastActionTime();
   }
   public getPlayerInputs():FirebaseListObservable<any>
   {

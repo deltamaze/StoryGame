@@ -93,7 +93,9 @@ export class StoryGameService {
       if (this.gameObj.currentRound % 2 == 0 && this.gameObj.currentRound > 0) {
         this.determineRoundWinner(this.gameObj.currentRound);
       }
-      this.gameObj.isGameOver = this.wasThereInputThisRound(this.gameObj.currentRound);//end game if no input detected
+      console.log("Current isGameOver Status:");
+      console.log(this.gameObj.isGameOver );
+      this.gameObj.isGameOver = !this.wasThereInputThisRound(this.gameObj.currentRound);//end game if no input detected
       this.checkForInActivePlayers(this.gameObj.currentRound);
       this.gameObj.currentRound = this.gameObj.currentRound + 1;
       this.gameObj.timeLeftInRound = this.gameObj.timeBetweenTurns;//reset timer back to full
@@ -107,6 +109,18 @@ export class StoryGameService {
     //check to see if game over
     if (this.gameTime > this.maxGameLength || this.gameObj.currentRound > this.gameObj.totalRounds || this.gameObj.isGameOver == true)//game is over, or has gone past max length possible
     {
+      if(this.gameTime > this.maxGameLength)
+      {
+        console.log("GameTime passed max game time possible")
+      }
+      if(this.gameObj.currentRound > this.gameObj.totalRounds)
+      {
+        console.log("Reached The Last Round")
+      }
+      if(this.gameObj.isGameOver == true)
+      {
+        console.log("Exception Occured, ending game early")
+      }
       clearInterval(this.timer); //game over, top timer
       this.gameObj.isGameOver = true;
       console.log("Game Over");
@@ -117,6 +131,9 @@ export class StoryGameService {
 
 
   private inactivityTreshold(): number {
+    return Date.now() - (this.oneSecond * this.gameObj.timeBetweenTurns * 2);
+  }
+  private disconnectTreshold(): number {
     return Date.now() - (this.oneSecond * 10);
   }
   private checkForDisconnectedPlayers(): void {
@@ -125,11 +142,9 @@ export class StoryGameService {
     let activePlayerTally: number = 0;
     for (var player in this.allPlayersObj) {
       if (this.allPlayersObj.hasOwnProperty(player)) {
-        if (this.allPlayersObj[player].isActive == true && this.allPlayersObj[player].pingTime < this.inactivityTreshold()) //if no ping for 10 sec, set them to inactive
+        if (this.allPlayersObj[player].pingTime < this.disconnectTreshold()) //if no ping for 10 sec, kick them
         {
-          this.allPlayersObj[player].isActive = false;
-          this.allPlayersObj[player].joinTime = Date.now();
-          firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).set(this.allPlayersObj[player]);
+          firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).remove();
         }
         else if (this.allPlayersObj[player].isActive) {
           activePlayerTally++;
@@ -138,6 +153,7 @@ export class StoryGameService {
     }
 
     if (activePlayerTally == 0 && this.gameTime > 10) {
+      console.log("No Active Players Detected");
       this.gameObj.isGameOver = true;//if after 10 seconds of gam creation, there are no active players, then end game
     }
 
@@ -145,13 +161,16 @@ export class StoryGameService {
   private checkForInActivePlayers(roundNum: number): void {
     for (var player in this.allPlayersObj) {
       if (this.allPlayersObj.hasOwnProperty(player)) {
-        if (this.allPlayersObj[player].isActive == true && this.allPlayersObj[player].isActiveStartTime < this.inactivityTreshold()) //only check for active players, that didn't just join the game 
+        if (this.allPlayersObj[player].isActive == true && this.allPlayersObj[player].isActiveStartTime < this.inactivityTreshold() && this.allPlayersObj[player].lastActionTime < this.inactivityTreshold()) //only check for active players, that didn't just join the game 
         {
           //look for in playerInputsObj
-          if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player] == null) {
-            this.allPlayersObj[player].isActive = false;
-            this.allPlayersObj[player].joinTime = Date.now();
-            firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).set(this.allPlayersObj[player]);
+          //if player has been in game for 30 seconds, but didn't have any input in the previous round, then kick
+          let prevRound = (roundNum-1)
+          if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null && this.playerInputsObj[prevRound][player] == null) {
+            //this.allPlayersObj[player].isActive = false;
+            //this.allPlayersObj[player].joinTime = Date.now();
+            //firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).set(this.allPlayersObj[player]);
+            firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).remove();
           }
 
         }
@@ -216,6 +235,8 @@ export class StoryGameService {
   }
   private determineRoundWinner(roundNum: number): void {
     let votes = []
+    let noVotes = true;
+    console.log("Determine Round Winner");
 
 
     for (var player in this.allPlayersObj) {
@@ -234,12 +255,17 @@ export class StoryGameService {
             {
               votes[this.playerInputsObj[roundNum][player].input] = 1;
             }
+            noVotes = false;
 
           }
         }
       }
     }
     console.log(votes);
+    if(noVotes)//no votes detected
+    {
+      return;
+    }
     //okay so now we have a dictionary with uid's and their vote tally
     //Add a random Decimal Value to tally, to generate a random winner if tie
     let winningKey = Object.keys(votes).reduce(function (a, b) { return (votes[a] + Math.random()) > (votes[b] + Math.random()) ? a : b });
@@ -250,7 +276,7 @@ export class StoryGameService {
 
     //update story thus far
     if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null && this.playerInputsObj[prevRound][winningKey] != null) {
-      this.gameObj.storyThusFar = this.gameObj.storyThusFar + " " + this.playerInputsObj[prevRound][winningKey].input
+      this.gameObj.storyThusFar = this.gameObj.storyThusFar + "..." + this.playerInputsObj[prevRound][winningKey].input
     }
     //update player score
     if (this.allPlayersObj[winningKey] != null) {
@@ -259,25 +285,29 @@ export class StoryGameService {
     }
   }
   private wasThereInputThisRound(roundNum: number): boolean {
+    if(roundNum == 0)
+    {
+      return true; // don't run method if game hasn't started yet.
+    }
     let inputCount: number = 0;
+
     for (var player in this.allPlayersObj) {
       if (this.allPlayersObj.hasOwnProperty(player)) {
-        //cycle through each active player and see who they voted for
-
-        if (this.allPlayersObj[player].isActive == true) //only check for active players
+        if (this.allPlayersObj[player].isActive == true) //only check for active players, that didn't just join the game 
         {
           //look for in playerInputsObj
           if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player] != null) {
-            inputCount++;//There was input!
+            inputCount++;
           }
         }
       }
-      if (inputCount > 0) {
-        return true;
-      }
-      else {
-        return false;
-      }
+    }
+    if (inputCount > 0) {
+      return true;
+    }
+    else {
+      console.log("No Input Detected, ending game Input Count: "+inputCount.toString()+" Current Round: "+roundNum.toString());
+      return false;
     }
   }
 }
