@@ -93,14 +93,32 @@ export class GameRoomComponent implements OnInit {
     //to debug, lets just return true for now
     //return true;
   }
-  private isActionComplete():boolean
+  private isMyActionComplete():boolean
   {
-    this.playerList.forEach(player => {
-      //find self
-      if(player.$key == this.gameService.user.uid && player.isActionFinished ==true )
-        return true;
-    });
+    // this.playerList.forEach(player => {
+    //   //find self
+    //   if(player.$key == this.gameService.user.uid && player.isActionFinished ==true )
+    //     return true;
+    // });
+    //update loop logic to resemble isHostStillInGame, instead of passing into another function
+    
+     return false;
+  }
+  private isHostStillInGame():boolean
+  {
+    for (var player in this.playerList) {
+      if (this.playerList.hasOwnProperty(player)) {
+          if(this.playerList[player].$key == this.gameInfo.creatorUid && this.playerList[player].pingTime > Math.floor(Date.now()) - 10000)
+          {
+            return true;
+          }
+      }
+    }
     return false;
+  }
+  private isWithin10Seconds(time:number):boolean
+  {
+    return time > Math.floor(Date.now()) - 10000
   }
 }
 

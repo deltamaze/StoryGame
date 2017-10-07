@@ -11,8 +11,8 @@
           <div class="card card-outline-primary mb-3">
             <div style="margin: 10px;">
               <div>
-                    <h4 class="float-left">Story</h4>
-                    <p class="float-right">Current Round: {{gameInfo.currentRound}} / {{gameInfo.totalRounds}}</p>
+                <h4 class="float-left">Story</h4>
+                <p class="float-right">Current Round: {{gameInfo.currentRound}} / {{gameInfo.totalRounds}}</p>
               </div>
               <br />
               <br />
@@ -26,18 +26,21 @@
               <div class="card-text">
                 <div *ngIf="gameInfo.currentRound == 0">
                   <div *ngIf="gameInfo.creatorUid == gameService.user.uid ">
-                    <button class="btn btn-success btn-md"  [disabled]="disableButton" (click)="startGame()">StartGame</button>
+                    <button class="btn btn-success btn-md" [disabled]="disableButton" (click)="startGame()">StartGame</button>
                   </div>
-                  <div *ngIf="gameInfo.creatorUid != gameService.user.uid ">Please Wait for Host to Start Game!</div>
+                  <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame()">Please Wait for Host to Start Game!</div>
+                  <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame() == false">Host Disconnected from game, game cannot start.</div>
                 </div>
                 <!--IfRound > 0 and Odd, and gameOver = False-->
                 <div *ngIf="gameInfo.currentRound % 2 ==1 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
-                <!--DEBUG-->
-                <!--<div *ngIf="1==1">-->
+                  <!--DEBUG-->
+                  <!--<div *ngIf="1==1">-->
                   <div>
                     <h4 class="float-left">Enter a sentence!</h4>
-                    <p class="float-right">Time Left in round: {{gameInfo.timeLeftInRound}}</p>
+                    <p class="float-right">Time Left: {{gameInfo.timeLeftInRound}}</p>
                   </div>
+                  <br />
+                  <br />
                   <form (ngSubmit)="submitIdea()">
                     <div class="form-group">
                       <input type="text" class="form-control" id="text" [(ngModel)]="ideaInput" name="text" maxlength="50" required>
@@ -47,13 +50,14 @@
                 </div>
                 <!--IfRound > 0 and Even, and gameOver = False-->
                 <div *ngIf="gameInfo.currentRound % 2 ==0 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
-                <!--DEBUG-->
-                <!--<div *ngIf="1==1">-->
+                  <!--DEBUG-->
+                  <!--<div *ngIf="1==1">-->
                   <div>
                     <h4 class="float-left">Vote on your favorite sentence!</h4>
-                    <p class="float-right">Time Left in round: {{gameInfo.timeLeftInRound}}</p>
+                    <p class="float-right">Time Left: {{gameInfo.timeLeftInRound}}</p>
                   </div>
-
+                  <br />
+                  <br />
                   <div class="text" *ngFor="let round of playerInputs">
                     <!--Only Display Current Round - 1-->
                     <div *ngIf="displayThisRound(round.$key)">
@@ -87,13 +91,16 @@
                   <div class="form-group">
                     <input type="text" class="form-control" id="text" [(ngModel)]="chatInput" name="text" maxlength="50" required>
                   </div>
-                  <button type="submit" class="btn btn-success">Send</button>
+                  <button type="submit" class="btn btn-success">Send</button> 
+                  <br />
                 </form>
-                <ul>
-                  <li class="text" *ngFor="let message of chatMessages">
-                    {{message.username}} - {{message.message}}
-                  </li>
-                </ul>
+                <div #list style="overflow-y:scroll; height:200px;" [scrollTop]="list.scrollHeight">
+                  <ul>
+                    <li class="text" *ngFor="let message of chatMessages">
+                      {{message.username}} - {{message.message}}
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -102,13 +109,14 @@
     </div>
     <div class="col-sm-3">
       <div class="card card-outline-warning mb-3">
-         <div style="margin: 10px;">
+        <div style="margin: 10px;">
           <h4 class="card-title">PlayerList</h4>
           <div class="card-text">
             <ul>
               <li class="text" *ngFor="let player of playerList">
-                <!--Add isActionFinished into this as a checkmark-->
-                {{player.username}} - {{player.score}}
+                <ng-template [ngIf]="isWithin10Seconds(player.pingTime) ">
+                    {{player.username}} - {{player.score}} <img *ngIf="player.isActionFinished" src="../../../assets/glyphicons-Ok.png" alt="image"> 
+                </ng-template>
               </li>
             </ul>
           </div>
