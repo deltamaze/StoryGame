@@ -7,7 +7,7 @@ import { UserService,UserInfo }      from '../core/user.service';
   templateUrl: './title.component.html',
 })
 export class TitleComponent {
-  title: string = 'Story Game - Alpha Test';
+  title: string = 'Story Game - Pre-Alpha';
   user: UserInfo;
 
   constructor(private userService: UserService) {

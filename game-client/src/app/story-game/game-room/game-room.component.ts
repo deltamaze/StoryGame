@@ -17,6 +17,7 @@ export class GameRoomComponent implements OnInit {
   public ideaInput: string;
   public playerInputs: any;
   public disableButton: boolean = false;
+  public lastVote: string;
 
 
 
@@ -62,11 +63,13 @@ export class GameRoomComponent implements OnInit {
   }
   public submitIdea():void
   {
+    this.lastVote = ""; //clear out last vote
     this.gameService.submitInput(this.ideaInput,this.gameInfo.currentRound);
   }
   public submiteVote(ideaKey):void
   {
     //clear out idea variable, to get ready for next round
+    this.lastVote = ideaKey; //use to determine where to play Check mark
     this.ideaInput = "";
     this.gameService.submitInput(ideaKey,this.gameInfo.currentRound);
   }
