@@ -45,7 +45,7 @@
                     <div class="form-group">
                       <input type="text" class="form-control" id="text" [(ngModel)]="ideaInput" name="text" maxlength="50" required>
                     </div>
-                    <button type="submit" [disabled]="disableButton" class="btn btn-primary">Submit Idea</button>
+                    <button type="submit"  class="btn btn-primary">Submit Idea</button>
                   </form>
                 </div>
                 <!--IfRound > 0 and Even, and gameOver = False-->
@@ -64,7 +64,7 @@
                       <ul>
                         <div *ngFor="let input of round  | propToArray">
                           <li *ngIf="displayThisInput(input.key)">
-                            {{input.value.input}} - <button class="btn btn-primary btn-sm" [disabled]="disableButton" (click)="submiteVote(input.key)">Vote</button>
+                            {{input.value.input}} - <button class="btn btn-primary btn-sm" (click)="submiteVote(input.key)">Vote</button>
                           </li>
                         </div>
                       </ul>
