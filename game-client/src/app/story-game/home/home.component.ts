@@ -8,14 +8,14 @@ import {StoryGameService} from '../story-game.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private gameService: StoryGameService) { }
+  constructor(public gameService: StoryGameService) { }
 
   ngOnInit() {
   }
-  private navJoinGame():void{
+  public navJoinGame():void{
     this.gameService.navJoinGame();
   }
-  private navCreateGame():void{
+  public navCreateGame():void{
     this.gameService.navCreateGame();
   }
 

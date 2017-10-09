@@ -8,31 +8,31 @@ import { UserService }      from '../../core/user.service';
 })
 export class LogonComponent implements OnInit {
   
-  private email: string;
-  private password: string;
-  private status: string;
+  public email: string;
+  public password: string;
+  public status: string;
 
-  constructor(private userService: UserService) { }
+  constructor(public userService: UserService) { }
 
   ngOnInit() {
     this.userService.getErrorStatus().subscribe(status => this.status = status);
   }
 
   
-  private login() :void{
+  public login() :void{
     this.userService.login(this.email,this.password);
   }
-  private googleLogin() :void{
+  public googleLogin() :void{
     this.userService.googleLogin();
   }
-  private guestLogin() :void{
+  public guestLogin() :void{
     this.userService.guestLogin();
   }
-  private signUp(): void{
+  public signUp(): void{
     this.userService.navSignup();
   }
 
-  private logout(): void{
+  public logout(): void{
     this.userService.logout();
   }
 

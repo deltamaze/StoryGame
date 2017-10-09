@@ -10,22 +10,22 @@ import { UserService } from '../../core/user.service';
 })
 export class CreateAccountComponent implements OnInit {
   
-  private status: string = "";
-  private desiredEmail: string = "";
-  private desiredPassword: string = "";
-  private confirmPassword: string ="";
+  public status: string = "";
+  public desiredEmail: string = "";
+  public desiredPassword: string = "";
+  public confirmPassword: string ="";
 
-  constructor(private userService: UserService) { }
+  constructor(public userService: UserService) { }
 
   ngOnInit() {
     this.userService.getErrorStatus().subscribe(status => this.status = status);  
   }
-  private createAccount():void{
+  public createAccount():void{
     if(this.validateInput()) 
       this.userService.createAccount(this.desiredEmail,this.desiredPassword);
 
   }
-  private validateInput():boolean{
+  public validateInput():boolean{
     if(this.desiredPassword===this.confirmPassword)
       return true
     else

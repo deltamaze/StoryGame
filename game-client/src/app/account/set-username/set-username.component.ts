@@ -9,19 +9,19 @@ import { UserService } from '../../core/user.service';
 })
 export class SetUsernameComponent implements OnInit {
 
-  private status: string = "";
-  private desiredUsername: string = "";
+  public status: string = "";
+  public desiredUsername: string = "";
 
-  constructor(private userService: UserService) { }
+  constructor(public userService: UserService) { }
 
   ngOnInit() {
     this.userService.getErrorStatus().subscribe(status => this.status = status);
   }
-  private setUsername(): void {
+  public setUsername(): void {
     if(this.validateInput())
       this.userService.setUsernameInFirebase(this.desiredUsername);
   }
-  private validateInput():boolean
+  public validateInput():boolean
   {
     if(this.desiredUsername.length >=3 && this.desiredUsername.length <=20)
       return true;

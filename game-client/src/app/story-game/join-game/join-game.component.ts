@@ -8,28 +8,28 @@ import {StoryGameService} from '../story-game.service';
 })
 export class JoinGameComponent implements OnInit {
   
-  private gameList:any;
-  private status: string = "";
+  public gameList:any;
+  public status: string = "";
 
-  constructor(private gameService: StoryGameService) { }
+  constructor(public gameService: StoryGameService) { }
 
   ngOnInit() {
     this.gameService.getErrorStatus().subscribe(status => this.status = status);
     this.getGames();
   }
-  private navHome():void{
+  public navHome():void{
     this.gameService.navHome();
   }
-  private getGames():void{
+  public getGames():void{
     this.gameService.getGames().subscribe(res=>{
       this.gameList = res
     });
   }
-  private consoleTest():void{
+  public consoleTest():void{
     
   }
-  private joinGame(gameKey:any):void{
-    console.log(gameKey);
+  public joinGame(gameKey:any):void{
+    //console.log(gameKey);
     this.gameService.joinGame(gameKey);
   }
 

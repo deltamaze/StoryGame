@@ -9,12 +9,12 @@ import {Utils} from '../../shared/utils'
 })
 export class CreateGameComponent implements OnInit {
 
-  private newGame: GameRoom = new GameRoom();
+  public newGame: GameRoom = new GameRoom();
   public createNewGame: FormGroup;
-  private status: string;
+  public status: string;
 
-  constructor(private gameService: StoryGameService,
-              private fb: FormBuilder) { }
+  constructor(public gameService: StoryGameService,
+              public fb: FormBuilder) { }
 
   ngOnInit() {
     this.gameService.getErrorStatus().subscribe(status => this.status = status);
@@ -37,7 +37,7 @@ export class CreateGameComponent implements OnInit {
     this.gameService.createGame(value);
   }
 
-  private navHome(): void {
+  public navHome(): void {
     this.gameService.navHome();
   }
 

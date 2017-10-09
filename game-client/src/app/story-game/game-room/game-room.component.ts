@@ -8,19 +8,19 @@ import {StoryGameService} from '../story-game.service';
 })
 export class GameRoomComponent implements OnInit {
   
-  private status: string = "";
-  private chatMessages: any;
-  private chatInput: string;
-  private playerList: any;
-  private gameStory: any;
-  private gameInfo: any;
-  private ideaInput: string;
-  private playerInputs: any;
-  private disableButton: boolean = false;
+  public status: string = "";
+  public chatMessages: any;
+  public chatInput: string;
+  public playerList: any;
+  public gameStory: any;
+  public gameInfo: any;
+  public ideaInput: string;
+  public playerInputs: any;
+  public disableButton: boolean = false;
 
 
 
-  constructor(private gameService: StoryGameService) { }
+  constructor(public gameService: StoryGameService) { }
 
   ngOnInit() {
     //make sure player is in game, and didn't nav straight here without joinin a game
@@ -39,7 +39,7 @@ export class GameRoomComponent implements OnInit {
     });
   }
 
-  private temporarilyDisableButton():void{
+  public temporarilyDisableButton():void{
     this.disableButton = true;
     console.log(this.disableButton);
         setTimeout(()=> {
@@ -48,44 +48,44 @@ export class GameRoomComponent implements OnInit {
     }, 2000);
   }
 
-  private submitChatMessage():void
+  public submitChatMessage():void
   {
     this.gameService.submitChatMessage(this.chatInput);
     this.chatInput = "";//clear input
     this.gameService.clearError();
 
   }
-  private startGame(): void
+  public startGame(): void
   {
     this.temporarilyDisableButton(); //prevent a double click, causing 2 posts to the web api
     this.gameService.startGame();
   }
-  private submitIdea():void
+  public submitIdea():void
   {
     this.temporarilyDisableButton();
     this.gameService.submitInput(this.ideaInput,this.gameInfo.currentRound);
   }
-  private submiteVote(ideaKey):void
+  public submiteVote(ideaKey):void
   {
     //clear out idea variable, to get ready for next round
     this.ideaInput = "";
     this.temporarilyDisableButton();
     this.gameService.submitInput(ideaKey,this.gameInfo.currentRound);
   }
-  private leaveGame():void
+  public leaveGame():void
   {
     this.gameService.navHome(); //this will unsubscripe player from gameroom as well as returning player home
   }
-  private consoleTest():void
+  public consoleTest():void
   {
     console.log(this.playerInputs.find(o => o.$key === (parseInt(this.gameInfo.currentRound)-1).toString()));
   }
-  private displayThisRound(roundNum: string):boolean
+  public displayThisRound(roundNum: string):boolean
   {
     //only display input for the round that is = to this round - 1
     return((parseInt(this.gameInfo.currentRound)-1 )== parseInt(roundNum) ); 
   }
-  private displayThisInput(inputUID: string):boolean
+  public displayThisInput(inputUID: string):boolean
   {
     //return true;
     //only display input that isn't your own.
@@ -93,7 +93,7 @@ export class GameRoomComponent implements OnInit {
     //to debug, lets just return true for now
     //return true;
   }
-  private isMyActionComplete():boolean
+  public isMyActionComplete():boolean
   {
     // this.playerList.forEach(player => {
     //   //find self
@@ -104,7 +104,7 @@ export class GameRoomComponent implements OnInit {
     
      return false;
   }
-  private isHostStillInGame():boolean
+  public isHostStillInGame():boolean
   {
     for (var player in this.playerList) {
       if (this.playerList.hasOwnProperty(player)) {
@@ -116,7 +116,7 @@ export class GameRoomComponent implements OnInit {
     }
     return false;
   }
-  private isWithin10Seconds(time:number):boolean
+  public isWithin10Seconds(time:number):boolean
   {
     return time > Math.floor(Date.now()) - 10000
   }
