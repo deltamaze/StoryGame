@@ -95,7 +95,11 @@ export class StoryGameService {
       }
       console.log("Current isGameOver Status:");
       console.log(this.gameObj.isGameOver );
-      this.gameObj.isGameOver = !this.wasThereInputThisRound(this.gameObj.currentRound);//end game if no input detected
+      if(!this.wasThereInputThisRound(this.gameObj.currentRound))
+      {
+                this.gameObj.isGameOver = true;
+                this.gameObj.gameOverReason ="Game Ended, due to no player activity in the previous round.";
+      }
       this.checkForInActivePlayers(this.gameObj.currentRound);
       this.gameObj.currentRound = this.gameObj.currentRound + 1;
       this.gameObj.timeLeftInRound = this.gameObj.timeBetweenTurns;//reset timer back to full
@@ -111,19 +115,14 @@ export class StoryGameService {
     {
       if(this.gameTime > this.maxGameLength)
       {
-        console.log("GameTime passed max game time possible")
+        this.gameObj.gameOverReason ="GameTime passed max game time possible.";
       }
       if(this.gameObj.currentRound > this.gameObj.totalRounds)
       {
-        console.log("Reached The Last Round")
-      }
-      if(this.gameObj.isGameOver == true)
-      {
-        console.log("Exception Occured, ending game early")
+        this.gameObj.gameOverReason =" - Won!"; //add determineWinner function
       }
       clearInterval(this.timer); //game over, top timer
       this.gameObj.isGameOver = true;
-      console.log("Game Over");
     }
     this.gameRef.set(this.gameObj); //post all changes to players can see
     console.log("Tick done");
