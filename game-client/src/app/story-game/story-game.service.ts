@@ -15,9 +15,9 @@ export class StoryGameService extends BaseService {
   public user: UserInfo; //for internal use in the set username function
   private pingSubscription: Subscription;
   //DEV
-  //private gameApiUrl:string = 'http://localhost:8080/'; 
+  private gameApiUrl:string = 'http://localhost:8080/'; 
   //PROD
-  private gameApiUrl:string = 'https://storygameapi.kilomaze.com/'; 
+  //private gameApiUrl:string = 'https://storygameapi.kilomaze.com/'; 
 
   constructor(
     public router: Router,
@@ -48,6 +48,7 @@ export class StoryGameService extends BaseService {
     newgame.isGameOver = false;
     newgame.timeLeftInRound=  0;
     newgame.gameTimeElapsed= 0;
+    newgame.gameOverReason='';
     //store password seperately or implement write (noread) only rule on it.
     
     let pushedGame = this.db.list('/storyGames/')
@@ -222,6 +223,7 @@ export class GameRoom {
   public isGameOver: boolean = false;
   public timeLeftInRound: number =  0;
   public gameTimeElapsed: number = 0;
+  public gameOverReason: string = "";
 
 }
 export class CurrentGameInfo {
