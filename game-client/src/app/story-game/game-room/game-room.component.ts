@@ -102,8 +102,16 @@ export class GameRoomComponent implements OnInit {
     //     return true;
     // });
     //update loop logic to resemble isHostStillInGame, instead of passing into another function
-    
-     return false;
+
+    for (var player in this.playerList) {
+      if (this.playerList.hasOwnProperty(player)) {
+          if(this.playerList[player].$key == this.gameService.user.uid && this.playerList[player].isActionFinished == true)
+          {
+            return true;
+          }
+      }
+    }
+    return false;
   }
   public isHostStillInGame():boolean
   {
