@@ -23,7 +23,7 @@ export class CreateGameComponent implements OnInit {
       gameName: [' ', [Validators.required, Validators.minLength(3),Validators.maxLength(20)]],
       isPrivate: [false, []],
       maxPlayers: [8, [Validators.required, Utils.minValue(3),Utils.maxValue(8)]],
-      timeBetweenTurns: [30, [Validators.required, Utils.minValue(5),Utils.maxValue(60)]],
+      timeBetweenTurns: [40, [Validators.required, Utils.minValue(5),Utils.maxValue(120)]],
       totalRounds: [15, [Validators.required,Utils.minValue(5),Utils.maxValue(30)]],
       storyThusFar: ['Once upon a time,', [Validators.required, Validators.minLength(5), ,Validators.maxLength(200)]],
       timestamp: [null]

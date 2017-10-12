@@ -14,10 +14,11 @@ export class GameRoomComponent implements OnInit {
   public playerList: any;
   public gameStory: any;
   public gameInfo: any;
-  public ideaInput: string;
+  public ideaInput: string = "";
   public playerInputs: any;
   public disableButton: boolean = false;
   public lastVote: string;
+  public maxCharacterCount:number = 100;
 
 
 
