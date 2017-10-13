@@ -26,6 +26,7 @@
               <div class="card-text">
                 <div *ngIf="gameInfo.currentRound == 0">
                   <div *ngIf="gameInfo.creatorUid == gameService.user.uid ">
+                     <img src="../../../assets/LetsGo120HScale.png" style="max-width:100%; height:auto;" alt="image"> 
                     <button class="btn btn-success btn-md" [disabled]="disableButton" (click)="startGame()">StartGame</button>
                   </div>
                   <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame()">Please Wait for Host to Start Game!</div>
