@@ -9,7 +9,7 @@
           <!--If round zero, and not owner, display: 'Waiting for game to start'-->
           <!--If Round > 0 display StoryThusFar-->
           <div class="card card-outline-primary mb-3">
-            <div style="margin: 10px;">
+            <div class="addMargin">
               <div>
                 <h4 class="float-left">Story</h4>
                 <p class="float-right">Current Round: {{gameInfo.currentRound}} / {{gameInfo.totalRounds}}</p>
@@ -22,11 +22,11 @@
             </div>
           </div>
           <div class="card card-outline-success mb-3">
-            <div style="margin: 10px;">
+            <div class="addMargin">
               <div class="card-text">
                 <div *ngIf="gameInfo.currentRound == 0">
-                  <div *ngIf="gameInfo.creatorUid == gameService.user.uid " style="text-align: center;">
-                    <img src="../../../assets/LetsGo120HScale.png" style="max-width:100%; height:auto;" alt="image">
+                  <div *ngIf="gameInfo.creatorUid == gameService.user.uid " class = "centerImg">
+                    <img src="../../../assets/LetsGo120HScale.png" class="imageResize" alt="image">
                     <br />
                     <button class="btn btn-success btn-md" [disabled]="disableButton" (click)="startGame()">StartGame</button>
                   </div>
@@ -93,7 +93,7 @@
         </div>
         <div class="col-12">
           <div class="card card-outline-info mb-3">
-            <div style="margin: 10px;">
+            <div class="addMargin">
               <h4 class="card-title">Chat</h4>
               <div class="card-text">
                 <form (ngSubmit)="submitChatMessage()">
@@ -103,7 +103,7 @@
                   <button type="submit" class="btn btn-success">Send</button>
                   <br />
                 </form>
-                <div #list style="overflow-y:scroll; height:200px;" [scrollTop]="list.scrollHeight">
+                <div #list class="chatRoom" [scrollTop]="list.scrollHeight">
                   <ul>
                     <li class="text" *ngFor="let message of chatMessages">
                       {{message.username}} - {{message.message}}
@@ -118,7 +118,7 @@
     </div>
     <div class="col-sm-3">
       <div class="card card-outline-warning mb-3">
-        <div style="margin: 10px;">
+        <div class="addMargin">
           <h4 class="card-title">PlayerList</h4>
           <div class="card-text">
             <ul>

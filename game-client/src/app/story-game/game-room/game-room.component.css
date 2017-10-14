@@ -1,0 +1,14 @@
+.centerImg{
+    text-align: center;
+}
+.addMargin{
+    margin: 10px;
+}
+.imageResize{
+    max-width:100%; 
+    height:auto;
+}
+.chatRoom{
+    overflow-y:scroll; 
+    height:200px;
+}
