@@ -25,8 +25,9 @@
             <div style="margin: 10px;">
               <div class="card-text">
                 <div *ngIf="gameInfo.currentRound == 0">
-                  <div *ngIf="gameInfo.creatorUid == gameService.user.uid ">
-                     <img src="../../../assets/LetsGo120HScale.png" style="max-width:100%; height:auto;" alt="image"> 
+                  <div *ngIf="gameInfo.creatorUid == gameService.user.uid " style="text-align: center;">
+                    <img src="../../../assets/LetsGo120HScale.png" style="max-width:100%; height:auto;" alt="image">
+                    <br />
                     <button class="btn btn-success btn-md" [disabled]="disableButton" (click)="startGame()">StartGame</button>
                   </div>
                   <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame()">Please Wait for Host to Start Game!</div>
@@ -52,7 +53,7 @@
                     <span *ngIf="isMyActionComplete()">
                       <button type="submit"  class="btn btn-success">Update</button> {{(ideaInput)?.length}}/{{maxCharacterCount}} <img src="../../../assets/glyphicons-Ok.png" alt="image"> <p>Your Idea was saved! You can make changes before time is up!</p>
                     </span>
-                    
+
                   </form>
                 </div>
                 <!--IfRound > 0 and Even, and gameOver = False-->
@@ -83,8 +84,7 @@
                 <!--If Game Over-->
                 <div *ngIf="gameInfo.isGameOver == true">
                   GameOver
-                  <br />
-                  {{gameInfo.gameOverReason}}
+                  <br /> {{gameInfo.gameOverReason}}
                 </div>
               </div>
             </div>
@@ -100,7 +100,7 @@
                   <div class="form-group">
                     <input type="text" class="form-control" id="text" [(ngModel)]="chatInput" name="text" maxlength="50" required>
                   </div>
-                  <button type="submit" class="btn btn-success">Send</button> 
+                  <button type="submit" class="btn btn-success">Send</button>
                   <br />
                 </form>
                 <div #list style="overflow-y:scroll; height:200px;" [scrollTop]="list.scrollHeight">
@@ -124,7 +124,8 @@
             <ul>
               <li class="text" *ngFor="let player of playerList">
                 <ng-template [ngIf]="isWithin10Seconds(player.pingTime) ">
-                    {{player.username}} - {{player.score}} <img *ngIf="player.isActionFinished" src="../../../assets/glyphicons-Ok.png" alt="image"> 
+                  {{player.username}} - {{player.score}} <img *ngIf="player.isActionFinished" src="../../../assets/glyphicons-Ok.png"
+                    alt="image">
                 </ng-template>
               </li>
             </ul>
