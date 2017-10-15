@@ -184,6 +184,8 @@ export class StoryGameService extends BaseService {
     let input = {
       username:this.user.username,
       input:idea,
+      votes:0,
+      isWinner:false,
       timestamp:firebase.database.ServerValue.TIMESTAMP
     }
     this.db.object('/gamePlayerInput/' + this.currentGameId + '/'+roundNumber.toString()+'/'+this.user.uid+'/').set(input).catch(err => this.handleError(err));

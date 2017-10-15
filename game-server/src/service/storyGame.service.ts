@@ -260,7 +260,6 @@ export class StoryGameService {
         }
       }
     }
-    console.log(votes);
     if(noVotes)//no votes detected
     {
       return;
@@ -268,13 +267,14 @@ export class StoryGameService {
     //okay so now we have a dictionary with uid's and their vote tally
     //Add a random Decimal Value to tally, to generate a random winner if tie
     let winningKey = Object.keys(votes).reduce(function (a, b) { return (votes[a] + Math.random()) > (votes[b] + Math.random()) ? a : b });
-    console.log(winningKey);
+    //console.log(winningKey);
     //okay we got the winningkey/uid of the winner
     //Lets look into the previous round and pull his sentence
     let prevRound = roundNum - 1;
 
     //update story thus far
     if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null && this.playerInputsObj[prevRound][winningKey] != null) {
+      this.playerInputsObj[prevRound][winningKey].isWinner = true;
       this.gameObj.storyThusFar = this.gameObj.storyThusFar + "..." + this.playerInputsObj[prevRound][winningKey].input
     }
     //update player score
@@ -282,6 +282,16 @@ export class StoryGameService {
       this.allPlayersObj[winningKey].score = this.allPlayersObj[winningKey].score + 1;
       firebase.database().ref('gamePlayers/' + this.gameId + '/' + winningKey).set(this.allPlayersObj[winningKey]);
     }
+    //let players know how much vote each input got
+    for(var key in votes) {
+      var voteCount = votes[key];
+      if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null && this.playerInputsObj[prevRound][key] != null) {
+        this.playerInputsObj[prevRound][key].votes = voteCount;
+      }
+    }
+    firebase.database().ref('gamePlayerInput/' + this.gameId + '/' + prevRound).set(this.playerInputsObj[prevRound]);
+  
+
   }
   private wasThereInputThisRound(roundNum: number): boolean {
     if(roundNum == 0)

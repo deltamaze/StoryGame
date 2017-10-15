@@ -30,15 +30,39 @@
                     <br />
                     <button class="btn btn-success btn-md" [disabled]="disableButton" (click)="startGame()">StartGame</button>
                   </div>
-                  <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame()">Please Wait for Host to Start Game!</div>
-                  <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame() == false">Host Disconnected from game, game cannot start.</div>
+                  <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame()" class = "centerImg">
+                    <img src="../../../assets/Waiting120HScale.png" class="imageResize" alt="image">
+                    <br />
+                    Please Wait for Host to Start Game!</div>
+                  <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame() == false" class = "centerImg">
+                    <img src="../../../assets/GO120HScale.png" class="imageResize" alt="image">
+                    <br />
+                    Host Disconnected from game, game cannot start.</div>
                 </div>
-                <!--IfRound > 0 and Odd, and gameOver = False-->
+                <!--Display action image-->
+                <div *ngIf="gameInfo.currentRound > 0">
+                    <div *ngIf="!isMyActionComplete() && gameInfo.timeLeftInRound > hurryThreshold && gameInfo.isGameOver == false" class = "centerImg">
+                      <img src="../../../assets/LetsGo120HScale.png" class="imageResize" alt="image">
+                    </div>
+                    <div *ngIf="!isMyActionComplete() && gameInfo.timeLeftInRound <= hurryThreshold && gameInfo.timeLeftInRound > 0  && gameInfo.isGameOver == false" class = "centerImg">
+                      <img src="../../../assets/Hurry120HScale.png" class="imageResize" alt="image">
+                    </div>
+                    <div *ngIf="isMyActionComplete() && gameInfo.timeLeftInRound > 0  && gameInfo.isGameOver == false" class = "centerImg">
+                      <img src="../../../assets/Waiting120HScale.png" class="imageResize" alt="image">
+                    </div>
+                    <div *ngIf="gameInfo.timeLeftInRound <= 0  && gameInfo.isGameOver == false" class = "centerImg">
+                      <img src="../../../assets/TimesUp!120HScale.png" class="imageResize" alt="image">
+                    </div>
+                    <div *ngIf="gameInfo.isGameOver != false" class = "centerImg">
+                      <img src="../../../assets/GO120HScale.png" class="imageResize" alt="image">
+                    </div>
+                </div>
                 <div *ngIf="gameInfo.currentRound % 2 ==1 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
                   <!--DEBUG-->
                   <!--<div *ngIf="1==1">-->
                   <div>
-                    <h4 class="float-left">Enter a sentence!</h4>
+                    
+                    <h4 class="float-left">Submit an Idea!</h4>
                     <p class="float-right">Time Left: {{gameInfo.timeLeftInRound}}</p>
                   </div>
                   <br />
@@ -71,8 +95,13 @@
                     <div *ngIf="displayThisRound(round.$key)">
                       <ul>
                         <div *ngFor="let input of round  | propToArray">
+                          <!--Display Options you can Vote for-->
                           <li *ngIf="displayThisInput(input.key)">
-                            {{input.value.input}} - <button class="btn btn-primary btn-sm" (click)="submiteVote(input.key)">Vote</button>
+                            {{input.value.input}} <span *ngIf="gameInfo.timeLeftInRound <=0"> - Player:{{input.value.username}} - Votes:{{input.value.votes}}</span><span *ngIf="input.value.isWinner"><< Winner!</span>  - <button class="btn btn-primary btn-sm" (click)="submiteVote(input.key)" [disabled] = "gameInfo.timeLeftInRound <=0">Vote</button>
+                          </li>
+                          <!--Display Option you can't vote for (Your own input)-->
+                          <li *ngIf="!displayThisInput(input.key)">
+                            {{input.value.input}} <span *ngIf="gameInfo.timeLeftInRound <=0"> - Player:{{input.value.username}} - Votes:{{input.value.votes}}</span>  - << Your Idea <span *ngIf="input.value.isWinner"><< Winner!</span>
                           </li>
                         </div>
                       </ul>

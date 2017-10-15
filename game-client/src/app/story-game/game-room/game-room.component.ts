@@ -19,6 +19,7 @@ export class GameRoomComponent implements OnInit {
   public disableButton: boolean = false;
   public lastVote: string;
   public maxCharacterCount:number = 100;
+  public hurryThreshold: number = 5;
 
 
 
@@ -130,5 +131,9 @@ export class GameRoomComponent implements OnInit {
   {
     return time > Math.floor(Date.now()) - 10000
   }
+  // public isTimeAlmostUp():boolean
+  // {
+  //   if(this.gameInfo != null && this.gameInfo.timeLeftInRound != null && this.gameInfo.timeLeftInRound > 0)
+  // }
 }
 
