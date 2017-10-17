@@ -8,6 +8,7 @@ deploy
 firebase.json
 *.firebaserc
 storygame-40e42-firebase-adminsdk-xgxyg-8d0fe422e4.json
+snakearcade-45688-firebase-adminsdk-d15fy-521e0e3393.json
 
 # IDEs and editors
 /.idea

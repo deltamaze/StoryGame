@@ -8,6 +8,7 @@ import methodOverride = require("method-override");
 
 import { IndexRoute } from "./routes/index";
 import { StoryGameRoute } from "./routes/storyGame";
+import { SnakeGameRoute } from "./routes/snakeGame";
 
 /**
  * The server.
@@ -115,6 +116,7 @@ export class Server {
     //IndexRoute
     IndexRoute.create(router);
     StoryGameRoute.create(router);
+    SnakeGameRoute.create(router);
 
     //use router middleware
     
