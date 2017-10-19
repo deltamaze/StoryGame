@@ -1,163 +1,177 @@
 <div *ngIf="gameInfo != null" class="container">
+  <!--gamebody and chat in single stacked column-->
   <div class="row">
-    <div class="col-md-9">
-      <!--gamebody and chat in single stacked column-->
-      <div class="row">
-        <div class="col-12">
+    <div class="col-12">
 
-          <!--If Owner and Round 0, display StartGame-->
-          <!--If round zero, and not owner, display: 'Waiting for game to start'-->
-          <!--If Round > 0 display StoryThusFar-->
-          <div class="card card-outline-primary mb-3">
-            <div class="addMargin">
-              <div>
-                <h4 class="float-left">Story</h4>
-                <p class="float-right">Current Round: {{gameInfo.currentRound}} / {{gameInfo.totalRounds}}</p>
+      <!--If Owner and Round 0, display StartGame-->
+      <!--If round zero, and not owner, display: 'Waiting for game to start'-->
+      <!--If Round > 0 display StoryThusFar-->
+      <div class="card card-outline-primary mb-3">
+        <div class="addMargin">
+          <div>
+            <h4 class="float-left">Story</h4>
+            <p class="float-right">Current Round: {{gameInfo.currentRound}} / {{gameInfo.totalRounds}}</p>
+          </div>
+          <br />
+          <br />
+          <div class="card-text">
+            <p>{{gameInfo.storyThusFar}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="card card-outline-success mb-3">
+        <div class="addMargin">
+          <div class="card-text">
+            <div *ngIf="gameInfo.currentRound == 0">
+              <div *ngIf="gameInfo.creatorUid == gameService.user.uid " class="centerImg">
+                <img src="../../../assets/LetsGo120HScale.png" class="imageResize" alt="image">
+                <br />
+                <button class="btn btn-success btn-md" [disabled]="disableButton" (click)="startGame()">StartGame</button>
               </div>
-              <br />
-              <br />
-              <div class="card-text">
-                <p>{{gameInfo.storyThusFar}}</p>
+              <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame()" class="centerImg">
+                <img src="../../../assets/Waiting120HScale.png" class="imageResize" alt="image">
+                <br /> Please Wait for Host to Start Game!</div>
+              <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame() == false" class="centerImg">
+                <img src="../../../assets/GO120HScale.png" class="imageResize" alt="image">
+                <br /> Host Disconnected from game, game cannot start.</div>
+            </div>
+            <!--Display action image-->
+            <div *ngIf="gameInfo.currentRound > 0">
+              <div *ngIf="!isMyActionComplete() && gameInfo.timeLeftInRound > hurryThreshold && gameInfo.isGameOver == false" class="centerImg">
+                <img src="../../../assets/LetsGo120HScale.png" class="imageResize" alt="image">
+              </div>
+              <div *ngIf="!isMyActionComplete() && gameInfo.timeLeftInRound <= hurryThreshold && gameInfo.timeLeftInRound > 0  && gameInfo.isGameOver == false"
+                class="centerImg">
+                <img src="../../../assets/Hurry120HScale.png" class="imageResize" alt="image">
+              </div>
+              <div *ngIf="isMyActionComplete() && gameInfo.timeLeftInRound > 0  && gameInfo.isGameOver == false" class="centerImg">
+                <img src="../../../assets/Waiting120HScale.png" class="imageResize" alt="image">
+              </div>
+              <div *ngIf="gameInfo.timeLeftInRound <= 0  && gameInfo.isGameOver == false" class="centerImg">
+                <img src="../../../assets/TimesUp!120HScale.png" class="imageResize" alt="image">
+              </div>
+              <div *ngIf="gameInfo.isGameOver != false" class="centerImg">
+                <img src="../../../assets/GO120HScale.png" class="imageResize" alt="image">
               </div>
             </div>
-          </div>
-          <div class="card card-outline-success mb-3">
-            <div class="addMargin">
-              <div class="card-text">
-                <div *ngIf="gameInfo.currentRound == 0">
-                  <div *ngIf="gameInfo.creatorUid == gameService.user.uid " class = "centerImg">
-                    <img src="../../../assets/LetsGo120HScale.png" class="imageResize" alt="image">
-                    <br />
-                    <button class="btn btn-success btn-md" [disabled]="disableButton" (click)="startGame()">StartGame</button>
-                  </div>
-                  <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame()" class = "centerImg">
-                    <img src="../../../assets/Waiting120HScale.png" class="imageResize" alt="image">
-                    <br />
-                    Please Wait for Host to Start Game!</div>
-                  <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame() == false" class = "centerImg">
-                    <img src="../../../assets/GO120HScale.png" class="imageResize" alt="image">
-                    <br />
-                    Host Disconnected from game, game cannot start.</div>
+            <div *ngIf="gameInfo.currentRound % 2 ==1 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
+              <!--DEBUG-->
+              <!--<div *ngIf="1==1">-->
+              <div>
+
+                <h4 class="float-left">Submit an Idea!</h4>
+                <p class="float-right">Time Left: {{gameInfo.timeLeftInRound}}</p>
+              </div>
+              <br />
+              <br />
+              <form (ngSubmit)="submitIdea()">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="text" [(ngModel)]="ideaInput" name="text" maxlength="{{maxCharacterCount}}" required>
                 </div>
-                <!--Display action image-->
-                <div *ngIf="gameInfo.currentRound > 0">
-                    <div *ngIf="!isMyActionComplete() && gameInfo.timeLeftInRound > hurryThreshold && gameInfo.isGameOver == false" class = "centerImg">
-                      <img src="../../../assets/LetsGo120HScale.png" class="imageResize" alt="image">
-                    </div>
-                    <div *ngIf="!isMyActionComplete() && gameInfo.timeLeftInRound <= hurryThreshold && gameInfo.timeLeftInRound > 0  && gameInfo.isGameOver == false" class = "centerImg">
-                      <img src="../../../assets/Hurry120HScale.png" class="imageResize" alt="image">
-                    </div>
-                    <div *ngIf="isMyActionComplete() && gameInfo.timeLeftInRound > 0  && gameInfo.isGameOver == false" class = "centerImg">
-                      <img src="../../../assets/Waiting120HScale.png" class="imageResize" alt="image">
-                    </div>
-                    <div *ngIf="gameInfo.timeLeftInRound <= 0  && gameInfo.isGameOver == false" class = "centerImg">
-                      <img src="../../../assets/TimesUp!120HScale.png" class="imageResize" alt="image">
-                    </div>
-                    <div *ngIf="gameInfo.isGameOver != false" class = "centerImg">
-                      <img src="../../../assets/GO120HScale.png" class="imageResize" alt="image">
-                    </div>
-                </div>
-                <div *ngIf="gameInfo.currentRound % 2 ==1 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
-                  <!--DEBUG-->
-                  <!--<div *ngIf="1==1">-->
-                  <div>
-                    
-                    <h4 class="float-left">Submit an Idea!</h4>
-                    <p class="float-right">Time Left: {{gameInfo.timeLeftInRound}}</p>
-                  </div>
-                  <br />
-                  <br />
-                  <form (ngSubmit)="submitIdea()">
-                    <div class="form-group">
-                      <input type="text" class="form-control" id="text" [(ngModel)]="ideaInput" name="text" maxlength="{{maxCharacterCount}}" required>
-                    </div>
-                    <span *ngIf="!isMyActionComplete()">
+                <span *ngIf="!isMyActionComplete()">
                       <button type="submit"  class="btn btn-primary">Submit Idea</button> {{(ideaInput)?.length}}/{{maxCharacterCount}}
                     </span>
-                    <span *ngIf="isMyActionComplete()">
+                <span *ngIf="isMyActionComplete()">
                       <button type="submit"  class="btn btn-success">Update</button> {{(ideaInput)?.length}}/{{maxCharacterCount}} <img src="../../../assets/glyphicons-Ok.png" alt="image"> <p>Your Idea was saved! You can make changes before time is up!</p>
                     </span>
 
-                  </form>
-                </div>
-                <!--IfRound > 0 and Even, and gameOver = False-->
-                <div *ngIf="gameInfo.currentRound % 2 ==0 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
-                  <!--DEBUG-->
-                  <!--<div *ngIf="1==1">-->
-                  <div>
-                    <h4 class="float-left">Vote on your favorite sentence!</h4>
-                    <p class="float-right">Time Left: {{gameInfo.timeLeftInRound}}</p>
-                  </div>
-                  <br />
-                  <br />
-                  <div class="text" *ngFor="let round of playerInputs">
-                    <!--Only Display Current Round - 1-->
-                    <div *ngIf="displayThisRound(round.$key)">
-                      <ul>
-                        <div *ngFor="let input of round  | propToArray">
-                          <!--Display Options you can Vote for-->
-                          <li *ngIf="displayThisInput(input.key)">
-                            {{input.value.input}} <span *ngIf="gameInfo.timeLeftInRound <=0"> - Player:{{input.value.username}} - Votes:{{input.value.votes}}</span><span *ngIf="input.value.isWinner"><< Winner!</span>  - <button class="btn btn-primary btn-sm" (click)="submiteVote(input.key)" [disabled] = "gameInfo.timeLeftInRound <=0">Vote</button>
-                          </li>
-                          <!--Display Option you can't vote for (Your own input)-->
-                          <li *ngIf="!displayThisInput(input.key)">
-                            {{input.value.input}} <span *ngIf="gameInfo.timeLeftInRound <=0"> - Player:{{input.value.username}} - Votes:{{input.value.votes}}</span>  - << Your Idea <span *ngIf="input.value.isWinner"><< Winner!</span>
-                          </li>
-                        </div>
-                      </ul>
-                    </div>
-                    <!--playerInputs.find(o => o.$key === (parseInt(gameInfo.currentRound)-1).toString())-->
-
-                  </div>
-                </div>
-                <!--If Game Over-->
-                <div *ngIf="gameInfo.isGameOver == true">
-                  GameOver
-                  <br /> {{gameInfo.gameOverReason}}
-                </div>
-              </div>
+              </form>
             </div>
-          </div>
-
-        </div>
-        <div class="col-12">
-          <div class="card card-outline-info mb-3">
-            <div class="addMargin">
-              <h4 class="card-title">Chat</h4>
-              <div class="card-text">
-                <form (ngSubmit)="submitChatMessage()">
-                  <div class="form-group">
-                    <input type="text" class="form-control" id="text" [(ngModel)]="chatInput" name="text" maxlength="50" required>
-                  </div>
-                  <button type="submit" class="btn btn-success">Send</button>
-                  <br />
-                </form>
-                <div #list class="chatRoom" [scrollTop]="list.scrollHeight">
+            <!--IfRound > 0 and Even, and gameOver = False-->
+            <div *ngIf="gameInfo.currentRound % 2 ==0 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
+              <!--DEBUG-->
+              <!--<div *ngIf="1==1">-->
+              <div>
+                <h4 class="float-left">Vote on your favorite sentence!</h4>
+                <p class="float-right">Time Left: {{gameInfo.timeLeftInRound}}</p>
+              </div>
+              <br />
+              <br />
+              <div class="text" *ngFor="let round of playerInputs">
+                <!--Only Display Current Round - 1-->
+                <div *ngIf="displayThisRound(round.$key)">
                   <ul>
-                    <li class="text" *ngFor="let message of chatMessages">
-                      {{message.username}} - {{message.message}}
-                    </li>
+                    <div *ngFor="let input of round  | propToArray">
+                      <!--Display Options you can Vote for-->
+                      <li *ngIf="displayThisInput(input.key)">
+                        {{input.value.input}} <span *ngIf="gameInfo.timeLeftInRound <=0"> - Player:{{input.value.username}} - Votes:{{input.value.votes}}</span>
+                        <span *ngIf="input.value.isWinner">
+                          << Winner!</span> - <button class="btn btn-primary btn-sm" (click)="submiteVote(input.key)"
+                          [disabled]="gameInfo.timeLeftInRound <=0">Vote</button>
+                      </li>
+                      <!--Display Option you can't vote for (Your own input)-->
+                      <li *ngIf="!displayThisInput(input.key)">
+                        {{input.value.input}} <span *ngIf="gameInfo.timeLeftInRound <=0"> - Player:{{input.value.username}} - Votes:{{input.value.votes}}</span>                        -
+                        << Your Idea <span *ngIf="input.value.isWinner">
+                          << Winner!</span>
+                      </li>
+                    </div>
                   </ul>
                 </div>
+                <!--playerInputs.find(o => o.$key === (parseInt(gameInfo.currentRound)-1).toString())-->
+
               </div>
+            </div>
+            <!--If Game Over-->
+            <div *ngIf="gameInfo.isGameOver == true">
+              GameOver
+              <br /> {{gameInfo.gameOverReason}}
             </div>
           </div>
         </div>
       </div>
+
     </div>
-    <div class="col-sm-3">
-      <div class="card card-outline-warning mb-3">
+    <div class="col-md-9">
+      <div class="card card-outline-info mb-3">
         <div class="addMargin">
-          <h4 class="card-title">PlayerList</h4>
           <div class="card-text">
-            <ul>
-              <li class="text" *ngFor="let player of playerList">
+            <div #list class="chatRoom" [scrollTop]="list.scrollHeight">
+              <ul>
+                <li>
+                  Welcome to the Chatroom!
+                </li>
+                <li class="text" *ngFor="let message of chatMessages">
+                  {{message.username}} - {{message.message}}
+                </li>
+              </ul>
+            </div>
+            <form (ngSubmit)="submitChatMessage()">
+              <div class="form-group">
+                <input type="text" class="form-control" id="text" [(ngModel)]="chatInput" name="text" maxlength="50" required>
+              </div>
+              <button type="submit" class="btn btn-success">Send</button>
+              <br />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-outline-warning mb-3">
+        <div class="addMargin MinHeight200">
+          <div class="card-text">
+            <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Scoreboard</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <!--<li *ngFor="let hero of heroes">
+                {{ hero }}
+              </li>-->
+              <tr *ngFor="let player of playerList">
                 <ng-template [ngIf]="isWithin10Seconds(player.pingTime) ">
-                  {{player.username}} - {{player.score}} <img *ngIf="player.isActionFinished" src="../../../assets/glyphicons-Ok.png"
-                    alt="image">
+                  <td style="font-size:xx-small"> {{player.username}} <img *ngIf="player.isActionFinished" src="../../../assets/glyphicons-Ok.png"
+                    alt="image"></td>
+                  <td >{{player.score}}
+                  </td>
                 </ng-template>
-              </li>
-            </ul>
+              </tr>
+            </tbody>
+          </table>
           </div>
         </div>
       </div>
