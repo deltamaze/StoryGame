@@ -13,5 +13,11 @@
     height:200px;
 }
 .MinHeight200{
-    min-height: 200px
+    min-height: 200px;
+}
+.smallFont{
+    font-size:xx-small;
+}
+.largeFont{
+    font-size: large;
 }

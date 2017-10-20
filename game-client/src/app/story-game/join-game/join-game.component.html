@@ -24,7 +24,7 @@
     <tr *ngFor="let game of gameList">
       <ng-template [ngIf]="game.isGameOver == false && game.players != null && game.players.length > 0 ">
         <td>{{game.gameName}}</td>
-        <td>({{game.currentRound}}/{{game.totalRounds}}) - ({{(game.players)?.length}}/{{game.maxPlayers}})</td>
+        <td>({{game.currentTurn}}/{{game.totalRounds}}) - ({{(game.players)?.length}}/{{game.maxPlayers}})</td>
         <!--<td>{{(game.players)?.length}} / {{game.maxPlayers}}</td>-->
         <td>{{game.storyThusFar.substring(0, 15)+'...'}}</td>
         <td><button class="btn btn-success btn-md" (click)="joinGame(game.$key)">Join</button></td>

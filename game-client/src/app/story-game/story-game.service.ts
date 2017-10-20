@@ -43,6 +43,7 @@ export class StoryGameService extends BaseService {
     super.clearError();
     
     newgame.timestamp = firebase.database.ServerValue.TIMESTAMP;
+    newgame.currentTurn = 0;
     newgame.currentRound = 0;
     newgame.creatorUid = this.user.uid;
     newgame.isGameOver = false;
@@ -220,6 +221,7 @@ export class GameRoom {
   public totalRounds: number = 15;
   public storyThusFar: string = "Once upon a time,";
   public timestamp: any = firebase.database.ServerValue.TIMESTAMP;
+  public currentTurn: number = 0;//when creating, start at round zero, when game starts , the api will turn this into round 1..2..3..etc
   public currentRound: number = 0;//when creating, start at round zero, when game starts , the api will turn this into round 1..2..3..etc
   public creatorUid:string= "0";
   public isGameOver: boolean = false;

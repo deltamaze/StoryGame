@@ -9,12 +9,12 @@
       <div class="card card-outline-primary mb-3">
         <div class="addMargin">
           <div>
-            <h4 class="float-left">Story</h4>
-            <p class="float-right">Current Round: {{gameInfo.currentRound}} / {{gameInfo.totalRounds}}</p>
+            <h4 class="float-left">{{gameInfo.gameName}}</h4>
+            <p class="float-right">Current Round: {{gameInfo.currentTurn}} / {{gameInfo.totalRounds}}</p>
           </div>
           <br />
           <br />
-          <div class="card-text">
+          <div class="card-text largeFont">
             <p>{{gameInfo.storyThusFar}}</p>
           </div>
         </div>
@@ -22,7 +22,7 @@
       <div class="card card-outline-success mb-3">
         <div class="addMargin">
           <div class="card-text">
-            <div *ngIf="gameInfo.currentRound == 0">
+            <div *ngIf="gameInfo.currentTurn == 0">
               <div *ngIf="gameInfo.creatorUid == gameService.user.uid " class="centerImg">
                 <img src="../../../assets/LetsGo120HScale.png" class="imageResize" alt="image">
                 <br />
@@ -36,7 +36,7 @@
                 <br /> Host Disconnected from game, game cannot start.</div>
             </div>
             <!--Display action image-->
-            <div *ngIf="gameInfo.currentRound > 0">
+            <div *ngIf="gameInfo.currentTurn > 0">
               <div *ngIf="!isMyActionComplete() && gameInfo.timeLeftInRound > hurryThreshold && gameInfo.isGameOver == false" class="centerImg">
                 <img src="../../../assets/LetsGo120HScale.png" class="imageResize" alt="image">
               </div>
@@ -54,7 +54,7 @@
                 <img src="../../../assets/GO120HScale.png" class="imageResize" alt="image">
               </div>
             </div>
-            <div *ngIf="gameInfo.currentRound % 2 ==1 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
+            <div *ngIf="gameInfo.currentTurn % 2 ==1 && gameInfo.currentTurn > 0 && gameInfo.isGameOver == false">
               <!--DEBUG-->
               <!--<div *ngIf="1==1">-->
               <div>
@@ -78,7 +78,7 @@
               </form>
             </div>
             <!--IfRound > 0 and Even, and gameOver = False-->
-            <div *ngIf="gameInfo.currentRound % 2 ==0 && gameInfo.currentRound > 0 && gameInfo.isGameOver == false">
+            <div *ngIf="gameInfo.currentTurn % 2 ==0 && gameInfo.currentTurn > 0 && gameInfo.isGameOver == false">
               <!--DEBUG-->
               <!--<div *ngIf="1==1">-->
               <div>
@@ -108,7 +108,7 @@
                     </div>
                   </ul>
                 </div>
-                <!--playerInputs.find(o => o.$key === (parseInt(gameInfo.currentRound)-1).toString())-->
+                <!--playerInputs.find(o => o.$key === (parseInt(gameInfo.currentTurn)-1).toString())-->
 
               </div>
             </div>
@@ -160,11 +160,12 @@
             </thead>
             <tbody>
               <!--<li *ngFor="let hero of heroes">
-                {{ hero }}
+                {{ hero }}style="font-size:xx-small"
               </li>-->
               <tr *ngFor="let player of playerList">
                 <ng-template [ngIf]="isWithin10Seconds(player.pingTime) ">
-                  <td style="font-size:xx-small"> {{player.username}} <img *ngIf="player.isActionFinished" src="../../../assets/glyphicons-Ok.png"
+                  <td [ngClass]="{'smallFont': player.username.length > 8 }"> {{player.username}} 
+                    <img *ngIf="player.isActionFinished" src="../../../assets/glyphicons-Ok.png"
                     alt="image"></td>
                   <td >{{player.score}}
                   </td>

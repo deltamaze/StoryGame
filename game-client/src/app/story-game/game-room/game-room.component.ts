@@ -66,14 +66,14 @@ export class GameRoomComponent implements OnInit {
   public submitIdea():void
   {
     this.lastVote = ""; //clear out last vote
-    this.gameService.submitInput(this.ideaInput,this.gameInfo.currentRound);
+    this.gameService.submitInput(this.ideaInput,this.gameInfo.currentTurn);
   }
   public submiteVote(ideaKey):void
   {
     //clear out idea variable, to get ready for next round
     this.lastVote = ideaKey; //use to determine where to play Check mark
     this.ideaInput = "";
-    this.gameService.submitInput(ideaKey,this.gameInfo.currentRound);
+    this.gameService.submitInput(ideaKey,this.gameInfo.currentTurn);
   }
   public leaveGame():void
   {
@@ -81,12 +81,12 @@ export class GameRoomComponent implements OnInit {
   }
   public consoleTest():void
   {
-    console.log(this.playerInputs.find(o => o.$key === (parseInt(this.gameInfo.currentRound)-1).toString()));
+    console.log(this.playerInputs.find(o => o.$key === (parseInt(this.gameInfo.currentTurn)-1).toString()));
   }
   public displayThisRound(roundNum: string):boolean
   {
     //only display input for the round that is = to this round - 1
-    return((parseInt(this.gameInfo.currentRound)-1 )== parseInt(roundNum) ); 
+    return((parseInt(this.gameInfo.currentTurn)-1 )== parseInt(roundNum) ); 
   }
   public displayThisInput(inputUID: string):boolean
   {

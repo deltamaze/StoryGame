@@ -43,7 +43,7 @@ export class StoryGameService {
       //grab game info, created by user in client side Create Game Page
       this.gameObj = snapshot.val()
     }.bind(this)).then(() => {
-      if (this.gameObj.currentRound != 0) {
+      if (this.gameObj.currentTurn != 0) {
         console.log("Game Round isn't zero");
         return;
       }
@@ -78,30 +78,30 @@ export class StoryGameService {
     this.establishActivePlayers();//players join as inactive, so activate them as they come in
     this.checkForDisconnectedPlayers();
 
-    if (this.allPlayerActionSubmitted(this.gameObj.currentRound) || this.gameObj.timeLeftInRound <= 0) {
+    if (this.allPlayerActionSubmitted(this.gameObj.currentTurn) || this.gameObj.timeLeftInRound <= 0) {
       didRoundChange = true;
     }
     //check to see if round time is up, if so, tally votes determine winner and progress round
 
-    if (this.gameObj.currentRound == 0) {//if this is the start of the game , lets change round zero, to round 1
+    if (this.gameObj.currentTurn == 0) {//if this is the start of the game , lets change round zero, to round 1
       didRoundChange = true;
     }
 
     //progress round, or decrease time
     if (didRoundChange)//round changes, reset round time left
     {
-      if (this.gameObj.currentRound % 2 == 0 && this.gameObj.currentRound > 0) {
-        this.determineRoundWinner(this.gameObj.currentRound);
+      if (this.gameObj.currentTurn % 2 == 0 && this.gameObj.currentTurn > 0) {
+        this.determineRoundWinner(this.gameObj.currentTurn);
       }
       console.log("Current isGameOver Status:");
       console.log(this.gameObj.isGameOver );
-      if(!this.wasThereInputThisRound(this.gameObj.currentRound))
+      if(!this.wasThereInputThisRound(this.gameObj.currentTurn))
       {
                 this.gameObj.isGameOver = true;
                 this.gameObj.gameOverReason ="Game Ended, due to no player activity in the previous round.";
       }
-      this.checkForInActivePlayers(this.gameObj.currentRound);
-      this.gameObj.currentRound = this.gameObj.currentRound + 1;
+      this.checkForInActivePlayers(this.gameObj.currentTurn);
+      this.gameObj.currentTurn = this.gameObj.currentTurn + 1;
       this.gameObj.timeLeftInRound = this.gameObj.timeBetweenTurns;//reset timer back to full
       this.resetIsActionFinished();//set everyone isActionFinished back to false
     }
@@ -111,13 +111,13 @@ export class StoryGameService {
     }
 
     //check to see if game over
-    if (this.gameTime > this.maxGameLength || this.gameObj.currentRound > this.gameObj.totalRounds || this.gameObj.isGameOver == true)//game is over, or has gone past max length possible
+    if (this.gameTime > this.maxGameLength || this.gameObj.currentTurn > this.gameObj.totalRounds || this.gameObj.isGameOver == true)//game is over, or has gone past max length possible
     {
       if(this.gameTime > this.maxGameLength)
       {
         this.gameObj.gameOverReason ="GameTime passed max game time possible.";
       }
-      if(this.gameObj.currentRound > this.gameObj.totalRounds)
+      if(this.gameObj.currentTurn > this.gameObj.totalRounds)
       {
         this.gameObj.gameOverReason =" - Won!"; //add determineWinner function
       }
