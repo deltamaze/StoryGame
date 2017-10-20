@@ -47,7 +47,7 @@ export class StoryGameService extends BaseService {
     newgame.currentRound = 0;
     newgame.creatorUid = this.user.uid;
     newgame.isGameOver = false;
-    newgame.timeLeftInRound=  0;
+    newgame.timeLeftInTurn=  0;
     newgame.gameTimeElapsed= 0;
     newgame.gameOverReason='';
     //store password seperately or implement write (noread) only rule on it.
@@ -225,7 +225,7 @@ export class GameRoom {
   public currentRound: number = 0;//when creating, start at round zero, when game starts , the api will turn this into round 1..2..3..etc
   public creatorUid:string= "0";
   public isGameOver: boolean = false;
-  public timeLeftInRound: number =  0;
+  public timeLeftInTurn: number =  0;
   public gameTimeElapsed: number = 0;
   public gameOverReason: string = "";
 

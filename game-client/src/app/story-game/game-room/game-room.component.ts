@@ -133,7 +133,7 @@ export class GameRoomComponent implements OnInit {
   }
   // public isTimeAlmostUp():boolean
   // {
-  //   if(this.gameInfo != null && this.gameInfo.timeLeftInRound != null && this.gameInfo.timeLeftInRound > 0)
+  //   if(this.gameInfo != null && this.gameInfo.timeLeftInTurn != null && this.gameInfo.timeLeftInTurn > 0)
   // }
 }
 

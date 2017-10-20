@@ -16,8 +16,6 @@ export class StoryGameService {
   currentPlayersObj: any;
   playerInputsObj: any;
   timer: any;
-  roundTime: number = 0;//move to game object
-  gameTime: number = 0;//move to game object
   oneSecond: number = 1000;
   gameEngineInterval: number = 1 * this.oneSecond; //how many seconds per interval
   maxGameLength: number = (this.oneSecond * 1200);//max possible game time is 20 minutes
@@ -28,7 +26,6 @@ export class StoryGameService {
   }
 
   public startGame() {
-    //set custom title
 
     //Start Game
     this.gameRef = firebase.database().ref('storyGames/' + this.gameId);
@@ -68,7 +65,7 @@ export class StoryGameService {
   }
   private gameEngine(): void {
 
-    let didRoundChange: boolean = false;
+    let didTurnChange: boolean = false;
     this.gameObj.gameTimeElapsed = this.gameObj.gameTimeElapsed + (this.gameEngineInterval / this.oneSecond);//add second to game
     console.log(this.gameObj.gameTimeElapsed);
 
@@ -78,17 +75,17 @@ export class StoryGameService {
     this.establishActivePlayers();//players join as inactive, so activate them as they come in
     this.checkForDisconnectedPlayers();
 
-    if (this.allPlayerActionSubmitted(this.gameObj.currentTurn) || this.gameObj.timeLeftInRound <= 0) {
-      didRoundChange = true;
+    if (this.allPlayerActionSubmitted(this.gameObj.currentTurn) || this.gameObj.timeLeftInTurn <= 0) {
+      didTurnChange = true;
     }
     //check to see if round time is up, if so, tally votes determine winner and progress round
 
     if (this.gameObj.currentTurn == 0) {//if this is the start of the game , lets change round zero, to round 1
-      didRoundChange = true;
+      didTurnChange = true;
     }
 
     //progress round, or decrease time
-    if (didRoundChange)//round changes, reset round time left
+    if (didTurnChange)//round changes, reset round time left
     {
       if (this.gameObj.currentTurn % 2 == 0 && this.gameObj.currentTurn > 0) {
         this.determineRoundWinner(this.gameObj.currentTurn);
@@ -102,18 +99,19 @@ export class StoryGameService {
       }
       this.checkForInActivePlayers(this.gameObj.currentTurn);
       this.gameObj.currentTurn = this.gameObj.currentTurn + 1;
-      this.gameObj.timeLeftInRound = this.gameObj.timeBetweenTurns;//reset timer back to full
+      this.gameObj.currentRound = Math.ceil(this.gameObj.currentTurn/2); //round = turn / 2, round up
+      this.gameObj.timeLeftInTurn = this.gameObj.timeBetweenTurns;//reset timer back to full
       this.resetIsActionFinished();//set everyone isActionFinished back to false
     }
     else//round did not change, decrease time
     {
-      this.gameObj.timeLeftInRound = this.gameObj.timeLeftInRound - (this.gameEngineInterval / this.oneSecond);
+      this.gameObj.timeLeftInTurn = this.gameObj.timeLeftInTurn - (this.gameEngineInterval / this.oneSecond);
     }
 
     //check to see if game over
-    if (this.gameTime > this.maxGameLength || this.gameObj.currentTurn > this.gameObj.totalRounds || this.gameObj.isGameOver == true)//game is over, or has gone past max length possible
+    if (this.gameObj.gameTimeElapsed > this.maxGameLength || this.gameObj.currentRound > this.gameObj.totalRounds || this.gameObj.isGameOver == true)//game is over, or has gone past max length possible
     {
-      if(this.gameTime > this.maxGameLength)
+      if(this.gameObj.gameTimeElapsed > this.maxGameLength)
       {
         this.gameObj.gameOverReason ="GameTime passed max game time possible.";
       }
@@ -151,7 +149,7 @@ export class StoryGameService {
       }
     }
 
-    if (activePlayerTally == 0 && this.gameTime > 10) {
+    if (activePlayerTally == 0 && this.gameObj.gameTimeElapsed > 10) {
       console.log("No Active Players Detected");
       this.gameObj.isGameOver = true;//if after 10 seconds of gam creation, there are no active players, then end game
     }
