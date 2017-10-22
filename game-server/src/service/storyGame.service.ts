@@ -19,6 +19,9 @@ export class StoryGameService {
   oneSecond: number = 1000;
   gameEngineInterval: number = 1 * this.oneSecond; //how many seconds per interval
   maxGameLength: number = (this.oneSecond * 1200);//max possible game time is 20 minutes
+  timesUpPeriodActive: boolean = false;
+  timesUpDisplayTimerResetValue: number = 5;
+  timesUpDisplayTimer: number = this.timesUpDisplayTimerResetValue;
   //inactivityTreshold: number = Date.now()-( this.oneSecond * 10); // if no ping for 10 sec, set them to inactive
 
   constructor(id: string) {
@@ -65,64 +68,72 @@ export class StoryGameService {
   }
   private gameEngine(): void {
 
-    let didTurnChange: boolean = false;
+
     this.gameObj.gameTimeElapsed = this.gameObj.gameTimeElapsed + (this.gameEngineInterval / this.oneSecond);//add second to game
     console.log(this.gameObj.gameTimeElapsed);
-
-
-
-    //perform maintenance for inactive players
     this.establishActivePlayers();//players join as inactive, so activate them as they come in
     this.checkForDisconnectedPlayers();
 
-    if (this.allPlayerActionSubmitted(this.gameObj.currentTurn) || this.gameObj.timeLeftInTurn <= 0) {
-      didTurnChange = true;
-    }
-    //check to see if round time is up, if so, tally votes determine winner and progress round
 
-    if (this.gameObj.currentTurn == 0) {//if this is the start of the game , lets change round zero, to round 1
-      didTurnChange = true;
-    }
-
-    //progress round, or decrease time
-    if (didTurnChange)//round changes, reset round time left
+    if (this.timesUpPeriodActive == false)//Turn still going
     {
-      if (this.gameObj.currentTurn % 2 == 0 && this.gameObj.currentTurn > 0) {
-        this.determineRoundWinner(this.gameObj.currentTurn);
+      let didTurnEnd: boolean = false;
+      if (this.allPlayerActionSubmitted(this.gameObj.currentTurn) || this.gameObj.timeLeftInTurn <= 0) {
+        didTurnEnd = true;
       }
-      console.log("Current isGameOver Status:");
-      console.log(this.gameObj.isGameOver );
-      if(!this.wasThereInputThisRound(this.gameObj.currentTurn))
+      if (this.gameObj.currentTurn == 0) {//if this is the start of the game , lets change round zero, to round 1
+        didTurnEnd = true;
+      }
+      if (didTurnEnd)//round changes, reset round time left
       {
-                this.gameObj.isGameOver = true;
-                this.gameObj.gameOverReason ="Game Ended, due to no player activity in the previous round.";
+        if (this.gameObj.currentTurn % 2 == 0 && this.gameObj.currentTurn > 0) {
+          this.determineRoundWinner(this.gameObj.currentTurn);
+        }
+        if (!this.wasThereInputThisRound(this.gameObj.currentTurn)) {
+          this.gameObj.isGameOver = true;
+          this.gameObj.gameOverReason = "Game Ended, due to no player activity in the previous round.";
+        }
+        this.checkForInActivePlayers(this.gameObj.currentTurn);
+        this.timesUpDisplayTimer = this.timesUpDisplayTimerResetValue;
+        this.timesUpPeriodActive = true;
       }
-      this.checkForInActivePlayers(this.gameObj.currentTurn);
-      this.gameObj.currentTurn = this.gameObj.currentTurn + 1;
-      this.gameObj.currentRound = Math.ceil(this.gameObj.currentTurn/2); //round = turn / 2, round up
-      this.gameObj.timeLeftInTurn = this.gameObj.timeBetweenTurns;//reset timer back to full
-      this.resetIsActionFinished();//set everyone isActionFinished back to false
+      else//round did not change, decrease time
+      {
+        this.gameObj.timeLeftInTurn = this.gameObj.timeLeftInTurn - (this.gameEngineInterval / this.oneSecond);
+      }
+
     }
-    else//round did not change, decrease time
-    {
-      this.gameObj.timeLeftInTurn = this.gameObj.timeLeftInTurn - (this.gameEngineInterval / this.oneSecond);
+    //Times Up Period
+    if (this.timesUpPeriodActive == true) {
+      if(this.timesUpDisplayTimer ==0)
+      {
+        
+        this.resetIsActionFinished();//set everyone isActionFinished back to false
+        this.gameObj.currentTurn = this.gameObj.currentTurn + 1;
+        this.gameObj.currentRound = Math.ceil(this.gameObj.currentTurn / 2); //round = turn / 2, round up
+        this.gameObj.timeLeftInTurn = this.gameObj.timeBetweenTurns;//reset timer back to full
+        this.timesUpPeriodActive = false;
+
+      }
+      else{
+        this.timesUpDisplayTimer--;
+      }
     }
 
     //check to see if game over
     if (this.gameObj.gameTimeElapsed > this.maxGameLength || this.gameObj.currentRound > this.gameObj.totalRounds || this.gameObj.isGameOver == true)//game is over, or has gone past max length possible
     {
-      if(this.gameObj.gameTimeElapsed > this.maxGameLength)
-      {
-        this.gameObj.gameOverReason ="GameTime passed max game time possible.";
+      if (this.gameObj.gameTimeElapsed > this.maxGameLength) {
+        this.gameObj.gameOverReason = "GameTime passed max game time possible.";
       }
-      if(this.gameObj.currentTurn > this.gameObj.totalRounds)
-      {
-        this.gameObj.gameOverReason =" - Won!"; //add determineWinner function
+      if (this.gameObj.currentTurn > this.gameObj.totalRounds) {
+        this.gameObj.gameOverReason = " - Won!"; //add determineWinner function
       }
       clearInterval(this.timer); //game over, top timer
       this.gameObj.isGameOver = true;
     }
     this.gameRef.set(this.gameObj); //post all changes to players can see
+    
     console.log("Tick done");
   }//end iteration
 
@@ -162,7 +173,7 @@ export class StoryGameService {
         {
           //look for in playerInputsObj
           //if player has been in game for 30 seconds, but didn't have any input in the previous round, then kick
-          let prevRound = (roundNum-1)
+          let prevRound = (roundNum - 1)
           if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null && this.playerInputsObj[prevRound][player] == null) {
             //this.allPlayersObj[player].isActive = false;
             //this.allPlayersObj[player].joinTime = Date.now();
@@ -258,7 +269,7 @@ export class StoryGameService {
         }
       }
     }
-    if(noVotes)//no votes detected
+    if (noVotes)//no votes detected
     {
       return;
     }
@@ -281,19 +292,18 @@ export class StoryGameService {
       firebase.database().ref('gamePlayers/' + this.gameId + '/' + winningKey).set(this.allPlayersObj[winningKey]);
     }
     //let players know how much vote each input got
-    for(var key in votes) {
+    for (var key in votes) {
       var voteCount = votes[key];
       if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null && this.playerInputsObj[prevRound][key] != null) {
         this.playerInputsObj[prevRound][key].votes = voteCount;
       }
     }
     firebase.database().ref('gamePlayerInput/' + this.gameId + '/' + prevRound).set(this.playerInputsObj[prevRound]);
-  
+
 
   }
   private wasThereInputThisRound(roundNum: number): boolean {
-    if(roundNum == 0)
-    {
+    if (roundNum == 0) {
       return true; // don't run method if game hasn't started yet.
     }
     let inputCount: number = 0;
@@ -313,7 +323,7 @@ export class StoryGameService {
       return true;
     }
     else {
-      console.log("No Input Detected, ending game Input Count: "+inputCount.toString()+" Current Round: "+roundNum.toString());
+      console.log("No Input Detected, ending game Input Count: " + inputCount.toString() + " Current Round: " + roundNum.toString());
       return false;
     }
   }
