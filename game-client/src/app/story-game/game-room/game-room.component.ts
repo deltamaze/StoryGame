@@ -12,6 +12,7 @@ export class GameRoomComponent implements OnInit {
   public chatMessages: any;
   public chatInput: string;
   public playerList: any;
+  public roundWinners: any;
   public gameStory: any;
   public gameInfo: any;
   public ideaInput: string = "";
@@ -28,6 +29,9 @@ export class GameRoomComponent implements OnInit {
   ngOnInit() {
     //make sure player is in game, and didn't nav straight here without joinin a game
     this.gameService.verifyInGameStatus();
+    this.gameService.getRoundWinners().subscribe(res => {
+      this.roundWinners = res;
+    });;
 
     this.gameService.getErrorStatus().subscribe(status => this.status = status);
     this.gameService.getGameInfo().subscribe(res => this.gameInfo = res);

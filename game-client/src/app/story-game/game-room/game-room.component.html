@@ -10,12 +10,15 @@
         <div class="addMargin">
           <div>
             <h4 class="float-left">{{gameInfo.gameName}}</h4>
-            <p class="float-right">Current Round: {{gameInfo.currentTurn}} / {{gameInfo.totalRounds}}</p>
+            <p class="float-right">Current Round: {{gameInfo.currentRound}} / {{gameInfo.totalRounds}}</p>
           </div>
           <br />
           <br />
-          <div class="card-text largeFont">
-            <p>{{gameInfo.storyThusFar}}</p>
+          <div class="card-text ">
+            <h3>{{gameInfo.storyThusFar}} ...</h3>
+            <div class="text largeFont" *ngFor="let message of roundWinners">
+                  <br />{{message.message}} - <span class="smallFont">by {{message.username}}</span>
+            </div>
           </div>
         </div>
       </div>

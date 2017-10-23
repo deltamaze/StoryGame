@@ -58,6 +58,10 @@ export class StoryGameService {
       this.playerInputsRef.on("value", function (snapshot) {
         this.playerInputsObj = snapshot.val();
       }.bind(this));
+      console.log("Set Game Round to 1, to start up game");
+      this.incrementTurn();
+      this.gameRef.set(this.gameObj); //post updated info, so player can see
+
 
       console.log("Starting GameEngine for id:" + this.gameId);
       this.timer = setInterval(this.gameEngine.bind(this), this.gameEngineInterval);
@@ -96,6 +100,7 @@ export class StoryGameService {
         this.checkForInActivePlayers(this.gameObj.currentTurn);
         this.timesUpDisplayTimer = this.timesUpDisplayTimerResetValue;
         this.timesUpPeriodActive = true;
+        this.gameObj.timeLeftInTurn = 0;
       }
       else//round did not change, decrease time
       {
@@ -105,14 +110,11 @@ export class StoryGameService {
     }
     //Times Up Period
     if (this.timesUpPeriodActive == true) {
-      if(this.timesUpDisplayTimer ==0)
+      if(this.timesUpDisplayTimer ==0 || this.gameObj.currentTurn % 2 == 1)
       {
         
-        this.resetIsActionFinished();//set everyone isActionFinished back to false
-        this.gameObj.currentTurn = this.gameObj.currentTurn + 1;
-        this.gameObj.currentRound = Math.ceil(this.gameObj.currentTurn / 2); //round = turn / 2, round up
-        this.gameObj.timeLeftInTurn = this.gameObj.timeBetweenTurns;//reset timer back to full
-        this.timesUpPeriodActive = false;
+        this.incrementTurn();
+        
 
       }
       else{
@@ -175,9 +177,6 @@ export class StoryGameService {
           //if player has been in game for 30 seconds, but didn't have any input in the previous round, then kick
           let prevRound = (roundNum - 1)
           if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null && this.playerInputsObj[prevRound][player] == null) {
-            //this.allPlayersObj[player].isActive = false;
-            //this.allPlayersObj[player].joinTime = Date.now();
-            //firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).set(this.allPlayersObj[player]);
             firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).remove();
           }
 
@@ -229,6 +228,14 @@ export class StoryGameService {
     }
 
     return allPlayersReady;
+  }
+  private incrementTurn(): void{
+    this.resetIsActionFinished();//set everyone isActionFinished back to false
+    this.gameObj.currentTurn = this.gameObj.currentTurn + 1;
+    this.gameObj.currentRound = Math.ceil(this.gameObj.currentTurn / 2); //round = turn / 2, round up
+    this.gameObj.timeLeftInTurn = this.gameObj.timeBetweenTurns;//reset timer back to full
+    this.timesUpPeriodActive = false;
+
   }
   private resetIsActionFinished(): void {
     for (var player in this.allPlayersObj) {

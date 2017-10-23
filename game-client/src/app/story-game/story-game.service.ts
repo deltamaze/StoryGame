@@ -176,9 +176,16 @@ export class StoryGameService extends BaseService {
     this.db.list('/gamePlayerChat/' + this.currentGameId + '/')
       .push(packedMessage).catch(err => this.handleError(err));
   }
+
+  
+
   public getChatMessages():FirebaseListObservable<any>
   {
     return this.db.list('/gamePlayerChat/' + this.currentGameId + '/')
+  }
+  public getRoundWinners():FirebaseListObservable<any>
+  {
+    return this.db.list('/gameRoundWinners/' + this.currentGameId + '/')
   }
   public submitInput(idea: string,roundNumber: number):void
   {
