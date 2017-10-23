@@ -15,6 +15,7 @@ export class StoryGameService {
   allPlayersObj: any;
   currentPlayersObj: any;
   playerInputsObj: any;
+  
   timer: any;
   oneSecond: number = 1000;
   gameEngineInterval: number = 1 * this.oneSecond; //how many seconds per interval
@@ -288,10 +289,17 @@ export class StoryGameService {
     //Lets look into the previous round and pull his sentence
     let prevRound = roundNum - 1;
 
-    //update story thus far
+    //update story
     if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null && this.playerInputsObj[prevRound][winningKey] != null) {
       this.playerInputsObj[prevRound][winningKey].isWinner = true;
-      this.gameObj.storyThusFar = this.gameObj.storyThusFar + "..." + this.playerInputsObj[prevRound][winningKey].input
+      //this.gameObj.storyThusFar = this.gameObj.storyThusFar + "..." + this.playerInputsObj[prevRound][winningKey].input
+      var winningIdea = {
+        username:this.playerInputsObj[prevRound][winningKey].username,
+        message:this.playerInputsObj[prevRound][winningKey].input,
+        timestamp:firebase.database.ServerValue.TIMESTAMP
+
+      }
+      firebase.database().ref('gameRoundWinners/' + this.gameId + '/' + prevRound).set(winningIdea);
     }
     //update player score
     if (this.allPlayersObj[winningKey] != null) {
