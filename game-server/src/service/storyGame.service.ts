@@ -130,7 +130,7 @@ export class StoryGameService {
         this.gameObj.gameOverReason = "GameTime passed max game time possible.";
       }
       if (this.gameObj.currentTurn > this.gameObj.totalRounds) {
-        this.gameObj.gameOverReason = " - Won!"; //add determineWinner function
+        this.gameObj.gameOverReason =  this.determineGameWinner()+" - Won!"; //add determineWinner function
       }
       clearInterval(this.timer); //game over, top timer
       this.gameObj.isGameOver = true;
@@ -249,6 +249,30 @@ export class StoryGameService {
       }
     }
   }
+  private determineGameWinner(): string
+  {
+    let returnString: string="";
+    let maxScore: number = 0;
+    for (var player in this.allPlayersObj) {
+      if (this.allPlayersObj.hasOwnProperty(player)) {
+        //cycle through each active player and see if they have the most points
+
+        if (this.allPlayersObj[player].isActive == true && this.allPlayersObj[player].score >=maxScore) //only check for active players
+        {
+          maxScore = this.allPlayersObj[player].points //update maxPoints
+          returnString = this.allPlayersObj[player].username + " ";//replace string with just this player
+        }
+        else if(this.allPlayersObj[player].isActive == true && this.allPlayersObj[player].score ==maxScore)
+        {
+          returnString += "& "+this.allPlayersObj[player].username;//Append
+        }
+      }
+    }
+    //find out max points any single player has.
+    // list all players
+    return returnString;
+  }
+
   private determineRoundWinner(roundNum: number): void {
     let votes = []
     let noVotes = true;
