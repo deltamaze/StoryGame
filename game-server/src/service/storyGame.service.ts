@@ -21,7 +21,7 @@ export class StoryGameService {
   gameEngineInterval: number = 1 * this.oneSecond; //how many seconds per interval
   maxGameLength: number = (this.oneSecond * 1200);//max possible game time is 20 minutes
   timesUpPeriodActive: boolean = false;
-  timesUpDisplayTimerResetValue: number = 5;
+  timesUpDisplayTimerResetValue: number = 10;
   timesUpDisplayTimer: number = this.timesUpDisplayTimerResetValue;
   //inactivityTreshold: number = Date.now()-( this.oneSecond * 10); // if no ping for 10 sec, set them to inactive
 
@@ -145,7 +145,7 @@ export class StoryGameService {
     return Date.now() - (this.oneSecond * this.gameObj.timeBetweenTurns * 2);
   }
   private disconnectTreshold(): number {
-    return Date.now() - (this.oneSecond * 10);
+    return Date.now() - (this.oneSecond * this.gameObj.timeBetweenTurns);
   }
   private checkForDisconnectedPlayers(): void {
     //startAt:{ value: Math.floor(Date.now()) - 900000 , key: 'timestamp' }//use as threshold to only pull players who have pinged in the past 15 minutes
@@ -155,6 +155,10 @@ export class StoryGameService {
       if (this.allPlayersObj.hasOwnProperty(player)) {
         if (this.allPlayersObj[player].pingTime < this.disconnectTreshold()) //if no ping for 10 sec, kick them
         {
+            console.log("Detected Disconnected Player: "+this.allPlayersObj[player].username);
+            console.log("Last Action Time: "+this.allPlayersObj[player].pingTime.toString())
+            console.log("Treshold: "+this.disconnectTreshold().toString())
+
           firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).remove();
         }
         else if (this.allPlayersObj[player].isActive) {
@@ -174,10 +178,15 @@ export class StoryGameService {
       if (this.allPlayersObj.hasOwnProperty(player)) {
         if (this.allPlayersObj[player].isActive == true && this.allPlayersObj[player].isActiveStartTime < this.inactivityTreshold() && this.allPlayersObj[player].lastActionTime < this.inactivityTreshold()) //only check for active players, that didn't just join the game 
         {
+            console.log("Detected Inactive Player: "+this.allPlayersObj[player].username);
+            console.log("Last Action Time: "+this.allPlayersObj[player].lastActionTime.toString())
+            console.log("Treshold: "+this.inactivityTreshold().toString())
+
           //look for in playerInputsObj
           //if player has been in game for 30 seconds, but didn't have any input in the previous round, then kick
           let prevRound = (roundNum - 1)
           if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null && this.playerInputsObj[prevRound][player] == null) {
+            console.log("No Prev Round activity detected for round:" + prevRound);
             firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).remove();
           }
 
