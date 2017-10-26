@@ -24,6 +24,7 @@ export class GameRoomComponent implements OnInit {
 
 
 
+
   constructor(public gameService: StoryGameService) { }
 
   ngOnInit() {
@@ -52,7 +53,10 @@ export class GameRoomComponent implements OnInit {
         setTimeout(()=> {
           this.disableButton = false;
           console.log(this.disableButton);
-    }, 2000);
+    }, 1000);
+  }
+  public getLastRoundWinner():string{
+    return "John Doe";
   }
 
   public submitChatMessage():void
@@ -69,12 +73,14 @@ export class GameRoomComponent implements OnInit {
   }
   public submitIdea():void
   {
+    this.temporarilyDisableButton(); //prevent a double click, causing 2 posts to the web api
     this.lastVote = ""; //clear out last vote
     this.gameService.submitInput(this.ideaInput,this.gameInfo.currentTurn);
   }
   public submiteVote(ideaKey):void
   {
     //clear out idea variable, to get ready for next round
+    this.temporarilyDisableButton(); //prevent a double click, causing 2 posts to the web api
     this.lastVote = ideaKey; //use to determine where to play Check mark
     this.ideaInput = "";
     this.gameService.submitInput(ideaKey,this.gameInfo.currentTurn);

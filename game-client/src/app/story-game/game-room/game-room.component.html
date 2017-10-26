@@ -72,10 +72,10 @@
                   <input type="text" class="form-control" id="text" [(ngModel)]="ideaInput" name="text" maxlength="{{maxCharacterCount}}" required>
                 </div>
                 <span *ngIf="!isMyActionComplete()">
-                      <button type="submit"  class="btn btn-primary">Submit Idea</button> {{(ideaInput)?.length}}/{{maxCharacterCount}}
+                      <button type="submit"   [disabled]="disableButton" class="btn btn-primary">Submit Idea</button> {{(ideaInput)?.length}}/{{maxCharacterCount}}
                     </span>
                 <span *ngIf="isMyActionComplete()">
-                      <button type="submit"  class="btn btn-success">Update</button> {{(ideaInput)?.length}}/{{maxCharacterCount}} <img src="../../../assets/glyphicons-Ok.png" alt="image"> <p>Your Idea was saved! You can make changes before time is up!</p>
+                      <button type="submit"   [disabled]="disableButton" class="btn btn-success">Update</button> {{(ideaInput)?.length}}/{{maxCharacterCount}} <img src="../../../assets/glyphicons-Ok.png" alt="image"> <p>Your Idea was saved! You can make changes before time is up!</p>
                     </span>
 
               </form>
@@ -84,9 +84,17 @@
             <div *ngIf="gameInfo.currentTurn % 2 ==0 && gameInfo.currentTurn > 0 && gameInfo.isGameOver == false">
               <!--DEBUG-->
               <!--<div *ngIf="1==1">-->
-              <div>
+              <div *ngIf="gameInfo.timeLeftInTurn > 0 ">
                 <h4 class="float-left">Vote on your favorite sentence!</h4>
                 <p class="float-right">Time Left: {{gameInfo.timeLeftInTurn}}</p>
+              </div>
+              <div *ngIf="gameInfo.timeLeftInTurn <= 0 ">
+                <div class="text" *ngFor="let round of roundWinners">
+                  <!--Only Display winner for (Current Round - 1)-->
+                  <div *ngIf="displayThisRound(round.$key)"> 
+                    <h4 class="float-left">Round Winner: {{round.username}}!</h4>
+                  </div>
+                </div>
               </div>
               <br />
               <br />
@@ -99,7 +107,7 @@
                       <li *ngIf="displayThisInput(input.key)" [ngClass]="{'text-success boldFont': input.value.isWinner }">
                         {{input.value.input}} <span class="smallFont" *ngIf="gameInfo.timeLeftInTurn <=0"> - score:{{input.value.votes}} - submitter:{{input.value.username}} </span>
                         <strong *ngIf="input.value.isWinner">
-                          << Winner!</strong> - <button class="btn btn-primary btn-sm" (click)="submiteVote(input.key)"
+                          << Winner!</strong> - <button  [disabled]="disableButton" class="btn btn-primary btn-sm" (click)="submiteVote(input.key)"
                           [disabled]="gameInfo.timeLeftInTurn <=0">Vote</button>
                         <span *ngIf="isMyActionComplete() && input.key == lastVote && gameInfo.timeLeftInTurn >0">
                            <img src="../../../assets/glyphicons-Ok.png" alt="image"> <p>Vote saved!, You can change your vote before time is up.</p>
