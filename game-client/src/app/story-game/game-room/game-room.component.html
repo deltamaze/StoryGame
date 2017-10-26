@@ -10,7 +10,8 @@
         <div class="addMargin">
           <div>
             <p class="float-left">Game: {{gameInfo.gameName}}</p>
-            <p class="float-right">Current Round: {{gameInfo.currentRound}} / {{gameInfo.totalRounds}}</p>
+            <p class="float-right" *ngIf="gameInfo.currentRound <= gameInfo.totalRounds">Current Round: {{gameInfo.currentRound}} / {{gameInfo.totalRounds}}</p>
+            <p class="float-right" *ngIf="gameInfo.currentRound > gameInfo.totalRounds">Current Round: {{gameInfo.totalRounds}} / {{gameInfo.totalRounds}}</p>
           </div>
           <br />
           <br />
