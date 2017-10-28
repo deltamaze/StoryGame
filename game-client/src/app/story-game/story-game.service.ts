@@ -4,7 +4,9 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject, Subscription } from 'rxjs/RX'
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { AngularFireDatabase, 
+  FirebaseListObservable, 
+  FirebaseObjectObservable } from 'angularfire2/database';
 import { BaseService} from '../core/base.service';
 import { UserService, UserInfo } from '../core/user.service';
 
@@ -64,9 +66,12 @@ export class StoryGameService extends BaseService {
 
   public joinGame(gameId: string = ""):void {
     super.clearError();
-    if (gameId != "")//this will be blank when coming from the createGame component, and have gameId when coming form joinGame component
+    //this will be blank when coming from the createGame component
+    //this will have value when coming form joinGame component
+    if (gameId != "")
       this.currentGameId = gameId
-    if (this.pingSubscription != null && !this.pingSubscription.closed) {//kill any existing ping subscription, so we can create a new one.
+    //kill any existing ping subscription, so we can create a new one.
+    if (this.pingSubscription != null && !this.pingSubscription.closed) {
       this.pingSubscription.unsubscribe();
     }
 
@@ -95,20 +100,19 @@ export class StoryGameService extends BaseService {
     
 
     return this.db.list(`/storyGames/`,{
+          //use as threshold to only pull games that were started 300000 millisec ago
             query:{
               orderByChild: 'timestamp',
-              startAt:{ value: Math.floor(Date.now()) - 300000 , key: 'timestamp' }//use as threshold to only pull games that were started 55 min ago
+              startAt:{ value: Math.floor(Date.now()) - 300000 , key: 'timestamp' }
             }
           })
       .map(games=>{
         for (let game of games) {
           // Find each corresponding associated object and store it as a FibreaseObjectObservable
-
           this.db.list(`/gamePlayers/${game.$key}`).subscribe(players =>{
             game.players = players.filter(player=>{
-              
-              return player.pingTime > Math.floor(Date.now()) - 15000 ; //use as threshold to only pull players who have pinged in the past 15 seconds
-
+              //use as threshold to only pull players who have pinged in the past 15 seconds
+              return player.pingTime > Math.floor(Date.now()) - 15000 ; 
             });
           });
         }
@@ -196,7 +200,10 @@ export class StoryGameService extends BaseService {
       isWinner:false,
       timestamp:firebase.database.ServerValue.TIMESTAMP
     }
-    this.db.object('/gamePlayerInput/' + this.currentGameId + '/'+roundNumber.toString()+'/'+this.user.uid+'/').set(input).catch(err => this.handleError(err));
+    this.db.object('/gamePlayerInput/' + this.currentGameId + 
+                   '/'+roundNumber.toString()+'/'+this.user.uid+'/')
+                   .set(input)
+                   .catch(err => this.handleError(err));
     this.updateLastActionTime();
   }
   public getPlayerInputs():FirebaseListObservable<any>
@@ -228,8 +235,8 @@ export class GameRoom {
   public totalRounds: number = 15;
   public storyThusFar: string = "Once upon a time,";
   public timestamp: any = firebase.database.ServerValue.TIMESTAMP;
-  public currentTurn: number = 0;//when creating, start at round zero, when game starts , the api will turn this into round 1..2..3..etc
-  public currentRound: number = 0;//when creating, start at round zero, when game starts , the api will turn this into round 1..2..3..etc
+  public currentTurn: number = 0;//server populated field
+  public currentRound: number = 0;//server populated field
   public creatorUid:string= "0";
   public isGameOver: boolean = false;
   public timeLeftInTurn: number =  0;

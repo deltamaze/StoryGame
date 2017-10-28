@@ -83,7 +83,8 @@ export class UserService extends BaseService {
         if (!item.username) {
           this.router.navigate(['setUsername']);
         }
-        else if (this.router.url === '/setUsername') {//If username is already set up, and they are on the SetupUsername page, redirect them to Home
+        //If username is already set up, & they are on the SetupUsername page, redirect to Home
+        else if (this.router.url === '/setUsername') {
           this.router.navigate(['home']);
         }
         else {
@@ -109,7 +110,8 @@ export class UserService extends BaseService {
   }
   public createAccount(email: string, password: string): void {
     this.clearError();
-    this.afAuth.auth.createUserWithEmailAndPassword(email, password).catch(err => this.handleError(err));
+    this.afAuth.auth.createUserWithEmailAndPassword(email, password)
+      .catch(err => this.handleError(err));
   }
 
 }

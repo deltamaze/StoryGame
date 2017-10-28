@@ -21,7 +21,7 @@ export class StoryGameService {
   gameEngineInterval: number = 1 * this.oneSecond; //how many seconds per interval
   maxGameLength: number = (this.oneSecond * 1200);//max possible game time is 20 minutes
   timesUpPeriodActive: boolean = false;
-  timesUpDisplayTimerResetValue: number = 10;
+  timesUpDisplayTimerResetValue: number = 6;
   timesUpDisplayTimer: number = this.timesUpDisplayTimerResetValue;
   //inactivityTreshold: number = Date.now()-( this.oneSecond * 10); // if no ping for 10 sec, set them to inactive
 

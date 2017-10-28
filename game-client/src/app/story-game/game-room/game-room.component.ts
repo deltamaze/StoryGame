@@ -28,7 +28,7 @@ export class GameRoomComponent implements OnInit {
   constructor(public gameService: StoryGameService) { }
 
   ngOnInit() {
-    //make sure player is in game, and didn't nav straight here without joinin a game
+    //make sure player is in game, and didn't nav straight here without joining a game
     this.gameService.verifyInGameStatus();
     this.gameService.getRoundWinners().subscribe(res => {
       this.roundWinners = res;
@@ -68,31 +68,29 @@ export class GameRoomComponent implements OnInit {
   }
   public startGame(): void
   {
-    this.temporarilyDisableButton(); //prevent a double click, causing 2 posts to the web api
+    this.temporarilyDisableButton(); 
     this.gameService.startGame();
   }
   public submitIdea():void
   {
-    this.temporarilyDisableButton(); //prevent a double click, causing 2 posts to the web api
+    this.temporarilyDisableButton(); 
     this.lastVote = ""; //clear out last vote
     this.gameService.submitInput(this.ideaInput,this.gameInfo.currentTurn);
   }
   public submiteVote(ideaKey):void
   {
     //clear out idea variable, to get ready for next round
-    this.temporarilyDisableButton(); //prevent a double click, causing 2 posts to the web api
+    this.temporarilyDisableButton(); 
     this.lastVote = ideaKey; //use to determine where to play Check mark
     this.ideaInput = "";
     this.gameService.submitInput(ideaKey,this.gameInfo.currentTurn);
   }
   public leaveGame():void
   {
-    this.gameService.navHome(); //this will unsubscripe player from gameroom as well as returning player home
+    //this will unsubscripe player from gameroom as well as returning player home
+    this.gameService.navHome(); 
   }
-  public consoleTest():void
-  {
-    console.log(this.playerInputs.find(o => o.$key === (parseInt(this.gameInfo.currentTurn)-1).toString()));
-  }
+  
   public displayThisRound(roundNum: string):boolean
   {
     //only display input for the round that is = to this round - 1
@@ -117,7 +115,8 @@ export class GameRoomComponent implements OnInit {
 
     for (var player in this.playerList) {
       if (this.playerList.hasOwnProperty(player)) {
-          if(this.playerList[player].$key == this.gameService.user.uid && this.playerList[player].isActionFinished == true)
+          if(this.playerList[player].$key == this.gameService.user.uid &&
+             this.playerList[player].isActionFinished == true)
           {
             return true;
           }
@@ -129,7 +128,9 @@ export class GameRoomComponent implements OnInit {
   {
     for (var player in this.playerList) {
       if (this.playerList.hasOwnProperty(player)) {
-          if(this.playerList[player].$key == this.gameInfo.creatorUid && this.playerList[player].pingTime > Math.floor(Date.now()) - 10000)
+          if(this.playerList[player].$key == this.gameInfo.creatorUid && //host in game
+             //host last ping within 10 seconds
+             this.playerList[player].pingTime > Math.floor(Date.now()) - 10000)
           {
             return true;
           }
@@ -141,9 +142,11 @@ export class GameRoomComponent implements OnInit {
   {
     return time > Math.floor(Date.now()) - 10000
   }
-  // public isTimeAlmostUp():boolean
+  // public consoleTest():void//used for debugging, ignore
   // {
-  //   if(this.gameInfo != null && this.gameInfo.timeLeftInTurn != null && this.gameInfo.timeLeftInTurn > 0)
+  //   console.log(
+  //     this.playerInputs.find(o => o.$key === (parseInt(this.gameInfo.currentTurn)-1).toString())
+  //     );
   // }
 }
 

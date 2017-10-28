@@ -25,12 +25,14 @@ export class JoinGameComponent implements OnInit {
       this.gameList = res
     });
   }
-  public consoleTest():void{
-    
-  }
+  
   public joinGame(gameKey:any):void{
     //console.log(gameKey);
     this.gameService.joinGame(gameKey);
+  }
+
+  public consoleTest():void{
+    
   }
 
 

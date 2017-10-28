@@ -31,8 +31,4 @@ export class CreateAccountComponent implements OnInit {
     else
       this.userService.handleError("Password and Confirm Password do not match.");
   }
-
-
-
-
 }

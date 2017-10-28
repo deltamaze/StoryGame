@@ -24,4 +24,3 @@
 .boldFont{
     font-weight: bold;
 }
-/*[ngClass]="{'smallFont': player.username.length > 8 }"*/
