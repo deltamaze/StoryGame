@@ -236,8 +236,9 @@ export class StoryGameService {
 
     for (let player in this.allPlayersObj) {
       if (this.allPlayersObj.hasOwnProperty(player)) {
-        if (this.allPlayersObj[player].isActive == true) //only check for active players, that didn't just join the game
+        if (this.allPlayersObj[player].isActive == true)
         {
+          // only check for active players, that didn't just join the game
           //look for in playerInputsObj
           if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player] != null) {
             countDone++;
