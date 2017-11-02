@@ -18,10 +18,10 @@ export class StoryGameRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router) {
-    //log
+    // log
     console.log("[StoryGameRoute::create] Creating storygame route.");
 
-    //add storyGame Route
+    // add storyGame Route
     router.use(function (req: Request, res: Response, next: NextFunction) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -55,21 +55,18 @@ export class StoryGameRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public startGame(req: Request, res: Response, next: NextFunction) {
-    //set custom title
+    // set custom title
     this.title = "Home | StoryGameAPI";
 
-    //set message
-    let options: Object = {
+    // set message
+    const options: Object = {
       "message": 'Parameter:' + req.params.roomName//
     };
 
-    //render template
+    // render template
     this.render(req, res, "index", options);
 
-    //start game service
+    // start game service
     new StoryGameService(req.params.roomName).startGame();
   }
-
-
-
 }

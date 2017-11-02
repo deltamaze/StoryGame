@@ -1,6 +1,6 @@
 import { Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject, Subscription } from 'rxjs/RX'
+import { BehaviorSubject, Subscription } from 'rxjs/RX';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';

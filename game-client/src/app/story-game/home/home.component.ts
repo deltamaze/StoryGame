@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {StoryGameService} from '../story-game.service';
+import { StoryGameService } from '../story-game.service';
 
 @Component({
   selector: 'app-home',
@@ -12,10 +12,10 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
   }
-  public navJoinGame():void{
+  public navJoinGame(): void {
     this.gameService.navJoinGame();
   }
-  public navCreateGame():void{
+  public navCreateGame(): void {
     this.gameService.navCreateGame();
   }
 

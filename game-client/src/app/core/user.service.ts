@@ -1,16 +1,16 @@
 import { Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject, Subscription } from 'rxjs/RX'
+import { BehaviorSubject, Subscription } from 'rxjs/RX';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { BaseService } from './base.service'
+import { BaseService } from './base.service';
 
 @Injectable()
 export class UserService extends BaseService {
   public user: Observable<firebase.User>;
-  private userSubscription: firebase.User; //for internal use in the set username function
+  private userSubscription: firebase.User; // for internal use in the set username function
   private userInfo: BehaviorSubject<UserInfo> = new BehaviorSubject<UserInfo>(new UserInfo);
 
   private authStatusSubscription: Subscription;
@@ -44,21 +44,21 @@ export class UserService extends BaseService {
     this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then(() => this.router.navigate(['home']))
       .then(() => this.verifyAuthStatus())
-      .catch(err => this.handleError(err));;
+      .catch(err => this.handleError(err));
   }
   public guestLogin(): void {
     this.clearError();
     this.afAuth.auth.signInAnonymously()
       .then(() => this.router.navigate(['home']))
       .then(() => this.verifyAuthStatus())
-      .catch(err => this.handleError(err));;
+      .catch(err => this.handleError(err));
   }
 
   public logout(): void {
     this.clearError();
     this.afAuth.auth.signOut()
       .then(() => {
-        let userInfo: UserInfo = new UserInfo;
+        const userInfo: UserInfo = new UserInfo;
         userInfo.username = "";
         userInfo.uid = "";
         this.setUserInfo(userInfo);
@@ -83,14 +83,14 @@ export class UserService extends BaseService {
         if (!item.username) {
           this.router.navigate(['setUsername']);
         }
-        //If username is already set up, & they are on the SetupUsername page, redirect to Home
+        // If username is already set up, & they are on the SetupUsername page, redirect to Home
         else if (this.router.url === '/setUsername') {
           this.router.navigate(['home']);
         }
         else {
-          let userInfo: UserInfo = new UserInfo;
-          userInfo.username = item.username
-          userInfo.uid = uid
+          const userInfo: UserInfo = new UserInfo;
+          userInfo.username = item.username;
+          userInfo.uid = uid;
           this.setUserInfo(userInfo);
         }
       });
@@ -117,6 +117,6 @@ export class UserService extends BaseService {
 }
 
 export class UserInfo {
-  public username: string = "";
-  public uid: string = "";
+  public username = "";
+  public uid = "";
 }

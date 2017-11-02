@@ -9,8 +9,8 @@ import { UserService } from '../../core/user.service';
 })
 export class SetUsernameComponent implements OnInit {
 
-  public status: string = "";
-  public desiredUsername: string = "";
+  public status = '';
+  public desiredUsername = '';
 
   constructor(public userService: UserService) { }
 
@@ -18,16 +18,16 @@ export class SetUsernameComponent implements OnInit {
     this.userService.getErrorStatus().subscribe(status => this.status = status);
   }
   public setUsername(): void {
-    if(this.validateInput())
+    if (this.validateInput()) {
       this.userService.setUsernameInFirebase(this.desiredUsername);
+    }
   }
-  public validateInput():boolean
-  {
-    if(this.desiredUsername.length >=3 && this.desiredUsername.length <=20)
+  public validateInput(): boolean {
+    if (this.desiredUsername.length >= 3 && this.desiredUsername.length <= 20) {
       return true;
-    else
+    }
+    else {
       return false;
+    }
   }
-
-
 }

@@ -13,5 +13,4 @@ export const environment = {
     storageBucket: "storygame-40e42.appspot.com",
     messagingSenderId: "763373972154"
   }
-  
 };

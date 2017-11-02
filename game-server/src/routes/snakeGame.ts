@@ -16,10 +16,10 @@ export class SnakeGameRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router) {
-    //log
+    // log
     console.log("[SnakeGameRoute::create] Creating snakegame route.");
 
-    //add storyGame Route
+    // add storyGame Route
     router.use(function (req: Request, res: Response, next: NextFunction) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -53,18 +53,18 @@ export class SnakeGameRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public startGame(req: Request, res: Response, next: NextFunction) {
-    //set custom title
+    // set custom title
     this.title = "Home | SnakeGameAPI";
 
-    //set message
-    let options: Object = {
+    // set message
+    const options: Object = {
       "message": 'Parameter:' + req.params.roomName//
     };
 
-    //render template
+    // render template
     this.render(req, res, "index", options);
 
-    //start game service
+    // start game service
     new SnakeGameService().startGame(req.params.roomName);
   }
 
@@ -75,20 +75,20 @@ export class SnakeGameRoute extends BaseRoute {
 
 
 
-var firebase = require('firebase-admin');
-var snakeServiceAccount = require("../../snakearcade-45688-firebase-adminsdk-d15fy-521e0e3393.json");
-
-var snakeFB= firebase.initializeApp({
+const firebase = require('firebase-admin');
+const snakeServiceAccount =
+  require("../../snakearcade-45688-firebase-adminsdk-d15fy-521e0e3393.json");
+const snakeFB = firebase.initializeApp({
     credential: firebase.credential.cert(snakeServiceAccount),
     databaseURL: "https://snakearcade-45688.firebaseio.com"
-},"secondary");
+}, "secondary");
 
 
 
 
 function Snake() {
     this.vect = new Vector();
-    this.tail = []
+    this.tail = [];
     this.playerNum = 0;
     this.total = 0;
     this.gameOver = false;
@@ -97,18 +97,20 @@ function Vector() {
     this.x = 0;
     this.y = 0;
 }
-
+// code below copy pasted here to save on server hosting costs, lint later
+/* tslint:disable */
 function SnakeGameService() {
     console.log("Snake Game Service");
-    this.snakes = [new Snake(), new Snake()]
+    this.snakes = [new Snake(), new Snake()];
     this.gameUpdateTime = 100;
     this.canvasHeight = 300;
     this.canvasWidth = 300;
-    this.gameScale = 10;//how large game pixel is
+    this.gameScale = 10;// how large game pixel is
     this.cols = Math.floor(this.canvasHeight / this.gameScale);
     this.rows = Math.floor(this.canvasWidth / this.gameScale);
     this.food = new Vector();
     this.room = 'Main';
+    
     this.p1Ref;
     this.p2Ref;
     this.foodRef;

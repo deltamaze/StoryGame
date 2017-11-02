@@ -4,19 +4,15 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 import { AngularFireModule } from 'angularfire2';
 import { environment } from '../../environments/environment';
 
-// class AngularFireAuthMock extends AngularFireDatabase {           // added this class
-//   public login() { ... }
-//   public logout() { ... }
-// }
 
-class AngularFireDBMock extends AngularFireDatabase {                   // added this class
-  //public auth: AngularFireAuthMock;
+class AngularFireDBMock extends AngularFireDatabase {
+  // public auth: AngularFireAuthMock;
 }
 
 describe('UserService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports:[AngularFireModule.initializeApp(environment.firebase)],
+      imports: [AngularFireModule.initializeApp(environment.firebase)],
       providers: [UserService,
       { provide: AngularFireDatabase, useClass: AngularFireDBMock } ]
     });
@@ -38,7 +34,8 @@ describe('UserService', () => {
     expect(service).toBeFalsy();
   }));
 
-   it('should redirect User to logon page if not signed in', inject([UserService], (service: UserService) => {
+   it('should redirect User to logon page if not signed in',
+    inject([UserService], (service: UserService) => {
     expect(service).toBeFalsy();
   }));
 

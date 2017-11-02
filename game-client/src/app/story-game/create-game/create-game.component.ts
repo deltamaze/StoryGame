@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { StoryGameService, GameRoom } from '../story-game.service';
+import { StoryGameService } from '../story-game.service';
 import {FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl  } from '@angular/forms';
-import {Utils} from '../../shared/utils'
+import {Utils} from '../../shared/utils';
 @Component({
   selector: 'app-create-game',
   templateUrl: './create-game.component.html',
@@ -9,7 +9,6 @@ import {Utils} from '../../shared/utils'
 })
 export class CreateGameComponent implements OnInit {
 
-  public newGame: GameRoom = new GameRoom();
   public createNewGame: FormGroup;
   public status: string;
 
@@ -20,21 +19,21 @@ export class CreateGameComponent implements OnInit {
     this.gameService.getErrorStatus().subscribe(status => this.status = status);
 
     this.createNewGame = this.fb.group({
-      gameName: [' ', [Validators.required, Validators.minLength(3),Validators.maxLength(20)]],
+      gameName: [' ', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
       isPrivate: [false, []],
-      maxPlayers: [8, [Validators.required, Utils.minValue(3),Utils.maxValue(8)]],
-      timeBetweenTurns: [40, [Validators.required, Utils.minValue(5),Utils.maxValue(120)]],
-      totalRounds: [7, [Validators.required,Utils.minValue(5),Utils.maxValue(30)]],
-      storyThusFar: ['Once upon a time,', 
-        [Validators.required, Validators.minLength(5), ,Validators.maxLength(200)]],
+      maxPlayers: [8, [Validators.required, Utils.minValue(3), Utils.maxValue(8)]],
+      timeBetweenTurns: [40, [Validators.required, Utils.minValue(5), Utils.maxValue(120)]],
+      totalRounds: [7, [Validators.required, Utils.minValue(5), Utils.maxValue(30)]],
+      storyThusFar: ['Once upon a time,',
+        [Validators.required, Validators.minLength(5), Validators.minLength(3),
+          Validators.maxLength(200)]],
       timestamp: [null]
     });
   }
 
-  onSubmit({ value }: { value: GameRoom, valid: boolean }) {
+  onSubmit({ value }: { value: any, valid: boolean }) {
 
-    
-    this.gameService.clearError(); //Clear Server Error
+    this.gameService.clearError(); // Clear Server Error
     this.gameService.createGame(value);
   }
 

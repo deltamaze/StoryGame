@@ -9,27 +9,28 @@ import { UserService } from '../../core/user.service';
   styleUrls: ['./create-account.component.css']
 })
 export class CreateAccountComponent implements OnInit {
-  public status: string = '';
-  public desiredEmail: string = '';
-  public desiredPassword: string = '';
-  public confirmPassword: string = '';
+
+  public status = "";
+  public desiredEmail = '';
+  public desiredPassword = '';
+  public confirmPassword = '';
 
   constructor(public userService: UserService) { }
 
   ngOnInit() {
-    this.userService.getErrorStatus().subscribe(status => this.status = status);  
+    this.userService.getErrorStatus().subscribe(status => this.status = status);
   }
   public createAccount(): void {
-    if (this.validateInput())
-    {
-      this.userService.createAccount(this.desiredEmail,this.desiredPassword);
+    if (this.validateInput()) {
+      this.userService.createAccount(this.desiredEmail, this.desiredPassword);
     }
-
   }
-  public validateInput():boolean{
-    if(this.desiredPassword===this.confirmPassword)
-      return true
-    else
-      this.userService.handleError("Password and Confirm Password do not match.");
+  public validateInput(): boolean {
+    if (this.desiredPassword === this.confirmPassword) {
+      return true;
+    }
+    else {
+      this.userService.handleError('Password and Confirm Password do not match.');
+    }
   }
 }

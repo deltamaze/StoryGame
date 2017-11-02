@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService }      from '../../core/user.service';
+import { UserService } from '../../core/user.service';
 
 @Component({
   selector: 'app-logon',
@@ -7,7 +7,6 @@ import { UserService }      from '../../core/user.service';
   styleUrls: ['./logon.component.css']
 })
 export class LogonComponent implements OnInit {
-  
   public email: string;
   public password: string;
   public status: string;
@@ -17,22 +16,20 @@ export class LogonComponent implements OnInit {
   ngOnInit() {
     this.userService.getErrorStatus().subscribe(status => this.status = status);
   }
-
-  
-  public login() :void{
-    this.userService.login(this.email,this.password);
+  public login(): void {
+    this.userService.login(this.email, this.password);
   }
-  public googleLogin() :void{
+  public googleLogin(): void {
     this.userService.googleLogin();
   }
-  public guestLogin() :void{
+  public guestLogin(): void {
     this.userService.guestLogin();
   }
-  public signUp(): void{
+  public signUp(): void {
     this.userService.navSignup();
   }
 
-  public logout(): void{
+  public logout(): void {
     this.userService.logout();
   }
 

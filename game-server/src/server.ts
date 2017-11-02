@@ -38,16 +38,16 @@ export class Server {
    * @constructor
    */
   constructor() {
-    //create expressjs application
+    // create expressjs application
     this.app = express();
 
-    //configure application
+    // configure application
     this.config();
 
-    //add routes
+    // add routes
     this.routes();
 
-    //add api
+    // add api
     this.api();
   }
 
@@ -58,7 +58,7 @@ export class Server {
    * @method api
    */
   public api() {
-    //empty for now
+    // empty for now
   }
 
   /**
@@ -68,37 +68,38 @@ export class Server {
    * @method config
    */
   public config() {
-    //add static paths
+    // add static paths
     this.app.use(express.static(path.join(__dirname, "public")));
 
-    //configure pug
+    // configure pug
     this.app.set("views", path.join(__dirname, "views"));
     this.app.set("view engine", "pug");
 
-    //mount logger
+    // mount logger
     this.app.use(logger("dev"));
 
-    //mount json form parser
+    // mount json form parser
     this.app.use(bodyParser.json());
 
-    //mount query string parser
+    // mount query string parser
     this.app.use(bodyParser.urlencoded({
       extended: true
     }));
 
-    //mount cookie parser middleware
+    // mount cookie parser middleware
     this.app.use(cookieParser("SECRET_GOES_HERE"));
 
-    //mount override?
+    // mount override?
     this.app.use(methodOverride());
 
     // catch 404 and forward to error handler
-    this.app.use(function(err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
+    this.app.use(function(err: any, req: express.Request,
+      res: express.Response, next: express.NextFunction) {
         err.status = 404;
         next(err);
     });
 
-    //error handling
+    // error handling
     this.app.use(errorHandler());
   }
 
@@ -113,13 +114,12 @@ export class Server {
     let router: express.Router;
     router = express.Router();
 
-    //IndexRoute
+    // IndexRoute
     IndexRoute.create(router);
     StoryGameRoute.create(router);
     SnakeGameRoute.create(router);
 
-    //use router middleware
-    
+    // use router middleware
     this.app.use(router);
   }
 

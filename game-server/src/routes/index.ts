@@ -17,10 +17,10 @@ export class IndexRoute extends BaseRoute {
    * @static
    */
   public static create(router: Router) {
-    //log
+    // log
     console.log("[IndexRoute::create] Creating index route.");
 
-    //add home page route
+    // add home page route
     router.get("/", (req: Request, res: Response, next: NextFunction) => {
       new IndexRoute().index(req, res, next);
     });
@@ -46,15 +46,15 @@ export class IndexRoute extends BaseRoute {
    * @next {NextFunction} Execute the next method.
    */
   public index(req: Request, res: Response, next: NextFunction) {
-    //set custom title
+    // set custom title
     this.title = "Home | StoryGameAPI";
 
-    //set message
-    let options: Object = {
+    // set message
+    const options: Object = {
       "message": "Welcome to the StoryGameAPI"
     };
 
-    //render template
+    // render template
     this.render(req, res, "index", options);
   }
 }
