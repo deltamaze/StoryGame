@@ -106,17 +106,17 @@
                     <div *ngFor="let input of round  | propToArray">
                       <!--Display Options you can Vote for-->
                       <li *ngIf="displayThisInput(input.key)" [ngClass]="{'text-success boldFont': input.value.isWinner }">
-                        {{input.value.input}} <span class="smallFont" *ngIf="gameInfo.timeLeftInTurn <=0"> - score:{{input.value.votes}} - submitter:{{input.value.username}} </span>
+                        {{input.value.input}} <span class="text-primary" *ngIf="gameInfo.timeLeftInTurn <=0"> - score:{{input.value.votes}} - submitter:{{input.value.username}} </span>
                         <strong *ngIf="input.value.isWinner">
-                          << Winner!</strong> - <button  [disabled]="disableButton" class="btn btn-primary btn-sm" (click)="submiteVote(input.key)"
-                          [disabled]="gameInfo.timeLeftInTurn <=0">Vote</button>
+                          << Winner!</strong> - <button class="btn btn-primary btn-sm" (click)="submiteVote(input.key)"
+                          [disabled]="gameInfo.timeLeftInTurn <=0 || disableButton">Vote</button>
                         <span *ngIf="isMyActionComplete() && input.key == lastVote && gameInfo.timeLeftInTurn >0">
                            <img src="../../../assets/glyphicons-Ok.png" alt="image"> <p>Vote saved!, You can change your vote before time is up.</p>
                         </span>
                       </li>
                       <!--Display Option you can't vote for (Your own input)-->
                       <li *ngIf="!displayThisInput(input.key)" [ngClass]="{'text-success boldFont': input.value.isWinner }">
-                        {{input.value.input}} <span class="smallFont" *ngIf="gameInfo.timeLeftInTurn <=0"> - score:{{input.value.votes}} - submitter:You ! </span>                        -
+                        {{input.value.input}} <span class="text-primary" *ngIf="gameInfo.timeLeftInTurn <=0"> - score:{{input.value.votes}} - submitter:You ! </span>                        -
                         <span *ngIf="gameInfo.timeLeftInTurn >0"><< Your Idea</span> <strong *ngIf="input.value.isWinner">
                           << Winner!</strong>
                       </li>
