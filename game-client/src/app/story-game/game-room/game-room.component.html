@@ -30,7 +30,7 @@
               <div *ngIf="gameInfo.creatorUid == gameService.user.uid " class="centerImg">
                 <img src="../../../assets/LetsGo120HScale.png" class="imageResize" alt="image">
                 <br />
-                <button class="btn btn-success btn-md" [disabled]="disableButton" (click)="startGame()">StartGame</button>
+                <button class="btn btn-success btn-md" [disabled]="disableStartButton" (click)="startGame()">StartGame</button>
               </div>
               <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame()" class="centerImg">
                 <img src="../../../assets/Waiting120HScale.png" class="imageResize" alt="image">
