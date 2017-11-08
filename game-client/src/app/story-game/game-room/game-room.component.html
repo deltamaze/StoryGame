@@ -17,9 +17,9 @@
           <br />
           <div class="card-text ">
             <h3>{{gameInfo.storyThusFar}} ...</h3>
-            <div class="text largeFont" *ngFor="let message of roundWinners">
-                  <br />{{message.message}} - <span class="smallFont">by {{message.username}}</span>
-            </div>
+            <span class="largeFont" *ngFor="let message of roundWinners">
+                  {{message.message}} - <span class="smallFont">by {{message.username}}</span><br />
+            </span>
           </div>
         </div>
       </div>

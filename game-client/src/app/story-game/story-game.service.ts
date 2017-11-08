@@ -19,9 +19,9 @@ export class StoryGameService extends BaseService {
   public user: UserInfo; // for internal use in the set username function
   private pingSubscription: Subscription;
   // DEV
-   private gameApiUrl = 'http://localhost:8080/';
+  // private gameApiUrl = 'http://localhost:8080/';
   // PROD
-  // private gameApiUrl = 'https://storygameapi.kilomaze.com/';
+   private gameApiUrl = 'https://storygameapi.kilomaze.com/';
 
   constructor(
     public router: Router,
@@ -142,9 +142,9 @@ export class StoryGameService extends BaseService {
     const fbPath = '/gamePlayers/' + this.currentGameId + '/' + this.user.uid + '/pingTime';
     const ping = firebase.database.ServerValue.TIMESTAMP;
     this.db.object(fbPath)
-      .set(ping).catch(err => this.pingDisconnected());
+      .set(ping).catch(err => this.kickByServer());
   }
-  private pingDisconnected(): void {
+  private kickByServer(): void {
 
 
     this.leaveGame();
@@ -219,8 +219,4 @@ export class StoryGameService extends BaseService {
       .subscribe({ error: err => this.handleError(err) });
   }
 
-}
-
-export class CurrentGameInfo {
-  public gameName: string;
 }
