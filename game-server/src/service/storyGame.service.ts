@@ -192,8 +192,7 @@ export class StoryGameService {
       if (this.allPlayersObj.hasOwnProperty(player)) {
         if (this.allPlayersObj[player].isActive === true &&
           this.allPlayersObj[player].isActiveStartTime < this.inactivityThreshold() &&
-          this.allPlayersObj[player].lastActionTime < this.inactivityThreshold())
-          {
+          this.allPlayersObj[player].lastActionTime < this.inactivityThreshold()) {
           // only check for active players, that didn't just join the game, and last action
           // was more than the inactivity threshold
           console.log("Detected Inactive Player: " + this.allPlayersObj[player].username);
@@ -205,7 +204,7 @@ export class StoryGameService {
           // but didn't have any input in the previous round,then kick
           const prevRound = (roundNum - 1);
           if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null &&
-             this.playerInputsObj[prevRound][player] == null) {
+            this.playerInputsObj[prevRound][player] == null) {
             console.log("No Prev Round activity detected for round:" + prevRound);
             firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).remove();
           }
@@ -218,34 +217,35 @@ export class StoryGameService {
     for (const player in this.currentPlayersObj) {
       if (this.currentPlayersObj.hasOwnProperty(player)) {
         if (this.currentPlayersObj[player].isActive !== true &&
-          this.currentPlayersObj[player].pingTime >= this.inactivityThreshold())
-        {
+          this.currentPlayersObj[player].pingTime >= this.inactivityThreshold()) {
           // if within threshold, and they are currently inactive, convert to active
           this.currentPlayersObj[player].isActive = true;
           this.currentPlayersObj[player].isActiveStartTime = Date.now();
-          firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).set(this.currentPlayersObj[player]);
+          firebase.database().ref('gamePlayers/' + this.gameId + '/' + player)
+            .set(this.currentPlayersObj[player]);
         }
       }
     }
   }
 
   private allPlayerActionSubmitted(roundNum: number): boolean {
-    let allPlayersReady: boolean = false; //if someone isn't ready, set this to false
-    let countDone: number = 0;
-    let countNotDone: number = 0;
+    let allPlayersReady = false; // if someone isn't ready, set this to false
+    let countDone = 0;
+    let countNotDone = 0;
 
-    for (let player in this.allPlayersObj) {
+    for (const player in this.allPlayersObj) {
       if (this.allPlayersObj.hasOwnProperty(player)) {
-        if (this.allPlayersObj[player].isActive == true)
-        {
+        if (this.allPlayersObj[player].isActive === true) {
           // only check for active players, that didn't just join the game
-          //look for in playerInputsObj
-          if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player] != null) {
+          // look for in playerInputsObj
+          if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null &&
+            this.playerInputsObj[roundNum][player] != null) {
             countDone++;
-            //also, lets make sure to let other players know, that this guy has completed his action
-            if (this.allPlayersObj[player].isActionFinished == false) {
+            // lets make sure to let other players know, that this guy has completed his action
+            if (this.allPlayersObj[player].isActionFinished === false) {
               this.allPlayersObj[player].isActionFinished = true;
-              firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).set(this.allPlayersObj[player]);
+              firebase.database().ref('gamePlayers/' + this.gameId + '/' + player)
+                .set(this.allPlayersObj[player]);
             }
           }
           else {
@@ -256,7 +256,7 @@ export class StoryGameService {
     }
     console.log("Players who are ready: " + countDone);
     console.log("Players who are not ready" + countNotDone);
-    if (countDone > 0 && countNotDone == 0) {
+    if (countDone > 0 && countNotDone === 0) {
       allPlayersReady = true;
     }
 
@@ -264,67 +264,73 @@ export class StoryGameService {
   }
 
   private incrementTurn(): void {
-    this.resetIsActionFinished();//set everyone isActionFinished back to false
+    // set everyone isActionFinished back to false
+    this.resetIsActionFinished();
     this.gameObj.currentTurn = this.gameObj.currentTurn + 1;
-    this.gameObj.currentRound = Math.ceil(this.gameObj.currentTurn / 2); //round = turn / 2, round up
-    this.gameObj.timeLeftInTurn = this.gameObj.timeBetweenTurns;//reset timer back to full
+    // round = turn / 2, round up
+    this.gameObj.currentRound = Math.ceil(this.gameObj.currentTurn / 2);
+    // reset timer back to full
+    this.gameObj.timeLeftInTurn = this.gameObj.timeBetweenTurns;
     this.timesUpPeriodActive = false;
 
   }
 
   private resetIsActionFinished(): void {
-    for (let player in this.allPlayersObj) {
+    for (const player in this.allPlayersObj) {
       if (this.allPlayersObj.hasOwnProperty(player)) {
-        if (this.allPlayersObj[player].isActionFinished == true) //only check for active players, that didn't just join the game
-        {
+        if (this.allPlayersObj[player].isActionFinished === true) {
           this.allPlayersObj[player].isActionFinished = false;
-          firebase.database().ref('gamePlayers/' + this.gameId + '/' + player).set(this.allPlayersObj[player]);
+          firebase.database().ref('gamePlayers/' + this.gameId + '/' + player)
+            .set(this.allPlayersObj[player]);
         }
       }
     }
   }
 
   private determineGameWinner(): string {
-    let returnString: string = "";
-    let maxScore: number = 0;
-    for (let player in this.allPlayersObj) {
+    let returnString = "";
+    let maxScore = 0;
+    for (const player in this.allPlayersObj) {
       if (this.allPlayersObj.hasOwnProperty(player)) {
-        //cycle through each active player and see if they have the most points
-
-        if (this.allPlayersObj[player].isActive == true && this.allPlayersObj[player].score >= maxScore) //only check for active players
-        {
-          maxScore = this.allPlayersObj[player].points; //update maxPoints
-          returnString = this.allPlayersObj[player].username + " ";//replace string with just this player
+        // cycle through each active player and see if they have the most points
+        if (this.allPlayersObj[player].isActive === true &&
+          this.allPlayersObj[player].score >= maxScore) {
+          maxScore = this.allPlayersObj[player].points; // update maxPoints
+          // replace string with just this player
+          returnString = this.allPlayersObj[player].username + " ";
         }
-        else if (this.allPlayersObj[player].isActive == true && this.allPlayersObj[player].score == maxScore) {
-          returnString += "& " + this.allPlayersObj[player].username;//Append
+        else if (this.allPlayersObj[player].isActive === true &&
+          this.allPlayersObj[player].score === maxScore) {
+          // Append
+          returnString += "& " + this.allPlayersObj[player].username;
         }
       }
     }
-    //find out max points any single player has.
+    // find out max points any single player has.
     // list all players
     return returnString;
   }
 
   private determineRoundWinner(roundNum: number): void {
-    let votes = [];
+    const votes = [];
     let noVotes = true;
     console.log("Determine Round Winner");
 
 
-    for (let player in this.allPlayersObj) {
+    for (const player in this.allPlayersObj) {
       if (this.allPlayersObj.hasOwnProperty(player)) {
-        //cycle through each active player and see who they voted for
+        // cycle through each active player and see who they voted for
 
-        if (this.allPlayersObj[player].isActive == true) //only check for active players
+        if (this.allPlayersObj[player].isActive === true) // only check for active players
         {
-          //look for in playerInputsObj
-          if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player] != null) {
-            //parse vote
+          // look for in playerInputsObj
+          if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null &&
+            this.playerInputsObj[roundNum][player] != null) {
+            // parse vote
             if (votes.hasOwnProperty(this.playerInputsObj[roundNum][player].input)) {
-              votes[this.playerInputsObj[roundNum][player].input]++
+              votes[this.playerInputsObj[roundNum][player].input]++;
             }
-            else//if no current votes for this person, then push new entry into votes
+            else// if no current votes for this person, then push new entry into votes
             {
               votes[this.playerInputsObj[roundNum][player].input] = 1;
             }
@@ -334,25 +340,25 @@ export class StoryGameService {
         }
       }
     }
-    if (noVotes)//no votes detected
+    if (noVotes)// no votes detected
     {
       return;
     }
-    //okay so now we have a dictionary with uid's and their vote tally
-    //Add a random Decimal Value to tally, to generate a random winner if tie
-    let winningKey = Object.keys(votes).reduce(function (a, b) {
-      return (votes[a] + Math.random()) > (votes[b] + Math.random()) ? a : b
+    // okay so now we have a dictionary with uid's and their vote tally
+    // Add a random Decimal Value to tally, to generate a random winner if tie
+    const winningKey = Object.keys(votes).reduce(function (a, b) {
+      return (votes[a] + Math.random()) > (votes[b] + Math.random()) ? a : b;
     });
-    //console.log(winningKey);
-    //okay we got the winning key/uid of the winner
-    //Lets look into the previous round and pull his sentence
-    let prevRound = roundNum - 1;
+    // console.log(winningKey);
+    // okay we got the winning key/uid of the winner
+    // Lets look into the previous round and pull his sentence
+    const prevRound = roundNum - 1;
 
-    //update story
-    if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null && this.playerInputsObj[prevRound][winningKey] != null) {
+    // update story
+    if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null &&
+      this.playerInputsObj[prevRound][winningKey] != null) {
       this.playerInputsObj[prevRound][winningKey].isWinner = true;
-      //this.gameObj.storyThusFar = this.gameObj.storyThusFar + "..." + this.playerInputsObj[prevRound][winningKey].input
-      let winningIdea = {
+      const winningIdea = {
         username: this.playerInputsObj[prevRound][winningKey].username,
         message: this.playerInputsObj[prevRound][winningKey].input,
         timestamp: firebase.database.ServerValue.TIMESTAMP
@@ -360,35 +366,41 @@ export class StoryGameService {
       };
       firebase.database().ref('gameRoundWinners/' + this.gameId + '/' + prevRound).set(winningIdea);
     }
-    //update player score
+    // update player score
     if (this.allPlayersObj[winningKey] != null) {
       this.allPlayersObj[winningKey].score = this.allPlayersObj[winningKey].score + 1;
-      firebase.database().ref('gamePlayers/' + this.gameId + '/' + winningKey).set(this.allPlayersObj[winningKey]);
+      firebase.database().ref('gamePlayers/' + this.gameId + '/' + winningKey)
+        .set(this.allPlayersObj[winningKey]);
     }
-    //let players know how much vote each input got
-    for (let key in votes) {
-      let voteCount = votes[key];
-      if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null && this.playerInputsObj[prevRound][key] != null) {
-        this.playerInputsObj[prevRound][key].votes = voteCount;
+    // let players know how much vote each input got
+    for (const key in votes) {
+      if (votes.hasOwnProperty(key)) {
+        const voteCount = votes[key];
+        if (this.playerInputsObj != null && this.playerInputsObj[prevRound] != null &&
+          this.playerInputsObj[prevRound][key] != null) {
+          this.playerInputsObj[prevRound][key].votes = voteCount;
+        }
       }
     }
-    firebase.database().ref('gamePlayerInput/' + this.gameId + '/' + prevRound).set(this.playerInputsObj[prevRound]);
+    firebase.database().ref('gamePlayerInput/' + this.gameId + '/' + prevRound)
+    .set(this.playerInputsObj[prevRound]);
 
 
   }
 
   private wasThereInputThisRound(roundNum: number): boolean {
-    if (roundNum == 0) {
+    if (roundNum === 0) {
       return true; // don't run method if game hasn't started yet.
     }
-    let inputCount: number = 0;
+    let inputCount = 0;
 
-    for (let player in this.allPlayersObj) {
+    for (const player in this.allPlayersObj) {
       if (this.allPlayersObj.hasOwnProperty(player)) {
-        if (this.allPlayersObj[player].isActive == true) //only check for active players, that didn't just join the game
+        if (this.allPlayersObj[player].isActive === true)
         {
-          //look for in playerInputsObj
-          if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null && this.playerInputsObj[roundNum][player] != null) {
+          // look for in playerInputsObj
+          if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null &&
+            this.playerInputsObj[roundNum][player] != null) {
             inputCount++;
           }
         }
@@ -398,7 +410,8 @@ export class StoryGameService {
       return true;
     }
     else {
-      console.log("No Input Detected, ending game Input Count: " + inputCount.toString() + " Current Round: " + roundNum.toString());
+      console.log("No Input Detected, ending game Input Count: " +
+        inputCount.toString() + " Current Round: " + roundNum.toString());
       return false;
     }
   }

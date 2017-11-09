@@ -17,6 +17,7 @@ export class GameRoomComponent implements OnInit {
   public ideaInput = "";
   public playerInputs: any;
   public disableButton = false;
+  public disableStartButton = false;
   public lastVote: string;
   public maxCharacterCount = 100;
   public hurryThreshold = 5;
@@ -54,9 +55,6 @@ export class GameRoomComponent implements OnInit {
       console.log(this.disableButton);
     }, 1000);
   }
-  public getLastRoundWinner(): string {
-    return "John Doe";
-  }
 
   public submitChatMessage(): void {
     this.gameService.submitChatMessage(this.chatInput);
@@ -65,7 +63,7 @@ export class GameRoomComponent implements OnInit {
 
   }
   public startGame(): void {
-    this.temporarilyDisableButton();
+    this.disableStartButton = true;
     this.gameService.startGame();
   }
   public submitIdea(): void {
@@ -90,19 +88,9 @@ export class GameRoomComponent implements OnInit {
     return ((parseInt(this.gameInfo.currentTurn, 10) - 1) === parseInt(roundNum, 10));
   }
   public displayThisInput(inputUID: string): boolean {
-    // return true;
-    // only display input that isn't your own.
     return (this.gameService.user.uid !== inputUID);
-    // to debug, lets just return true for now
-    // return true;
   }
   public isMyActionComplete(): boolean {
-    // this.playerList.forEach(player => {
-    //   //find self
-    //   if(player.$key == this.gameService.user.uid && player.isActionFinished ==true )
-    //     return true;
-    // });
-    // update loop logic to resemble isHostStillInGame, instead of passing into another function
 
     for (const player in this.playerList) {
       if (this.playerList.hasOwnProperty(player)) {
@@ -129,11 +117,5 @@ export class GameRoomComponent implements OnInit {
   public isWithin10Seconds(time: number): boolean {
     return time > Math.floor(Date.now()) - 10000;
   }
-  // public consoleTest():void//used for debugging, ignore
-  // {
-  //   console.log(
-  //     this.playerInputs.find(o => o.$key === (parseInt(this.gameInfo.currentTurn)-1).toString())
-  //     );
-  // }
 }
 
