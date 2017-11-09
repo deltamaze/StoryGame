@@ -1,6 +1,6 @@
 import { Injectable, Optional } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Rx';
 import { BehaviorSubject, Subscription } from 'rxjs/RX';
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
