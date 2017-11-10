@@ -19,14 +19,12 @@ export class StoryGameService {
 
   timer: any;
   oneSecond = 1000;
-  gameEngineInterval: number = this.oneSecond; // how many seconds per interval
-  maxGameLength: number = (this.oneSecond * 1200); // max possible game time is 20 minutes
+  gameEngineInterval: number = this.oneSecond;
+  maxGameLength: number = (this.oneSecond * 1200); // abort game if exceed 20 min
   timesUpPeriodActive = false;
   timesUpDisplayTimerResetValue = 6;
   timesUpDisplayTimer: number = this.timesUpDisplayTimerResetValue;
 
-  // inactivityThreshold: number = Date.now()-( this.oneSecond * 10);
-  // if no ping for 10 sec, set them to inactive
 
   constructor(id: string) {
     this.gameId = id;
@@ -56,14 +54,17 @@ export class StoryGameService {
       this.playersRef.on("value", function (snapshot) {
         this.allPlayersObj = snapshot.val();
       }.bind(this));
+
       this.playersRef.orderByChild("joinTime")
         .limitToLast(this.gameObj.maxPlayers)
         .on("value", function (snapshot) {
           this.currentPlayersObj = snapshot.val();
         }.bind(this));
+
       this.playerInputsRef.on("value", function (snapshot) {
         this.playerInputsObj = snapshot.val();
       }.bind(this));
+
       console.log("Set Game Round to 1, to start up game");
       this.incrementTurn();
       this.gameRef.set(this.gameObj); // post updated info, so player can see
@@ -82,7 +83,7 @@ export class StoryGameService {
     // add second to game
     this.gameObj.gameTimeElapsed =
       this.gameObj.gameTimeElapsed + (this.gameEngineInterval / this.oneSecond);
-    console.log(this.gameObj.gameTimeElapsed);
+
     this.establishActivePlayers(); // players join as inactive, so activate them as they come in
     this.checkForDisconnectedPlayers();
 
@@ -101,18 +102,21 @@ export class StoryGameService {
       if (didTurnEnd)// round changes, reset round time left
       {
         if (this.gameObj.currentTurn % 2 === 0 && this.gameObj.currentTurn > 0) {
+          // end of vote turn
           this.determineRoundWinner(this.gameObj.currentTurn);
         }
         if (!this.wasThereInputThisRound(this.gameObj.currentTurn)) {
+          // no input detected, abort game.
           this.gameObj.isGameOver = true;
           this.gameObj.gameOverReason =
             "Game Ended, due to no player activity in the previous round.";
         }
-        this.checkForInActivePlayers(this.gameObj.currentTurn);
+        this.kickInactivePlayers(this.gameObj.currentTurn);
         this.timesUpDisplayTimer = this.timesUpDisplayTimerResetValue;
         this.timesUpPeriodActive = true;
         this.gameObj.timeLeftInTurn = 0;
       }
+
       else// round did not change, decrease time
       {
         this.gameObj.timeLeftInTurn =
@@ -187,7 +191,7 @@ export class StoryGameService {
 
   }
 
-  private checkForInActivePlayers(roundNum: number): void {
+  private kickInactivePlayers(roundNum: number): void {
     for (const player in this.allPlayersObj) {
       if (this.allPlayersObj.hasOwnProperty(player)) {
         if (this.allPlayersObj[player].isActive === true &&

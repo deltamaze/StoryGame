@@ -180,8 +180,6 @@ export class StoryGameService extends BaseService {
       .push(packedMessage).catch(err => this.handleError(err));
   }
 
-
-
   public getChatMessages(): FirebaseListObservable<any> {
     return this.db.list('/gamePlayerChat/' + this.currentGameId + '/');
   }
@@ -196,8 +194,8 @@ export class StoryGameService extends BaseService {
       isWinner: false,
       timestamp: firebase.database.ServerValue.TIMESTAMP
     };
-    this.db.object('/gamePlayerInput/' + this.currentGameId +
-      '/' + roundNumber.toString() + '/' + this.user.uid + '/')
+    this.db.object('/gamePlayerInput/' + this.currentGameId + '/' +
+      roundNumber.toString() + '/' + this.user.uid + '/')
       .set(input)
       .catch(err => this.handleError(err));
     this.updateLastActionTime();
