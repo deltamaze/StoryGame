@@ -16,7 +16,7 @@ import { UserService, UserInfo } from '../core/user.service';
 export class StoryGameService extends BaseService {
 
   public currentGameId = "";
-  public user: UserInfo; // for internal use in the set username function
+  public user: UserInfo;
   private pingSubscription: Subscription;
   // DEV
   // private gameApiUrl = 'http://localhost:8080/';
