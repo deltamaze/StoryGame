@@ -143,6 +143,11 @@ export class StoryGameService extends BaseService {
     const ping = firebase.database.ServerValue.TIMESTAMP;
     this.db.object(fbPath)
       .set(ping).catch(err => this.kickByServer());
+    if (this.user.username === '')
+    {
+      // player logged out, cancel ping
+      this.leaveGame();
+    }
   }
   private kickByServer(): void {
 
