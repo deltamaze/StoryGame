@@ -298,8 +298,8 @@ export class StoryGameService {
       if (this.allPlayersObj.hasOwnProperty(player)) {
         // cycle through each active player and see if they have the most points
         if (this.allPlayersObj[player].isActive === true &&
-          this.allPlayersObj[player].score >= maxScore) {
-          maxScore = this.allPlayersObj[player].points; // update maxPoints
+          this.allPlayersObj[player].score > maxScore) {
+          maxScore = this.allPlayersObj[player].score; // update maxPoints
           // replace string with just this player
           returnString = this.allPlayersObj[player].username + " ";
         }
@@ -387,7 +387,7 @@ export class StoryGameService {
       }
     }
     firebase.database().ref('gamePlayerInput/' + this.gameId + '/' + prevRound)
-    .set(this.playerInputsObj[prevRound]);
+      .set(this.playerInputsObj[prevRound]);
 
 
   }
@@ -400,8 +400,7 @@ export class StoryGameService {
 
     for (const player in this.allPlayersObj) {
       if (this.allPlayersObj.hasOwnProperty(player)) {
-        if (this.allPlayersObj[player].isActive === true)
-        {
+        if (this.allPlayersObj[player].isActive === true) {
           // look for in playerInputsObj
           if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null &&
             this.playerInputsObj[roundNum][player] != null) {
