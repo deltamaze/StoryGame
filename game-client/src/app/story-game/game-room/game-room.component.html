@@ -26,35 +26,35 @@
       <div class="card card-outline-success mb-3">
         <div class="addMargin">
           <div class="card-text">
-            <div *ngIf="gameInfo.currentTurn == 0">
-              <div *ngIf="gameInfo.creatorUid == gameService.user.uid " class="centerImg">
+            <div [hidden]="!(gameInfo.currentTurn == 0)">
+              <div [hidden]="!(gameInfo.creatorUid == gameService.user.uid)" class="centerImg">
                 <img src="../../../assets/LetsGo120HScale.png" class="imageResize" alt="image">
                 <br />
                 <button class="btn btn-success btn-md" [disabled]="disableStartButton" (click)="startGame()">StartGame</button>
               </div>
-              <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame()" class="centerImg">
+              <div [hidden]="!(gameInfo.creatorUid != gameService.user.uid && isHostStillInGame())" class="centerImg">
                 <img src="../../../assets/Waiting120HScale.png" class="imageResize" alt="image">
                 <br /> Please Wait for Host to Start Game!</div>
-              <div *ngIf="gameInfo.creatorUid != gameService.user.uid && isHostStillInGame() == false" class="centerImg">
+              <div [hidden]="!(gameInfo.creatorUid != gameService.user.uid && isHostStillInGame() == false)" class="centerImg">
                 <img src="../../../assets/GO120HScale.png" class="imageResize" alt="image">
                 <br /> Host Disconnected from game, game cannot start.</div>
             </div>
             <!--Display action image-->
-            <div *ngIf="gameInfo.currentTurn > 0">
-              <div *ngIf="!isMyActionComplete() && gameInfo.timeLeftInTurn > hurryThreshold && gameInfo.isGameOver == false" class="centerImg">
+            <div [hidden]="!(gameInfo.currentTurn > 0)">
+              <div [hidden]="!(!isMyActionComplete() && gameInfo.timeLeftInTurn > hurryThreshold && gameInfo.isGameOver == false)" class="centerImg">
                 <img src="../../../assets/LetsGo120HScale.png" class="imageResize" alt="image">
               </div>
-              <div *ngIf="!isMyActionComplete() && gameInfo.timeLeftInTurn <= hurryThreshold && gameInfo.timeLeftInTurn > 0  && gameInfo.isGameOver == false"
+              <div [hidden]="!(!isMyActionComplete() && gameInfo.timeLeftInTurn <= hurryThreshold && gameInfo.timeLeftInTurn > 0  && gameInfo.isGameOver == false)"
                 class="centerImg">
                 <img src="../../../assets/Hurry120HScale.png" class="imageResize" alt="image">
               </div>
-              <div *ngIf="isMyActionComplete() && gameInfo.timeLeftInTurn > 0  && gameInfo.isGameOver == false" class="centerImg">
+              <div [hidden]="!(isMyActionComplete() && gameInfo.timeLeftInTurn > 0  && gameInfo.isGameOver == false)" class="centerImg">
                 <img src="../../../assets/Waiting120HScale.png" class="imageResize" alt="image">
               </div>
-              <div *ngIf="gameInfo.timeLeftInTurn <= 0  && gameInfo.isGameOver == false" class="centerImg">
+              <div [hidden]="!(gameInfo.timeLeftInTurn <= 0  && gameInfo.isGameOver == false)" class="centerImg">
                 <img src="../../../assets/TimesUp!120HScale.png" class="imageResize" alt="image">
               </div>
-              <div *ngIf="gameInfo.isGameOver != false" class="centerImg">
+              <div [hidden]="!(gameInfo.isGameOver != false)" class="centerImg">
                 <img src="../../../assets/GO120HScale.png" class="imageResize" alt="image">
               </div>
             </div>
