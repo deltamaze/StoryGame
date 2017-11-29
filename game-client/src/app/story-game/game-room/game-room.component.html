@@ -68,15 +68,15 @@
               </div>
               <br />
               <br />
-              <form (ngSubmit)="submitIdea()">
+              <form (ngSubmit)="submitIdea(false)">
                 <div class="form-group">
-                  <input type="text" class="form-control" id="text" [(ngModel)]="ideaInput" name="text" maxlength="{{maxCharacterCount}}" required>
+                  <input type="text" class="form-control" id="text" [(ngModel)]="ideaInput" (keyup)="autoSaveIdea()" name="text" maxlength="{{maxCharacterCount}}" required>
                 </div>
                 <span *ngIf="!isMyActionComplete()">
                       <button type="submit"   [disabled]="disableButton" class="btn btn-primary">Submit Idea</button> {{(ideaInput)?.length}}/{{maxCharacterCount}}
                     </span>
                 <span *ngIf="isMyActionComplete()">
-                      <button type="submit"   [disabled]="disableButton" class="btn btn-success">Update</button> {{(ideaInput)?.length}}/{{maxCharacterCount}} <img src="../../../assets/glyphicons-Ok.png" alt="image"> <p>Your Idea was saved! You can make changes before time is up!</p>
+                      <button type="submit"   [disabled]="disableButton" class="btn btn-success">Update</button> {{(ideaInput)?.length}}/{{maxCharacterCount}} <img src="../../../assets/glyphicons-Ok.png" alt="image"> <p>{{saveMessage}}</p>
                     </span>
 
               </form>

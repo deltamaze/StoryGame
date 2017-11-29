@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StoryGameService } from '../story-game.service';
+import { Subject } from 'rxjs/Rx';
 
 @Component({
   selector: 'app-game-room',
@@ -15,13 +16,14 @@ export class GameRoomComponent implements OnInit {
   public gameStory: any;
   public gameInfo: any;
   public ideaInput = "";
+  private ideaInputChanged = new Subject<string>();
   public playerInputs: any;
   public disableButton = false;
   public disableStartButton = false;
   public lastVote: string;
   public maxCharacterCount = 100;
   public hurryThreshold = 5;
-
+  public saveMessage = 'Your Idea was saved! You can make changes before time is up!';
 
 
 
@@ -33,6 +35,9 @@ export class GameRoomComponent implements OnInit {
     this.gameService.getRoundWinners().subscribe(res => {
       this.roundWinners = res;
     });
+
+    this.ideaInputChanged.debounceTime(300).distinctUntilChanged()
+      .subscribe(idea => this.submitIdea(true));
 
     this.gameService.getErrorStatus().subscribe(status => this.status = status);
     this.gameService.getGameInfo().subscribe(res => this.gameInfo = res);
@@ -66,10 +71,20 @@ export class GameRoomComponent implements OnInit {
     this.disableStartButton = true;
     this.gameService.startGame();
   }
-  public submitIdea(): void {
-    this.temporarilyDisableButton();
+  public autoSaveIdea() {
+    this.ideaInputChanged.next(this.ideaInput);
+  }
+  public submitIdea(isAutoSave: boolean): void {
     this.lastVote = ""; // clear out last vote
     this.gameService.submitInput(this.ideaInput, this.gameInfo.currentTurn);
+    if (isAutoSave === true) {
+      console.log("autosaved idea");
+      this.saveMessage = 'Auto-saved!';
+    }
+    if (isAutoSave === false) {
+      this.temporarilyDisableButton();
+      this.saveMessage = 'Your Idea was saved! You can make changes before time is up!';
+    }
   }
   public submiteVote(ideaKey): void {
     // clear out idea variable, to get ready for next round
