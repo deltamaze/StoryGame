@@ -17,6 +17,7 @@ export class GameRoomComponent implements OnInit {
   public gameInfo: any;
   public ideaInput = "";
   private ideaInputChanged = new Subject<string>();
+  private lastRoundSubmit = 0;
   public playerInputs: any;
   public disableButton = false;
   public disableStartButton = false;
@@ -76,14 +77,18 @@ export class GameRoomComponent implements OnInit {
   }
   public submitIdea(isAutoSave: boolean): void {
     this.lastVote = ""; // clear out last vote
+    // autosave should not mark player as ready, unless they already did a manual submit
     this.gameService.submitInput(this.ideaInput, this.gameInfo.currentTurn);
     if (isAutoSave === true) {
       console.log("autosaved idea");
       this.saveMessage = 'Auto-saved!';
+      // autosave should not mark player as ready, unless they already did a manual submit
+
     }
     if (isAutoSave === false) {
       this.temporarilyDisableButton();
       this.saveMessage = 'Your Idea was saved! You can make changes before time is up!';
+      this.lastRoundSubmit = this.gameInfo.currentRound;
     }
   }
   public submiteVote(ideaKey): void {
