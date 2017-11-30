@@ -78,17 +78,24 @@ export class GameRoomComponent implements OnInit {
   public submitIdea(isAutoSave: boolean): void {
     this.lastVote = ""; // clear out last vote
     // autosave should not mark player as ready, unless they already did a manual submit
-    this.gameService.submitInput(this.ideaInput, this.gameInfo.currentTurn);
+
     if (isAutoSave === true) {
-      console.log("autosaved idea");
       this.saveMessage = 'Auto-saved!';
       // autosave should not mark player as ready, unless they already did a manual submit
+      if (this.lastRoundSubmit === this.gameInfo.currentRound)
+      {
+        this.gameService.submitInput(this.ideaInput, this.gameInfo.currentTurn, true);
+      }
+      else {
+        this.gameService.submitInput(this.ideaInput, this.gameInfo.currentTurn, false);
+      }
 
     }
     if (isAutoSave === false) {
       this.temporarilyDisableButton();
       this.saveMessage = 'Your Idea was saved! You can make changes before time is up!';
       this.lastRoundSubmit = this.gameInfo.currentRound;
+      this.gameService.submitInput(this.ideaInput, this.gameInfo.currentTurn, true);
     }
   }
   public submiteVote(ideaKey): void {

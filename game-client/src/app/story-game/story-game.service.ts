@@ -191,12 +191,13 @@ export class StoryGameService extends BaseService {
   public getRoundWinners(): FirebaseListObservable<any> {
     return this.db.list('/gameRoundWinners/' + this.currentGameId + '/');
   }
-  public submitInput(idea: string, roundNumber: number): void {
+  public submitInput(idea: string, roundNumber: number, markPlayerReady: boolean = true): void {
     const input = {
       username: this.user.username,
       input: idea,
       votes: 0,
       isWinner: false,
+      playerReady: markPlayerReady,
       timestamp: firebase.database.ServerValue.TIMESTAMP
     };
     this.db.object('/gamePlayerInput/' + this.currentGameId + '/' +

@@ -243,7 +243,8 @@ export class StoryGameService {
           // only check for active players, that didn't just join the game
           // look for in playerInputsObj
           if (this.playerInputsObj != null && this.playerInputsObj[roundNum] != null &&
-            this.playerInputsObj[roundNum][player] != null) {
+            this.playerInputsObj[roundNum][player] != null &&
+            this.playerInputsObj[roundNum][player].playerReady === true) {
             countDone++;
             // lets make sure to let other players know, that this guy has completed his action
             if (this.allPlayersObj[player].isActionFinished === false) {
