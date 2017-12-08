@@ -18,6 +18,7 @@ export class GameRoomComponent implements OnInit {
   public ideaInput = "";
   private ideaInputChanged = new Subject<string>();
   private lastRoundSubmit = 0;
+  private lastRoundInputCleared = 0;
   public playerInputs: any;
   public disableButton = false;
   public disableStartButton = false;
@@ -76,7 +77,7 @@ export class GameRoomComponent implements OnInit {
     this.ideaInputChanged.next(this.ideaInput);
   }
   public submitIdea(isAutoSave: boolean): void {
-    this.lastVote = ""; // clear out last vote
+    
     // autosave should not mark player as ready, unless they already did a manual submit
 
     if (isAutoSave === true) {
@@ -102,7 +103,6 @@ export class GameRoomComponent implements OnInit {
     // clear out idea variable, to get ready for next round
     this.temporarilyDisableButton();
     this.lastVote = ideaKey; // use to determine where to play Check mark
-    this.ideaInput = "";
     this.gameService.submitInput(ideaKey, this.gameInfo.currentTurn);
   }
   public leaveGame(): void {
@@ -118,7 +118,13 @@ export class GameRoomComponent implements OnInit {
     return (this.gameService.user.uid !== inputUID);
   }
   public isMyActionComplete(): boolean {
-
+    // clear prev round input, if this is a new round
+    if (this.lastRoundInputCleared < this.gameInfo.currentRound)
+    {
+      this.lastRoundInputCleared = this.gameInfo.currentRound ;
+      this.lastVote = ""; // clear out last vote
+      this.ideaInput = "";
+    }
     for (const player in this.playerList) {
       if (this.playerList.hasOwnProperty(player)) {
         if (this.playerList[player].$key === this.gameService.user.uid &&
