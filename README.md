@@ -1,5 +1,5 @@
 # StoryGame
-Live app - <a href='storygame.kilomaze.com'>storygame.kilomaze.com</a>
+Live app - <a href='https://storygame.kilomaze.com'>storygame.kilomaze.com</a>
 
 
 A game that is intended  for 3 or more player. One player creates the game as the host, and other players can join the game.
