@@ -77,9 +77,11 @@ export class GameRoomComponent implements OnInit {
     this.ideaInputChanged.next(this.ideaInput);
   }
   public submitIdea(isAutoSave: boolean): void {
-    
     // autosave should not mark player as ready, unless they already did a manual submit
-
+    if (this.ideaInput.length === 0)
+    {
+      return; ///don't autosave if length of string is zero
+    }
     if (isAutoSave === true) {
       this.saveMessage = 'Auto-saved!';
       // autosave should not mark player as ready, unless they already did a manual submit
