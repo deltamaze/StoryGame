@@ -21,7 +21,7 @@ export class StoryGameService extends BaseService {
   // DEV
   // private gameApiUrl = 'http://localhost:8080/';
   // PROD
-   private gameApiUrl = 'https://storygameapi.kilomaze.com/';
+   private gameApiUrl = 'https://apis.wpooley.com/';
 
   constructor(
     public router: Router,
