@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { logout } from '../services/auth/action';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class NavBar extends React.Component {
@@ -32,7 +31,7 @@ class NavBar extends React.Component {
                 {
                   this.props.auth.userToken == ''
                     ? <Link className="nav-link" to="/signin">Login</Link>
-                    : <Link className="nav-link" onClick={this.props.logout} to="/signin">Logout</Link>
+                    : <Link className="nav-link" to="/signin">Change Username</Link>
                 }
               </li>
             </ul>
@@ -46,6 +45,5 @@ class NavBar extends React.Component {
 export default connect(
   state => ({ auth: state.auth }),
   ({
-    logout
   })
 )(NavBar);

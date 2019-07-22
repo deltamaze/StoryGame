@@ -4,15 +4,17 @@ import { login, logout } from '../services/auth/action';
 
 
 class SignInPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.content = <div>Loading...</div>;
+  // constructor(props) {
+  //   super(props);
+  // }
+
+  renderConnectingMsg() {
     if (this.props.auth.userToken === '') {
-      this.content = <div>Connecting to Auth Service...</div>;
+      return <div>Connecting to Auth Service...</div>;
+    } if (this.props.auth.userToken !== '') {
+      return <div>Set Username</div>;
     }
-    if (this.props.auth.userToken !== '') {
-      this.content = <div>Set Username</div>;
-    }
+    return null;
   }
 
   render() {
@@ -24,8 +26,6 @@ class SignInPage extends React.Component {
         <h1>Current UN: {this.props.auth.username}</h1>
         <h1>Current Token: {this.props.auth.userToken}</h1>
         {this.renderConnectingMsg()}
-        <br />
-        {this.content}
       </div>
     );
   }
