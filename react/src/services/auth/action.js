@@ -15,9 +15,12 @@ export function fetchAuth() {
           payload: { userToken: user.uid, userRole: 'admin' }
         });
       } else {
+        // let state know that not logged in
         dispatch({
           type: LOGOUT
         });
+        // try to log in
+        firebase.auth().signInAnonymously();
       }
     });
   };
