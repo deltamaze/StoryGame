@@ -17,6 +17,7 @@ class SignInPage extends React.Component {
 
   handleSubmit(event) {
     this.props.setUsername(event.target.value);
+    event.preventDefault();
   }
 
   renderConnectingMsg() {
