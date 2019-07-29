@@ -3,6 +3,11 @@ import { connect } from 'react-redux';
 import { setUsername } from '../services/auth/action';
 
 class SignInPage extends React.Component {
+  static handleSubmit(event) { // eslint suggest static when this.xx not used
+    // this.props.setUsername(event.target.value);
+    event.preventDefault();
+  }
+
   constructor(props) {
     super(props);
 
@@ -13,11 +18,6 @@ class SignInPage extends React.Component {
 
   handleChange(event) {
     this.props.setUsername(event.target.value);
-  }
-
-  handleSubmit(event) {
-    this.props.setUsername(event.target.value);
-    event.preventDefault();
   }
 
   renderConnectingMsg() {
