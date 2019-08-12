@@ -1,9 +1,11 @@
 
 import firebase from '../firebase/firebase';
+import debounce from '../../utilities/debounce';
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const SETUSERNAME = 'SETUSERNAME';
+
 
 // ACTION GENERATORS
 export function fetchAuth() {
@@ -37,6 +39,9 @@ export function setUsername(username) {
     });
   };
 }
+const setUsernameWithDebouce = debounce(setUsername, 250);
+export { setUsernameWithDebouce };
+
 
 export function logout() {
   return () => firebase.auth().signOut();

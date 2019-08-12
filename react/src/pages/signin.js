@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setUsername } from '../services/auth/action';
+import { setUsername, setUsernameWithDebouce } from '../services/auth/action';
 
 class SignInPage extends React.Component {
   static handleSubmit(event) { // eslint suggest static when this.xx not used
-    // this.props.setUsername(event.target.value);
+    this.props.setUsername(event.target.value);
     event.preventDefault();
   }
 
@@ -16,7 +16,7 @@ class SignInPage extends React.Component {
   }
 
   handleChange(event) {
-    this.props.setUsername(event.target.value);
+    this.props.setUsernameWithDebouce(event.target.value);
   }
 
   renderConnectingMsg() {
@@ -51,6 +51,6 @@ class SignInPage extends React.Component {
 export default connect(
   state => ({ auth: state.auth }),
   ({
-    setUsername
+    setUsername, setUsernameWithDebouce
   })
 )(SignInPage);
