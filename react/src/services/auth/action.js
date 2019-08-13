@@ -1,6 +1,6 @@
 
 import firebase from '../firebase/firebase';
-import debounce from '../../utilities/debounce';
+
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
@@ -39,8 +39,6 @@ export function setUsername(username) {
     });
   };
 }
-const setUsernameWithDebouce = debounce(setUsername, 250);
-export { setUsernameWithDebouce };
 
 
 export function logout() {
