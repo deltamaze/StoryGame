@@ -11,6 +11,25 @@ class NavBar extends React.Component {
     // this.props.fetchAuth();
   }
 
+  renderNavItems() {
+    if (this.props.auth.userToken === '') {
+      return (<ul className="navbar-nav"><li className="nav-item">Loading...</li></ul>);
+    } if (this.props.auth.userToken !== '') {
+      return (
+        <ul className="navbar-nav">
+          <li className="nav-item active">
+            <Link className="nav-link" to="/">Main Menu</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/signin">Change Username</Link>
+          </li>
+        </ul>
+      );
+    }
+    return null;
+  }
+
+
   render() {
     return (
       <div>
@@ -20,21 +39,7 @@ class NavBar extends React.Component {
             <span className="navbar-toggler-icon" />
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav">
-              <li className="nav-item active">
-                <Link className="nav-link" to="/">Home</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/counter">Counter</Link>
-              </li>
-              <li className="nav-item">
-                {
-                  this.props.auth.userToken == ''
-                    ? <Link className="nav-link" to="/signin">Login</Link>
-                    : <Link className="nav-link" to="/signin">Change Username</Link>
-                }
-              </li>
-            </ul>
+            {this.renderNavItems()}
           </div>
         </nav>
       </div>

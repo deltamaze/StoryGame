@@ -30,15 +30,46 @@ CounterScreen = connect(
 
 // pagesrouter
 
-const PageRouter = () => (
-  <div>
-    <Switch>
-      <Route path="/" exact component={HomeScreen} />
-      <PrivateRoute path="/counter" component={CounterScreen} />
-      <Route path="/signin" component={SignInPage} />
-      <Route path="*" component={NotFoundScreen} />
-    </Switch>
-  </div>
-);
+class PageRouter extends React.Component {
+  // constructor(props) {
+  //   super(props);
+  // }
+  componentDidMount() {
+    // this.props.fetchAuth();
+  }
 
-export default PageRouter;
+
+  renderSwitch() {
+    if (this.props.auth.userToken === '') {
+      return (
+        <div>Loading...</div>
+      );
+    } if (this.props.auth.userToken !== '') {
+      return (
+        <div>
+          <Switch>
+            <Route path="/" exact component={HomeScreen} />
+            <PrivateRoute path="/counter" component={CounterScreen} />
+            <Route path="/signin" component={SignInPage} />
+            <Route path="*" component={NotFoundScreen} />
+          </Switch>
+        </div>
+      );
+    }
+    return null;
+  }
+
+
+  render() {
+    return (
+      this.renderSwitch()
+    );
+  }
+}
+
+
+export default connect(
+  state => ({ auth: state.auth }),
+  ({
+  })
+)(PageRouter);
