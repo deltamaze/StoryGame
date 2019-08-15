@@ -4,9 +4,12 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
-    match /StoryGame/Usernames/{userId} {
+    match /StoryGame/Accounts/{userId} {
       allow read: if true;
-      allow write:if request.auth.uid == userId;
+      allow write:if request.auth.uid == userId
+            && request.resource.data.size() == 1
+            && request.resource.data.keys().hasOnly(['userName'])
+            && request.resource.data.userName is string;
     }
     match /{document=**} {
       allow read: if false;
