@@ -4,7 +4,7 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
-    match /StoryGame/Accounts/{userId} {
+    match /SGAccounts/{userId} {
       allow read: if true;
       allow write:if request.auth.uid == userId
             && request.resource.data.size() == 1
