@@ -27,6 +27,27 @@ export function fetchAuth() {
     });
   };
 }
+let usernameDoc = db.collection('SGAccounts').doc('');
+
+// function fetchUsername() {
+//   return (dispatch) => {
+//     let usernameObs = firebase.auth().onAuthStateChanged((user) => {
+//       if (user) {
+//         dispatch({
+//           type: LOGIN,
+//           payload: { userToken: user.uid, userRole: 'admin' }
+//         });
+//       } else {
+//         // let state know that not logged in
+//         dispatch({
+//           type: LOGOUT
+//         });
+//         // try to log in
+//         firebase.auth().signInAnonymously();
+//       }
+//     });
+//   };
+// }
 
 export function login() {
   return () => firebase.auth().signInAnonymously();

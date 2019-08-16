@@ -4,9 +4,15 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
-    match /StoryGame/Usernames/{userId} {
+    match /SGAccounts/{userId} {
       allow read: if true;
-      allow write:if request.auth.uid == userId;
+      allow write:if request.auth.uid == userId
+            && request.resource.data.size() == 1
+            && request.resource.data.keys().hasOnly(['username'])
+            && request.resource.data.username is string
+            && request.resource.data.username.size() >= 1
+            && request.resource.data.username.size() <= 30
+            && request.resource.data.username.matches('\\A[a-zA-Z]+\\z') == true;
     }
     match /{document=**} {
       allow read: if false;
