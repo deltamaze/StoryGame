@@ -1,19 +1,17 @@
-const authReducer = (state = { username: '', userToken: '', userRole: '' }, action) => {
+const authReducer = (state = { username: '', uid: '' }, action) => {
   switch (action.type) {
-  case 'LOGIN':
-    return {
-      username: state.username,
-      userToken: action.payload.userToken,
-      userRole: state.userRole
-    };
-  case 'SETUSERNAME':
+  case 'UPSERTUSERINFO':
     return {
       username: action.payload.username,
-      userToken: state.userToken,
-      userRole: state.userRole
+      uid: action.payload.uid
     };
-  case 'LOGOUT':
-    return { username: '', userToken: '', userRole: '' };
+  // case 'SETUSERNAME':
+  //   return {
+  //     username: action.payload.username,
+  //     uid: state.uid
+  //   };
+  // case 'LOGOUT':
+  //   return { username: '', uid: '' };
   default:
     return state;
   }

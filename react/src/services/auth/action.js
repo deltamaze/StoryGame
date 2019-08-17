@@ -3,17 +3,16 @@
 import firebase, { db } from '../firebase/firebase';
 
 
-export const LOGIN = 'LOGIN';
-export const LOGOUT = 'LOGOUT';
-export const SETUSERNAME = 'SETUSERNAME';
+export const UPSERTUSERINFO = 'UPSERTUSERINFO';
 
 
 console.log(db);
-let usernameListener = db.collection('SGAccounts').doc('0') // default unset value
-  .onSnapshot((doc) => {
-    // eslint-disable-next-line no-console
-    console.log('Current data: ', doc.data());
-  });
+let usernameRef = db.collection('SGAccounts').doc('0'); // default unset value
+console.log(usernameRef);
+let usernameListener = usernameRef.onSnapshot((doc) => {
+  // eslint-disable-next-line no-console
+  console.log('Current data: ', doc.data());
+});
 console.log(usernameListener);
 
 // ACTION GENERATORS
@@ -23,20 +22,19 @@ export function fetchAuth() {
       if (user) {
         // set up watcher on username for this user
         usernameListener(); // Remove previous listener
-        usernameListener = db.collection('SGAccounts').doc(user.uid) // default unset value
+        usernameRef = db.collection('SGAccounts').doc(user.uid);
+        usernameListener = usernameRef // default unset value
           .onSnapshot((doc) => {
-          // eslint-disable-next-line no-console
-          // eslint-disable-next-line indent
-          console.log('Current data: ', doc.data());
             dispatch({
-              type: LOGIN,
-              payload: { userToken: user.uid, userRole: 'admin' }
+              type: UPSERTUSERINFO,
+              payload: { username: doc.data().username, uid: user.uid }
             });
           });
       } else {
         // let state know that not logged in
         dispatch({
-          type: LOGOUT
+          type: UPSERTUSERINFO,
+          payload: { username: '', uid: '' }
         });
         // try to log in
         firebase.auth().signInAnonymously();
@@ -52,7 +50,7 @@ export function fetchAuth() {
 //       if (user) {
 //         dispatch({
 //           type: LOGIN,
-//           payload: { userToken: user.uid, userRole: 'admin' }
+//           payload: { uid: user.uid, userRole: 'admin' }
 //         });
 //       } else {
 //         // let state know that not logged in
@@ -70,12 +68,10 @@ export function login() {
   return () => firebase.auth().signInAnonymously();
 }
 export function setUsername(username) {
-  return (dispatch) => {
-    dispatch({
-      type: SETUSERNAME,
-      payload: { username }
-    });
+  const data = {
+    username // shorthand for username: username
   };
+  return () => usernameRef.set(data);
 }
 
 

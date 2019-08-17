@@ -40,11 +40,11 @@ class PageRouter extends React.Component {
 
 
   renderSwitch() {
-    if (this.props.auth.userToken === '') {
+    if (this.props.auth.uid === '') {
       return (
         <div>Loading...</div>
       );
-    } if (this.props.auth.userToken !== '') {
+    } if (this.props.auth.uid !== '') {
       return (
         <div>
           <Switch>

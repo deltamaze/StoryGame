@@ -12,9 +12,9 @@ class NavBar extends React.Component {
   }
 
   renderNavItems() {
-    if (this.props.auth.userToken === '') {
+    if (this.props.auth.uid === '') {
       return (<ul className="navbar-nav"><li className="nav-item">Loading...</li></ul>);
-    } if (this.props.auth.userToken !== '') {
+    } if (this.props.auth.uid !== '') {
       return (
         <ul className="navbar-nav">
           <li className="nav-item active">

@@ -25,9 +25,9 @@ class SignInPage extends React.Component {
 
 
   renderConnectingMsg() {
-    if (this.props.auth.userToken === '') {
+    if (this.props.auth.uid === '') {
       return <div>Connecting to Auth Service...</div>;
-    } if (this.props.auth.userToken !== '') {
+    } if (this.props.auth.uid !== '') {
       return <div>Set Username</div>;
     }
     return null;
@@ -46,7 +46,7 @@ class SignInPage extends React.Component {
           </label>
           <input type="submit" value="Submit" />
         </form>
-        <h1>Current Token: {this.props.auth.userToken}</h1>
+        <h1>Current Token: {this.props.auth.uid}</h1>
         {this.renderConnectingMsg()}
       </div>
     );
