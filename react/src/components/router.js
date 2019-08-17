@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 
 import SignInPage from './signin';
-import PrivateRoute from '../components/privateRoute';
+import PrivateRoute from './privateRoute';
 
 
 // HomeScreen

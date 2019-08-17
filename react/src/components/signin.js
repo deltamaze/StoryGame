@@ -28,7 +28,7 @@ class SignInPage extends React.Component {
     if (this.props.auth.uid === '') {
       return <div>Connecting to Auth Service...</div>;
     } if (this.props.auth.uid !== '') {
-      return <div>Set Username</div>;
+      return null;
     }
     return null;
   }
