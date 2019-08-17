@@ -6,6 +6,7 @@ import PageRouter from './components/router';
 import store from './store';
 import NavBar from './components/navbar';
 import FirebaseServiceStarter from './components/firebaseServiceStarter';
+import AlertBanner from './components/alert';
 
 ReactDOM.render(
   <Provider store={store}>
@@ -13,6 +14,7 @@ ReactDOM.render(
       <FirebaseServiceStarter />
       <NavBar />
       <PageRouter />
+      <AlertBanner />
     </BrowserRouter>
   </Provider>, document.querySelector('.container')
 );

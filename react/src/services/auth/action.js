@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 import firebase, { db } from '../firebase/firebase';
+import { setAlert } from '../alerts/action';
 
 
 export const UPSERTUSERINFO = 'UPSERTUSERINFO';
@@ -71,7 +72,8 @@ export function setUsername(username) {
   const data = {
     username // shorthand for username: username
   };
-  return () => usernameRef.set(data);
+  usernameRef.set(data).catch(err => setAlert(JSON.stringify(err)));
+  return () => {};
 }
 
 
