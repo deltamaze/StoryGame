@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import firebase, { db } from '../firebase/firebase';
-import { setAlert } from '../alerts/action';
+import { setAlertWithDispath } from '../alerts/action';
 
 
 export const UPSERTUSERINFO = 'UPSERTUSERINFO';
@@ -26,10 +26,17 @@ export function fetchAuth() {
         usernameRef = db.collection('SGAccounts').doc(user.uid);
         usernameListener = usernameRef // default unset value
           .onSnapshot((doc) => {
-            dispatch({
-              type: UPSERTUSERINFO,
-              payload: { username: doc.data().username, uid: user.uid }
-            });
+            if (doc.data() === undefined || doc.data().username === undefined) {
+              dispatch({
+                type: UPSERTUSERINFO,
+                payload: { username: '', uid: user.uid } // username not set yet
+              });
+            } else { // username set, push to state
+              dispatch({
+                type: UPSERTUSERINFO,
+                payload: { username: doc.data().username, uid: user.uid }
+              });
+            }
           });
       } else {
         // let state know that not logged in
@@ -72,8 +79,8 @@ export function setUsername(username) {
   const data = {
     username // shorthand for username: username
   };
-  usernameRef.set(data).catch(err => setAlert(JSON.stringify(err)));
-  return () => {};
+  usernameRef.set(data).catch(err => setAlertWithDispath(JSON.stringify(err)));
+  return () => { };
 }
 
 

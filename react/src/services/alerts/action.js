@@ -3,28 +3,19 @@ import store from '../../store';
 export const NEWALERT = 'NEWALERT';
 export const DISMISS = 'DISMISS';
 
-
 export function setAlert(alertMsg) {
-  // return (dispatch) => {
-  //   dispatch({
-  //     type: NEWALERT,
-  //     payload: { alertMsg }
-  //   });
-  // };
-  store.dispatch(
+  return (
     {
       type: NEWALERT,
-      payload: { alertMsg}
-    }
+      payload: { alertMsg }
+    });
+}
+
+
+export function setAlertWithDispath(alertMsg) {
+  store.dispatch(
+    setAlert(alertMsg)
   );
-  // console.log('checkpoint1');
-  // return (dispatch) => {
-  //   console.log('checkpoint2');
-  //   dispatch({
-  //     type: NEWALERT,
-  //     payload: { alertMsg }
-  //   });
-  // };
 }
 
 export function dismissAlert() {
