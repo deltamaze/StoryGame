@@ -11,10 +11,11 @@ import AlertBanner from './components/alert';
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <FirebaseServiceStarter />
-      <NavBar />
-      <PageRouter />
-      <AlertBanner />
+      <AlertBanner>
+        <FirebaseServiceStarter />
+        <NavBar />
+        <PageRouter />
+      </AlertBanner>
     </BrowserRouter>
   </Provider>, document.querySelector('.container')
 );

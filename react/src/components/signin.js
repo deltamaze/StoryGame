@@ -6,6 +6,7 @@ import debounce from '../utilities/debounce';
 class SignInPage extends React.Component {
   static handleSubmit(event) { // eslint suggest static when this.xx not used
     event.preventDefault();
+    throw "test";
   }
 
   constructor(props) {
