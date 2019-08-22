@@ -6,7 +6,6 @@ import debounce from '../utilities/debounce';
 class SignInPage extends React.Component {
   static handleSubmit(event) { // eslint suggest static when this.xx not used
     event.preventDefault();
-    throw "test";
   }
 
   constructor(props) {
@@ -14,14 +13,41 @@ class SignInPage extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.setUsernameWithDebouce = debounce(this.props.setUsername, 250);
-    this.state = { userNameTextBox: '' };
+    this.state = {
+      userNameTextBox: '',
+      userNameTextBoxValidation: ''
+    };
+
+    this.errorDiv = {
+      color: 'red'
+    };
+    this.errorBorder = {
+      border: '2px solid red',
+      borderRadius: '4px'
+    };
   }
 
   handleChange(event) {
     this.setState({
       userNameTextBox: event.target.value
     });
-    this.setUsernameWithDebouce(event.target.value);
+    // validate input
+    const digitRegex = new RegExp('\\d'); // contains digit
+
+    if (event.target.value.length === 0) {
+      this.setState({
+        userNameTextBoxValidation: 'This is a required Field!'
+      });
+    } else if (digitRegex.test(event.target.value)) {
+      this.setState({
+        userNameTextBoxValidation: 'No Numeric Characters allowed! Only Alphabet characters!'
+      });
+    } else {
+      this.setState({
+        userNameTextBoxValidation: ''
+      });
+      this.setUsernameWithDebouce(event.target.value);
+    }
   }
 
 
@@ -42,10 +68,21 @@ class SignInPage extends React.Component {
         <h1>Current UN: {this.props.auth.username}</h1>
         <form onSubmit={SignInPage.handleSubmit}>
           <label htmlFor="username">
-          Set Username
-            <input type="text" id="username" value={this.state.userNameTextBox} onChange={this.handleChange} />
+            Set Username
+            <input
+              type="text"
+              id="username"
+              required
+              minLength="1"
+              maxLength="30"
+              pattern="[a-zA-Z]*"
+              style={this.state.userNameTextBoxValidation === '' ? null : this.errorBorder}
+              value={this.state.userNameTextBox}
+              onChange={this.handleChange}
+            />
           </label>
           <input type="submit" value="Submit" />
+          <div style={this.errorDiv}>{this.state.userNameTextBoxValidation}</div>
         </form>
         <h1>Current Token: {this.props.auth.uid}</h1>
         {this.renderConnectingMsg()}

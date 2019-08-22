@@ -1,4 +1,4 @@
-const alertReducer = (state = { alertMsg: 'init', dismissed: false }, action) => {
+const alertReducer = (state = { alertMsg: 'init', dismissed: true }, action) => {
   console.log(action.payload);
   switch (action.type) {
   case 'NEWALERT':
