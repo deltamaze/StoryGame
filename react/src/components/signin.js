@@ -3,15 +3,14 @@ import { connect } from 'react-redux';
 import { setUsername } from '../services/auth/action';
 import debounce from '../utilities/debounce';
 
+
 class SignInPage extends React.Component {
-  static handleSubmit(event) { // eslint suggest static when this.xx not used
-    event.preventDefault();
-  }
 
   constructor(props) {
     super(props);
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.setUsernameWithDebouce = debounce(this.props.setUsername, 250);
     this.state = {
       userNameTextBox: '',
@@ -25,6 +24,13 @@ class SignInPage extends React.Component {
       border: '2px solid red',
       borderRadius: '4px'
     };
+  }
+
+  handleSubmit(event) { // eslint suggest static when this.xx not used
+    event.preventDefault();
+    console.log("checkpoint");
+    console.log(this.props);
+    this.props.history.push('/');
   }
 
   handleChange(event) {
@@ -66,7 +72,7 @@ class SignInPage extends React.Component {
         <h1>Login</h1>
         <h1>Current Local UN: {this.state.userNameTextBox}</h1>
         <h1>Current UN: {this.props.auth.username}</h1>
-        <form onSubmit={SignInPage.handleSubmit}>
+        <form onSubmit={this.handleSubmit}>
           <label htmlFor="username">
             Set Username
             <input
