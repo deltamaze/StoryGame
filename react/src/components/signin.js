@@ -5,7 +5,6 @@ import debounce from '../utilities/debounce';
 
 
 class SignInPage extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -28,8 +27,6 @@ class SignInPage extends React.Component {
 
   handleSubmit(event) { // eslint suggest static when this.xx not used
     event.preventDefault();
-    console.log("checkpoint");
-    console.log(this.props);
     this.props.history.push('/');
   }
 
