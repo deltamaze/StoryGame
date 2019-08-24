@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import PageRouter from './components/router';
 import store from './store';
-import StoreProvider from './storeProvider';
+import StoreProvider from './services/storeProvider';
 import NavBar from './components/navbar';
 import FirebaseServiceStarter from './components/firebaseServiceStarter';
 import AlertBanner from './components/alert';
