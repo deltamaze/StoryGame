@@ -4,10 +4,8 @@ import { Route, Switch } from 'react-router-dom';
 
 import SignInPage from './signin';
 import PrivateRoute from './privateRoute';
+import Home from './home';
 
-
-// HomeScreen
-const HomeScreen = () => <h1>Hello</h1>;
 // 404Screen
 const NotFoundScreen = () => <h1>404</h1>;
 // Counter
@@ -48,7 +46,7 @@ class PageRouter extends React.Component {
       return (
         <div>
           <Switch>
-            <Route path="/" exact component={HomeScreen} />
+            <PrivateRoute path="/" exact component={Home} />
             <PrivateRoute path="/counter" component={CounterScreen} />
             <Route path="/signin" component={SignInPage} />
             <Route path="*" component={NotFoundScreen} />
