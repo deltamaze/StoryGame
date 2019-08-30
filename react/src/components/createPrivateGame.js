@@ -28,13 +28,13 @@ class CreatePrivateGame extends React.Component {
     };
   }
 
-  handleSubmit(event) { // eslint suggest static when this.xx not used
-    event.preventDefault();
-    // call firebase service, push up local props to action,
-    // which sets firebase object, and routes player to game
-  }
+  // handleSubmit(event) { // eslint suggest static when this.xx not used
+  //   event.preventDefault();
+  //   // call firebase service, push up local props to action,
+  //   // which sets firebase object, and routes player to game
+  // }
 
-  handleChange(event) { // make one of these for every field
+  handleGameNameChange(event) { // make one of these for every field
     this.setState({
       userNameTextBox: event.target.value
     });
