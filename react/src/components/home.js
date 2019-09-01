@@ -17,7 +17,7 @@ class Home extends React.Component {
         {/* <Link className="btn" to="/">Play!</Link> */}
         <br />
         <br />
-        <Link className="btn btn-primary" to="/">Make Private Game</Link>
+        <Link className="btn btn-primary" to="/createPrivateGame">Make Private Game</Link>
         <br />
         <br />
         <Link className="btn btn-primary" to="/">Join Private Game</Link>

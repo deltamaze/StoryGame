@@ -5,6 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import SignInPage from './signin';
 import PrivateRoute from './privateRoute';
 import Home from './home';
+import CreatePrivateGame from './createPrivateGame';
 
 // 404Screen
 const NotFoundScreen = () => <h1>404</h1>;
@@ -49,6 +50,7 @@ class PageRouter extends React.Component {
             <PrivateRoute path="/" exact component={Home} />
             <PrivateRoute path="/counter" component={CounterScreen} />
             <Route path="/signin" component={SignInPage} />
+            <Route path="/createPrivateGame" component={CreatePrivateGame} />
             <Route path="*" component={NotFoundScreen} />
           </Switch>
         </div>
