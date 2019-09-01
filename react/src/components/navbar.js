@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -14,14 +15,28 @@ class NavBar extends React.Component {
   renderNavItems() {
     if (this.props.auth.uid === '') {
       return (<ul className="navbar-nav"><li className="nav-item">Loading...</li></ul>);
-    } if (this.props.auth.uid !== '') {
+    } if (this.props.auth.username === '') {
       return (
         <ul className="navbar-nav">
           <li className="nav-item active">
-            <Link className="nav-link" to="/">Main Menu</Link>
+            <Link className="nav-link" to="/signin">Set Username</Link>
           </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/signin">Change Username</Link>
+        </ul>
+      );
+    }
+    if (this.props.auth.username !== '') {
+      return (
+        <ul className="navbar-nav mr-auto">
+          <li className="nav-item active">
+            <Link className="nav-link" to="/">Menu</Link>
+          </li>
+          <li className="nav-item dropdown">
+            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Welcome back {this.props.auth.username}
+            </a>
+            <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <Link className="nav-link" to="/signin">Change Username</Link>
+            </div>
           </li>
         </ul>
       );

@@ -14,6 +14,16 @@ service cloud.firestore {
             && request.resource.data.username.size() <= 30
             && request.resource.data.username.matches('\\A[a-zA-Z]+\\z') == true;
     }
+    match /SGGames/{gameId} {
+      allow read: if true;
+      allow write:if request.auth.uid != null;
+            && request.resource.data.size() == 1
+            && request.resource.data.keys().hasOnly(['gameName','isCustom','gamePassword','createTime','sortTime'])
+            && request.resource.data.gameName is string
+            && request.resource.data.gameName.size() >= 1
+            && request.resource.data.gameName.size() <= 100
+            && request.resource.data.gameName.matches('\\A[a-zA-Z]+\\z') == true;
+    }
     match /{document=**} {
       allow read: if false;
       allow write: if false;
