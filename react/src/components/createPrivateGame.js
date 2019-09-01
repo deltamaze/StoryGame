@@ -1,16 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setUsername } from '../services/auth/action';
-import debounce from '../utilities/debounce';
 
 
 class CreatePrivateGame extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setUsernameWithDebouce = debounce(this.props.setUsername, 250);
+    this.handleGameNameChange = this.handleGameNameChange.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
       gameNameTextBox: '',
       gameNameTextBoxValidation: '',
@@ -36,24 +34,23 @@ class CreatePrivateGame extends React.Component {
 
   handleGameNameChange(event) { // make one of these for every field
     this.setState({
-      userNameTextBox: event.target.value
+      gameNameTextBox: event.target.value
     });
     // validate input
     const digitRegex = new RegExp('\\d'); // contains digit
 
     if (event.target.value.length === 0) {
       this.setState({
-        userNameTextBoxValidation: 'This is a required Field!'
+        gameNameTextBoxValidation: 'This is a required Field!'
       });
     } else if (digitRegex.test(event.target.value)) {
       this.setState({
-        userNameTextBoxValidation: 'No Numeric Characters allowed! Only Alphabet characters!'
+        gameNameTextBoxValidation: 'No Numeric Characters allowed! Only Alphabet characters!'
       });
     } else {
       this.setState({
-        userNameTextBoxValidation: ''
+        gameNameTextBoxValidation: ''
       });
-      this.setUsernameWithDebouce(event.target.value);
     }
   }
 
@@ -80,13 +77,13 @@ class CreatePrivateGame extends React.Component {
               minLength="1"
               maxLength="30"
               pattern="[a-zA-Z]*"
-              style={this.state.userNameTextBoxValidation === '' ? null : this.errorBorder}
-              value={this.state.userNameTextBox}
-              onChange={this.handleChange}
+              style={this.state.gameNameTextBoxValidation === '' ? null : this.errorBorder}
+              value={this.state.gameNameTextBox}
+              onChange={this.handleGameNameChange}
             />
           </label>
           <input type="submit" value="Submit" />
-          <div style={this.errorDiv}>{this.state.userNameTextBoxValidation}</div>
+          <div style={this.errorDiv}>{this.state.gameNameTextBoxValidation}</div>
         </form>
         <h1>Current Token: {this.props.auth.uid}</h1>
         {this.renderConnectingMsg()}

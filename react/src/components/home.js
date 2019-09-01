@@ -14,7 +14,7 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        {/* <Link className="btn" to="/">Play!</Link> */}
+        <Link className="btn" to="/">Quick Play!</Link>
         <br />
         <br />
         <Link className="btn btn-primary" to="/createPrivateGame">Make Private Game</Link>

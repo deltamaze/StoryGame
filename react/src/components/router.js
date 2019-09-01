@@ -50,7 +50,7 @@ class PageRouter extends React.Component {
             <PrivateRoute path="/" exact component={Home} />
             <PrivateRoute path="/counter" component={CounterScreen} />
             <Route path="/signin" component={SignInPage} />
-            <Route path="/createPrivateGame" component={CreatePrivateGame} />
+            <PrivateRoute path="/createPrivateGame" component={CreatePrivateGame} />
             <Route path="*" component={NotFoundScreen} />
           </Switch>
         </div>
