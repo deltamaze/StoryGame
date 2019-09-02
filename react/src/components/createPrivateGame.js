@@ -8,6 +8,7 @@ class CreatePrivateGame extends React.Component {
     super(props);
 
     this.handleGameNameChange = this.handleGameNameChange.bind(this);
+    this.handleIsPrivateChange = this.handleIsPrivateChange.bind(this);
     // this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
       gameNameTextBox: '',
@@ -27,7 +28,7 @@ class CreatePrivateGame extends React.Component {
   }
 
   // handleSubmit(event) { // eslint suggest static when this.xx not used
-  //   event.preventDefault();
+  //   event.preventDefault();isPrivate
   //   // call firebase service, push up local props to action,
   //   // which sets firebase object, and routes player to game
   // }
@@ -52,6 +53,13 @@ class CreatePrivateGame extends React.Component {
         gameNameTextBoxValidation: ''
       });
     }
+  }
+
+  handleIsPrivateChange() {
+    // console.log(event.target);
+    this.setState(prevState => ({
+      isPrivate: !prevState.isPrivate
+    }));
   }
 
 
@@ -82,6 +90,18 @@ class CreatePrivateGame extends React.Component {
               onChange={this.handleGameNameChange}
             />
           </label>
+          <br />
+          <label htmlFor="isPrivate">
+            Private Game?
+            <input
+              type="checkbox"
+              id="isPrivate"
+              // style={this.state.gameNameTextBoxValidation === '' ? null : this.errorBorder}
+              checked={this.state.isPrivate}
+              onChange={this.handleIsPrivateChange}
+            />
+          </label>
+          <br />
           <input type="submit" value="Submit" />
           <div style={this.errorDiv}>{this.state.gameNameTextBoxValidation}</div>
         </form>
