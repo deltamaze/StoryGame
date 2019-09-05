@@ -55,6 +55,28 @@ class CreatePrivateGame extends React.Component {
     }
   }
 
+  handlePasswordChange(event) { // make one of these for every field
+    this.setState({
+      gameNameTextBox: event.target.value
+    });
+    // validate input
+    const digitRegex = new RegExp('\\d'); // contains digit
+
+    if (event.target.value.length === 0) {
+      this.setState({
+        gameNameTextBoxValidation: 'This is a required Field!'
+      });
+    } else if (digitRegex.test(event.target.value)) {
+      this.setState({
+        gameNameTextBoxValidation: 'No Numeric Characters allowed! Only Alphabet characters!'
+      });
+    } else {
+      this.setState({
+        gameNameTextBoxValidation: ''
+      });
+    }
+  }
+
   handleIsPrivateChange() {
     // console.log(event.target);
     this.setState(prevState => ({
